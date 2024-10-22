@@ -2,28 +2,32 @@ using UnityEngine;
 
 public class Health : MonoBehaviour
 {
-    public int maxHealth;
-    public int currentHealth;
+    public EnemyData enemyData;
+    public float currentHealth;
 
     public HealthSystem healthBar;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        currentHealth = maxHealth;
-        healthBar.SetMaxHealth(maxHealth);
+        currentHealth = enemyData.maxHealth;
+        healthBar.SetMaxHealth(enemyData.maxHealth);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space)) 
+        if (currentHealth <= 0)
         {
-            Damage(20);
+            Destroy(gameObject);
         }
+        // if (Input.GetKeyDown(KeyCode.Space))
+        // {
+        //     Damage(20);
+        // }
     }
 
-    void Damage(int damage)
+    public void Damage(float damage)
     {
         currentHealth -= damage;
 
