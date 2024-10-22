@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.ta-david-yu.2d-platformer-hunter": {
+      "version": "https://github.com/ta-david-yu/2D-Platformer-Hunter.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "38a7053f7366279ceb3b68e998796953ecc9e332"
+    },
     "com.unity.2d.animation": {
       "version": "10.1.3",
       "depth": 1,
