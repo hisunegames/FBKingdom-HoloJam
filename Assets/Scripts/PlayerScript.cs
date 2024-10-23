@@ -1,0 +1,126 @@
+using System.Collections;
+using DYP;
+using UnityEngine;
+
+public class PlayerScript : MonoBehaviour
+{
+    public static PlayerScript instance;
+    public CustomMovementController2D m_Controller;
+
+    [Header("PlayerData")]
+    public float maxHealth = 100;
+    public float playerHealth;
+
+    [Header("Equipment")]
+    public int currentWeapon = 1;
+    //sword main (1) gun sub (2)
+
+    [Header("Sword")]
+    // public GameObject swordLeft;
+    public GameObject sword;
+
+    public Vector2 swordKnockback;
+    public float swordDamage;
+
+    public float attackCooldown = 0.25f;
+    private bool attackOnCooldown = false;
+
+    [Header("Gun")]
+    public GameObject bulletPrefab;
+    public Transform firePoint;
+    public float fireCooldown = 1f;
+    private float nextFireTime = 0f;
+    void Awake()
+    {
+        if (instance == null)
+        {
+
+            instance = this;
+        }
+        // swordLeft = transform.GetChild(0).gameObject;
+        // swordLeft.SetActive(false);
+        sword.SetActive(false);
+    }
+    void Start()
+    {
+        playerHealth = maxHealth;
+    }
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            currentWeapon = 1;
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            currentWeapon = 2;
+        }
+
+        if (Input.GetButtonDown("Fire1"))
+        {
+            if (currentWeapon == 1)
+            {
+                if (attackOnCooldown)
+                    return;
+                sword.SetActive(true);
+                StartCoroutine(AttackCooldown());
+            }
+            else if (currentWeapon == 2 && Time.time >= nextFireTime)
+            {
+                Shoot();
+                nextFireTime = Time.time + fireCooldown;
+            }
+            // if (m_Controller.FacingDirection == 1)
+            // else
+            //     swordLeft.SetActive(true);
+        }
+        else if (Input.GetButtonUp("Fire1"))
+        {
+            if (sword.activeSelf)
+                sword.SetActive(false);
+            // swordLeft.SetActive(false);
+        }
+
+
+    }
+
+    public void Damage(float damage)
+    {
+        playerHealth -= damage;
+        if (playerHealth <= 0)
+        {
+            Debug.Log("Player Dead");
+        }
+        else
+        {
+            Debug.Log("Player Health: " + playerHealth);
+        }
+    }
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+
+        if (other.gameObject.CompareTag("Enemy") && sword.activeSelf)
+        {
+            Debug.Log("Hit");
+            other.gameObject.GetComponent<Health>().Damage(swordDamage);
+            other.gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(swordKnockback.x * m_Controller.FacingDirection, swordKnockback.y), ForceMode2D.Impulse);
+        }
+        // else if (other.gameObject.CompareTag("Enemy") && swordLeft.activeSelf)
+        // {
+        //     Debug.Log("Hit");
+        //     other.gameObject.GetComponent<Health>().Damage(swordDamage);
+        //     other.gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(swordKnockback.x * m_Controller.FacingDirection, swordKnockback.y), ForceMode2D.Impulse);
+        // }
+    }
+    IEnumerator AttackCooldown()
+    {
+        attackOnCooldown = true;
+        yield return new WaitForSeconds(attackCooldown);
+        attackOnCooldown = false;
+    }
+
+    void Shoot()
+    {
+        Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+    }
+}
