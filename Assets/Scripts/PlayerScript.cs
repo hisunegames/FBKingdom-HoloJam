@@ -10,6 +10,8 @@ public class PlayerScript : MonoBehaviour
     [Header("PlayerData")]
     public float maxHealth = 100;
     public float playerHealth;
+    public float invincibilityTime = .2f;
+    public bool isInvincible = false;
 
     [Header("Equipment")]
     public int currentWeapon = 1;
@@ -131,6 +133,35 @@ public class PlayerScript : MonoBehaviour
         attackOnCooldown = true;
         yield return new WaitForSeconds(attackCooldown);
         attackOnCooldown = false;
+    }
+
+    public void PlayerHit(GameObject other, EnemyData enemyData, float facingDirection)
+    {
+        StartCoroutine(InvincibiltyFrames());
+        other.GetComponent<Health>().Damage(enemyData.attackPower);
+        StartCoroutine(FakeAddForceMotion(other, enemyData, facingDirection));
+    }
+    public IEnumerator FakeAddForceMotion(GameObject other, EnemyData enemyData, float facingDirection)
+    {
+        float i = 0.01f;
+        while (enemyData.knockbackForce >= i)
+        {
+            other.GetComponent<Rigidbody2D>().linearVelocity = new Vector2(enemyData.knockbackForce / i * (-facingDirection), other.GetComponent<Rigidbody2D>().linearVelocity.y); // !! For X axis positive force
+            i += Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+
+        }
+        other.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
+        yield return null;
+    }
+
+    public IEnumerator InvincibiltyFrames()
+    {
+        GetComponent<SpriteRenderer>().color = Color.red;
+        instance.isInvincible = true;
+        yield return new WaitForSeconds(instance.invincibilityTime);
+        isInvincible = false;
+        GetComponent<SpriteRenderer>().color = Color.white;
     }
 
     void Shoot()
