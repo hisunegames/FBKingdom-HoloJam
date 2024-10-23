@@ -586,6 +586,7 @@ MonoBehaviour:
   player: {fileID: 0}
   enemyData: {fileID: 0}
   distanceBetween: 4
+  facingDirection: 0
   distance: 0
 --- !u!114 &643506788406736445
 MonoBehaviour:
