@@ -1025,6 +1025,7 @@ GameObject:
   - component: {fileID: 1385199715}
   - component: {fileID: 1385199714}
   - component: {fileID: 1385199716}
+  - component: {fileID: 1385199717}
   m_Layer: 8
   m_Name: Tilemap
   m_TagString: Untagged
@@ -2025,6 +2026,33 @@ TilemapCollider2D:
   m_MaximumTileChangeCount: 1000
   m_ExtrusionFactor: 0
   m_UseDelaunayMesh: 0
+--- !u!50 &1385199717
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1385199712}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 7
 --- !u!4 &1517045886 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 612329077187676399, guid: 284a83340cb4f2d4e88c8bfb5ed9cac5, type: 3}
@@ -2251,10 +2279,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0
-    y: 0.35336977
-    width: 0.99791235
-    height: 0.29143897
+    x: 0.0026075619
+    y: 0.061930783
+    width: 0.9934811
+    height: 0.87431693
   near clip plane: 0.1
   far clip plane: 5000
   field of view: 40
@@ -2505,41 +2533,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: FBKing
       objectReference: {fileID: 0}
-    - target: {fileID: 8683622559005073274, guid: 6a4bc16f1cf3638488a0e8ff20ccd41d, type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: d2ff983382cb29742ae4eb15e011363a, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 585602345195423194, guid: 6a4bc16f1cf3638488a0e8ff20ccd41d, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 7992976298706274071}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6a4bc16f1cf3638488a0e8ff20ccd41d, type: 3}
 --- !u!4 &7992976298706274059 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 418131856958287295, guid: 6a4bc16f1cf3638488a0e8ff20ccd41d, type: 3}
   m_PrefabInstance: {fileID: 7992976298706274058}
   m_PrefabAsset: {fileID: 0}
---- !u!95 &7992976298706274069 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 8683622559005073274, guid: 6a4bc16f1cf3638488a0e8ff20ccd41d, type: 3}
-  m_PrefabInstance: {fileID: 7992976298706274058}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &7992976298706274071
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1826608521}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe62fc2f58eebb644b9be913f6337aee, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Animator: {fileID: 7992976298706274069}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

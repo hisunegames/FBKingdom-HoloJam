@@ -9,7 +9,6 @@ public class FubukiAnimationController : MonoBehaviour
     private CustomMovementController2D m_Controller;
     private Vector3 m_StartScale;
 
-
     [SerializeField]
     private Animator m_Animator;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -63,6 +62,16 @@ public class FubukiAnimationController : MonoBehaviour
     private void onJump()
     {
         m_Animator.SetTrigger("Jump");
+        BurstParticles();
+    }
+
+    public void BurstParticles()
+    {
+        ParticleSystem particleSystem = GetComponentInChildren<ParticleSystem>();
+        if (particleSystem != null)
+        {
+            particleSystem.Emit(100); // Emit 30 particles
+        }
     }
 
     private void onWallJump(Vector2 vec)

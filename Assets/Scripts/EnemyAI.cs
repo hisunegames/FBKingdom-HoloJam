@@ -56,11 +56,12 @@ public class EnemyAI : MonoBehaviour
     IEnumerator FakeAddForceMotion(GameObject other)
     {
         float i = 0.01f;
-        while (enemyData.knockbackForce > i)
+        while (enemyData.knockbackForce >= i)
         {
             other.GetComponent<Rigidbody2D>().linearVelocity = new Vector2(enemyData.knockbackForce / i * (-facingDirection), other.GetComponent<Rigidbody2D>().linearVelocity.y); // !! For X axis positive force
             i += Time.deltaTime;
             yield return new WaitForEndOfFrame();
+
         }
         other.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
         yield return null;

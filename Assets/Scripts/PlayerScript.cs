@@ -30,6 +30,9 @@ public class PlayerScript : MonoBehaviour
     public Transform firePoint;
     public float fireCooldown = 1f;
     private float nextFireTime = 0f;
+    private ParticleSystem.EmissionModule emission;
+
+
     void Awake()
     {
         if (instance == null)
@@ -44,6 +47,7 @@ public class PlayerScript : MonoBehaviour
     void Start()
     {
         playerHealth = maxHealth;
+        emission = gameObject.GetComponentInChildren<ParticleSystem>().emission;
     }
     void Update()
     {
@@ -74,14 +78,22 @@ public class PlayerScript : MonoBehaviour
             // else
             //     swordLeft.SetActive(true);
         }
-        else if (Input.GetButtonUp("Fire1"))
+        // else if (Input.GetButtonUp("Fire1"))
+        // {
+        //     if (sword.activeSelf)
+        //         sword.SetActive(false);
+        //     // swordLeft.SetActive(false);
+        // }
+
+        if (!gameObject.GetComponent<Animator>().GetBool("isGrounded"))
         {
-            if (sword.activeSelf)
-                sword.SetActive(false);
-            // swordLeft.SetActive(false);
+            emission.enabled = false;
         }
+        else
+        {
+            emission.enabled = true;
 
-
+        }
     }
 
     public void Damage(float damage)
@@ -114,6 +126,8 @@ public class PlayerScript : MonoBehaviour
     }
     IEnumerator AttackCooldown()
     {
+        yield return new WaitForSeconds(0.1f);
+        sword.SetActive(false);
         attackOnCooldown = true;
         yield return new WaitForSeconds(attackCooldown);
         attackOnCooldown = false;
