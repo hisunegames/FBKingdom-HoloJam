@@ -18,3 +18,4 @@ MonoBehaviour:
   attackPower: 20
   attackRange: 1
   knockbackForce: 0.1
+  mass: 0.2

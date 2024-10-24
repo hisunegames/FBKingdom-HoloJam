@@ -40,10 +40,10 @@ namespace FBK
         }
         void Update()
         {
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-                isMiteiru = true;
-            }
+            // if (Input.GetKeyDown(KeyCode.E))
+            // {
+            //     isMiteiru = true;
+            // }
         }
 
         void FixedUpdate()

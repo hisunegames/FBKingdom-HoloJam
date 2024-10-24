@@ -31,6 +31,7 @@ public class FubukiAnimationController : MonoBehaviour
         m_Controller.OnWallSliding += onWallSliding;
         m_Controller.OnWallSlidingEnd += onWallSlidingEnd;
         m_Controller.OnJump += onJump;
+        m_Controller.OnAction += OnAction;
     }
     // Update is called once per frame
     private void Update()
@@ -103,5 +104,10 @@ public class FubukiAnimationController : MonoBehaviour
     private void onDashEnd()
     {
         // m_Animator.SetBool("IsDashing", false);
+    }
+
+    private void OnAction(int actionCode)
+    {
+        // Handle the action based on the actionCode
     }
 }

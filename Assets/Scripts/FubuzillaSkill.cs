@@ -12,13 +12,22 @@ public class FubuzillaSkill : MonoBehaviour
     public bool onCooldown = false;
     public float skillDuration = 3f;
 
+    public ParticleSystem p_System;
+    public ParticleSystem.EmissionModule emission;
+    void Awake()
+    {
+        p_System = GetComponentInChildren<ParticleSystem>();
+        emission = p_System.emission;
+    }
 
     void Start()
     {
         laserSpriteRenderer.enabled = false;
+        emission.enabled = false;
     }
     void Update()
     {
+
         Vector3 mousePosition = Input.mousePosition;
         mousePosition.z = Camera.main.nearClipPlane;
         Vector3 targetPosition = Camera.main.ScreenToWorldPoint(mousePosition);
@@ -40,6 +49,7 @@ public class FubuzillaSkill : MonoBehaviour
         else
         {
             laserSpriteRenderer.enabled = false;
+            emission.enabled = false;
         }
     }
 
@@ -49,22 +59,52 @@ public class FubuzillaSkill : MonoBehaviour
         startPoint.z = 0;
 
         Vector3 direction = targetPosition - startPoint;
-        float distance = direction.magnitude;
-        Vector3 midPoint = startPoint + direction / 2;
+        RaycastHit2D hit = Physics2D.Raycast(startPoint, direction);
 
-        laserSpriteRenderer.size = new Vector2(distance + sizeOffset, laserSpriteRenderer.size.y);
-        laserSpriteRenderer.transform.SetPositionAndRotation(midPoint, Quaternion.FromToRotation(Vector3.right, direction));
+        ParticleSystem.EmissionModule emission = p_System.emission;
+        if (hit.collider != null)
+        {
+            Vector3 hitPoint = hit.point;
+            float distance = Vector3.Distance(startPoint, hitPoint);
+            Vector3 midPoint = startPoint + direction.normalized * (distance / 2);
+
+            // Get the normal of the hit surface
+            Vector3 hitNormal = hit.normal;
+            // Calculate the angle between the laser direction and the hit normal
+            float angle = Vector3.Angle(direction, hitNormal);
+
+            // Set the rotation of the particle system based on the angle
+            Vector3 p_rotation = new Vector3(angle, 0, 0);
+            p_System.gameObject.transform.rotation = Quaternion.Euler(p_rotation);
+            p_System.gameObject.transform.position = hitPoint;
+            emission.enabled = true;
+
+            // Set the rotation of the laser sprite based on the angle
+            laserSpriteRenderer.size = new Vector2(distance + sizeOffset, laserSpriteRenderer.size.y);
+            laserSpriteRenderer.transform.SetPositionAndRotation(midPoint, Quaternion.FromToRotation(Vector3.right, direction));
+            // laserSpriteRenderer.transform.rotation = Quaternion.Euler(0, 0, angle);
+        }
+        else
+        {
+            emission.enabled = false;
+        }
     }
 
     void DealDamage(Vector3 targetPosition)
     {
-        accumulatedDamage = damagePerSecond * Time.deltaTime;
-        Collider2D targetCollider = Physics2D.OverlapPoint(targetPosition);
-        if (targetCollider != null && targetCollider.CompareTag("Enemy"))
+        Vector3 startPoint = Camera.main.ScreenToWorldPoint(new Vector3(0, Screen.height, 0));
+        startPoint.z = 0;
+
+        Vector3 direction = targetPosition - startPoint;
+        RaycastHit2D hit = Physics2D.Raycast(startPoint, direction);
+
+        if (hit.collider != null && hit.collider.CompareTag("Enemy"))
         {
-            targetCollider.GetComponent<Health>().Damage(accumulatedDamage);
+            accumulatedDamage = damagePerSecond * Time.deltaTime;
+            hit.collider.GetComponent<Health>().Damage(accumulatedDamage);
         }
     }
+
     IEnumerator UseSkill()
     {
         isShooting = true;

@@ -2,7 +2,17 @@ fileFormatVersion: 2
 guid: 91349267652f7214b9ee0ad7a7bbc1f4
 ScriptedImporter:
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:AnimationClip
+      assembly: UnityEngine.AnimationModule
+      name: Attack
+    second: {fileID: 7400000, guid: 6f298bfbb1fd6214eb7b9eced7f5b044, type: 2}
+  - first:
+      type: UnityEngine:AnimationClip
+      assembly: UnityEngine.AnimationModule
+      name: Idle
+    second: {fileID: 7400000, guid: df3c761813124c74a8a34417a8113b63, type: 2}
   serializedVersion: 2
   userData: 
   assetBundleName: 
@@ -82,7 +92,7 @@ ScriptedImporter:
     generateModelPrefab: 1
     generateAnimationClips: 1
     addSortingGroup: 1
-    addShadowCasters: 0
+    addShadowCasters: 1
   asepriteImporterSettings:
     fileImportMode: 1
     importHiddenLayers: 0
@@ -95,9 +105,9 @@ ScriptedImporter:
     generateModelPrefab: 1
     generateAnimationClips: 1
     addSortingGroup: 1
-    addShadowCasters: 0
+    addShadowCasters: 1
   importFileNodeState: 1
-  platformSettingsDirtyTick: 638653762313218660
+  platformSettingsDirtyTick: 638653737089734519
   textureAssetName: 
   singleSpriteImportData:
   - name: 

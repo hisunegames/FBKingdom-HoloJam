@@ -11,13 +11,28 @@ ScriptedImporter:
   - first:
       type: UnityEngine:AnimationClip
       assembly: UnityEngine.AnimationModule
+      name: Action-Fall-Gun
+    second: {fileID: 7400000, guid: 1edcf018c2f01cc48ad23e9504366a7c, type: 2}
+  - first:
+      type: UnityEngine:AnimationClip
+      assembly: UnityEngine.AnimationModule
       name: Action-Float
     second: {fileID: 7400000, guid: 4b7027189e29149469cdbb92943732f5, type: 2}
   - first:
       type: UnityEngine:AnimationClip
       assembly: UnityEngine.AnimationModule
+      name: Action-Float-Gun
+    second: {fileID: 7400000, guid: b3a7b8d399916cf43b5bbc9d4f341fcb, type: 2}
+  - first:
+      type: UnityEngine:AnimationClip
+      assembly: UnityEngine.AnimationModule
       name: Action-Idle
     second: {fileID: 7400000, guid: e6c918d90b02304498a48377811fc69c, type: 2}
+  - first:
+      type: UnityEngine:AnimationClip
+      assembly: UnityEngine.AnimationModule
+      name: Action-Idle-Gun
+    second: {fileID: 7400000, guid: d8bb0b1e4671fc14d81a6252234a9942, type: 2}
   - first:
       type: UnityEngine:AnimationClip
       assembly: UnityEngine.AnimationModule
@@ -28,6 +43,11 @@ ScriptedImporter:
       assembly: UnityEngine.AnimationModule
       name: Action-Run
     second: {fileID: 7400000, guid: ac134d7d2ae4d754cbf4d33d384689c9, type: 2}
+  - first:
+      type: UnityEngine:AnimationClip
+      assembly: UnityEngine.AnimationModule
+      name: Action-Run-Gun
+    second: {fileID: 7400000, guid: 6ecae5af8032e5c4ba17d08fbb5e5a43, type: 2}
   - first:
       type: UnityEngine:AnimationClip
       assembly: UnityEngine.AnimationModule
@@ -132,7 +152,7 @@ ScriptedImporter:
     addSortingGroup: 1
     addShadowCasters: 0
   importFileNodeState: 1
-  platformSettingsDirtyTick: 638653209517772673
+  platformSettingsDirtyTick: 638653778644539341
   textureAssetName: 
   singleSpriteImportData:
   - name: 

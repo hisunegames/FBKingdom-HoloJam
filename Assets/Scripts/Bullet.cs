@@ -27,7 +27,7 @@ public class Bullet : MonoBehaviour
                 if (enemy.TryGetComponent<Rigidbody2D>(out var rb))
                 {
                     Vector2 knockbackDirection = (enemy.transform.position - transform.position).normalized;
-                    rb.AddForce(knockbackDirection * bullet.bulletKnockback, ForceMode2D.Impulse);
+                    rb.AddForce(-knockbackDirection * bullet.bulletKnockback, ForceMode2D.Impulse);
                 }
             }
             Destroy(gameObject);

@@ -13,6 +13,9 @@ public class PlayerScript : MonoBehaviour
     public float invincibilityTime = .2f;
     public bool isInvincible = false;
 
+    [Header("Player Animation")]
+    public Animator m_Animator;
+
     [Header("Equipment")]
     public int currentWeapon = 1;
     //sword main (1) gun sub (2)
@@ -49,6 +52,7 @@ public class PlayerScript : MonoBehaviour
     void Start()
     {
         playerHealth = maxHealth;
+        m_Animator = GetComponent<Animator>();
         emission = gameObject.GetComponentInChildren<ParticleSystem>().emission;
     }
     void Update()
@@ -56,10 +60,12 @@ public class PlayerScript : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             currentWeapon = 1;
+            m_Animator.SetBool("Shooting", false);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             currentWeapon = 2;
+            m_Animator.SetBool("Shooting", true);
         }
 
         if (Input.GetButtonDown("Fire1"))
@@ -117,7 +123,8 @@ public class PlayerScript : MonoBehaviour
         {
             Debug.Log("Hit");
             other.gameObject.GetComponent<Health>().Damage(swordDamage);
-            other.gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(swordKnockback.x * m_Controller.FacingDirection, swordKnockback.y), ForceMode2D.Impulse);
+            StartCoroutine(FakeAddForceMotionEnemy(other.gameObject, other.GetComponent<EnemyAI>().enemyData, m_Controller.FacingDirection));
+            // other.gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(swordKnockback.x * m_Controller.FacingDirection * other.gameObject.GetComponent<Rigidbody2D>().mass, swordKnockback.y), ForceMode2D.Impulse);
         }
         // else if (other.gameObject.CompareTag("Enemy") && swordLeft.activeSelf)
         // {
@@ -141,17 +148,35 @@ public class PlayerScript : MonoBehaviour
         other.GetComponent<Health>().Damage(enemyData.attackPower);
         StartCoroutine(FakeAddForceMotion(other, enemyData, facingDirection));
     }
-    public IEnumerator FakeAddForceMotion(GameObject other, EnemyData enemyData, float facingDirection)
+    public IEnumerator FakeAddForceMotion(GameObject target, EnemyData enemyData, float facingDirection)
     {
         float i = 0.01f;
         while (enemyData.knockbackForce >= i)
         {
-            other.GetComponent<Rigidbody2D>().linearVelocity = new Vector2(enemyData.knockbackForce / i * (-facingDirection), other.GetComponent<Rigidbody2D>().linearVelocity.y); // !! For X axis positive force
+            target.GetComponent<Rigidbody2D>().linearVelocity = new Vector2(enemyData.knockbackForce / i * (-facingDirection), swordKnockback.y); // !! For X axis positive force
             i += Time.deltaTime;
             yield return new WaitForEndOfFrame();
 
         }
-        other.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
+        target.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
+        yield return null;
+    }
+
+    public IEnumerator FakeAddForceMotionEnemy(GameObject target, EnemyData enemyData, float facingDirection)
+    {
+        float i = 0.01f;
+        while (swordKnockback.x >= i)
+        {
+            if (target == null)
+                yield break;
+            target.GetComponent<Rigidbody2D>().linearVelocity = new Vector2(swordKnockback.x * enemyData.mass / i * facingDirection, target.GetComponent<Rigidbody2D>().linearVelocity.y); // !! For X axis positive force
+            i += Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+
+        }
+        if (target == null)
+            yield break;
+        target.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
         yield return null;
     }
 
