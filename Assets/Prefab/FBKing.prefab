@@ -5598,6 +5598,7 @@ MonoBehaviour:
   playerHealth: 0
   invincibilityTime: 1
   isInvincible: 0
+  m_Animator: {fileID: 0}
   currentWeapon: 1
   sword: {fileID: 981159382683359254}
   swordKnockback: {x: 0.2, y: 0.1}

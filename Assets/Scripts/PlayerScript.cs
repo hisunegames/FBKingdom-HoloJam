@@ -60,12 +60,15 @@ public class PlayerScript : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             currentWeapon = 1;
-            m_Animator.SetBool("Shooting", false);
+            m_Animator.SetBool("ShootReady", false);
+            m_Animator.SetInteger("ActionState", 0);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             currentWeapon = 2;
-            m_Animator.SetBool("Shooting", true);
+            m_Animator.SetBool("ShootReady", true);
+            m_Animator.SetTrigger("Fire");
+            m_Animator.SetInteger("ActionState", 1);
         }
 
         if (Input.GetButtonDown("Fire1"))

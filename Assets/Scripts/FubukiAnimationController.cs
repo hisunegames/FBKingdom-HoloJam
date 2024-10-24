@@ -39,13 +39,13 @@ public class FubukiAnimationController : MonoBehaviour
         if (Mathf.Abs(m_Controller.InputVelocity.x) > 0.0f)
         {
             m_Animator.SetFloat("SpeedX", m_Controller.InputVelocity.x);
-            m_Animator.SetInteger("ActionState", 1);
+            // m_Animator.SetInteger("ActionState", 1);
             m_Animator.SetBool("isRunning", true);
         }
         else
         {
             m_Animator.SetBool("isRunning", false);
-            m_Animator.SetInteger("ActionState", 0);
+            // m_Animator.SetInteger("ActionState", 0);
         }
 
         m_Animator.SetFloat("SpeedY", m_Controller.InputVelocity.y);
