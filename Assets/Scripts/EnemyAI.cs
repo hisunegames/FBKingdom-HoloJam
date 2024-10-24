@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.TextCore;
 using FBK;
+
 public class EnemyAI : MonoBehaviour
 {
     public enum EnemyAIType
@@ -20,6 +21,8 @@ public class EnemyAI : MonoBehaviour
     public float distanceBetween;
     [SerializeField]
     private float facingDirection;
+    [SerializeField]
+    private float _speed;
 
     [SerializeField]
     private Vector2[] patrolPoints;
@@ -32,14 +35,19 @@ public class EnemyAI : MonoBehaviour
     private Animator animator;
     private bool isAttacking = false;
     private bool isRetreating = false;
-    // public float retreatDistance = 1f; // Distance to retreat after attack
+
+    private Vector3 startingScale;
 
     void Start()
     {
+        _speed = enemyData.speed;
+        startingScale = transform.localScale;
         animator = GetComponentInChildren<Animator>();
         player = GameObject.FindGameObjectWithTag("Player");
-        // Define patrol points (you can set these in the inspector or dynamically)
-        // patrolPoints = new Vector2[] { new Vector2(-5, 5), new Vector2(5, 5), new Vector2(5, -5), new Vector2(-5, -5) };
+    }
+
+    void Update()
+    {
     }
 
     void FixedUpdate()
@@ -52,7 +60,6 @@ public class EnemyAI : MonoBehaviour
             case EnemyAIType.Flying:
                 HandleFlyingAI();
                 break;
-                // Add cases for other AI types as needed
         }
     }
 
@@ -63,19 +70,49 @@ public class EnemyAI : MonoBehaviour
 
         if (distance < distanceBetween)
         {
-            // Move towards the player only in the X direction
-            Vector2 targetPosition = new Vector2(player.transform.position.x, transform.position.y);
-            transform.position = Vector2.MoveTowards(transform.position, targetPosition, enemyData.speed * Time.deltaTime);
+            isChasing = true;
+        }
+        else if (distance > distanceBetween * 1.5f)
+        {
+            isChasing = false;
         }
 
-        // Adjust facing direction based on player's position
-        if (direction.x < 0)
+        if (isChasing)
         {
-            facingDirection = -1;
+            Vector2 targetPosition = new Vector2(player.transform.position.x, transform.position.y);
+            transform.position = Vector2.MoveTowards(transform.position, targetPosition, enemyData.speed * Time.deltaTime);
+
+            if (direction.x < 0)
+            {
+                facingDirection = -1;
+            }
+            else
+            {
+                facingDirection = 1;
+            }
+            FlipSprite();
         }
         else
         {
-            facingDirection = 1;
+            Vector2 targetPatrolPoint = patrolPoints[currentPatrolIndex];
+            if (Vector2.Distance(transform.position, targetPatrolPoint) < 0.1f)
+            {
+                currentPatrolIndex = (currentPatrolIndex + 1) % patrolPoints.Length;
+            }
+            else
+            {
+                transform.position = Vector2.MoveTowards(transform.position, targetPatrolPoint, enemyData.speed * Time.deltaTime);
+                // Adjust facing direction based on movement
+                if (targetPatrolPoint.x < transform.position.x)
+                {
+                    facingDirection = -1;
+                }
+                else
+                {
+                    facingDirection = 1;
+                }
+                FlipSprite();
+            }
         }
     }
 
@@ -86,9 +123,8 @@ public class EnemyAI : MonoBehaviour
 
         if (isRetreating)
         {
-            // Move away from the player
             Vector2 retreatDirection = (transform.position - player.transform.position).normalized;
-            transform.position = Vector2.MoveTowards(transform.position, transform.position + (Vector3)retreatDirection * enemyData.retreatDistance, enemyData.speed * Time.deltaTime);
+            transform.position = Vector2.MoveTowards(transform.position, transform.position + (Vector3)retreatDirection * enemyData.retreatDistance, _speed * Time.deltaTime);
             if (Vector2.Distance(transform.position, player.transform.position) >= enemyData.retreatDistance)
             {
                 isRetreating = false;
@@ -107,17 +143,24 @@ public class EnemyAI : MonoBehaviour
 
         if (isChasing)
         {
-            // Move towards the player in both X and Y directions
-            transform.position = Vector2.MoveTowards(transform.position, new Vector2(player.transform.position.x, player.transform.position.y + flightLowerBound), enemyData.speed * Time.deltaTime);
+            transform.position = Vector2.MoveTowards(transform.position, new Vector2(player.transform.position.x, player.transform.position.y + flightLowerBound), _speed * Time.deltaTime);
             if (Math.Abs(distance) < enemyData.attackRange && !GetComponentInChildren<DetectPlayer>().inRange && !isAttacking)
             {
                 isAttacking = true;
                 OnAttack();
             }
+            if (direction.x < 0)
+            {
+                facingDirection = -1;
+            }
+            else
+            {
+                facingDirection = 1;
+            }
+            FlipSprite();
         }
         else
         {
-            // Patrol between points
             Vector2 targetPatrolPoint = patrolPoints[currentPatrolIndex];
             if (Vector2.Distance(transform.position, targetPatrolPoint) < 0.1f)
             {
@@ -125,37 +168,50 @@ public class EnemyAI : MonoBehaviour
             }
             else
             {
-                transform.position = Vector2.MoveTowards(transform.position, targetPatrolPoint, enemyData.speed * Time.deltaTime);
+                transform.position = Vector2.MoveTowards(transform.position, targetPatrolPoint, _speed * Time.deltaTime);
+                // Adjust facing direction based on movement
+                if (targetPatrolPoint.x < transform.position.x)
+                {
+                    facingDirection = -1;
+                }
+                else
+                {
+                    facingDirection = 1;
+                }
+                FlipSprite();
             }
         }
 
-        // Adjust facing direction based on player's position
-        if (direction.x < 0)
+        // Adjust facing direction based on movement
+
+    }
+
+    private void FlipSprite()
+    {
+        if (facingDirection == -1)
         {
-            facingDirection = -1;
+            GetComponentInChildren<SpriteRenderer>().flipX = false;
         }
-        else
+        else if (facingDirection == 1)
         {
-            facingDirection = 1;
+            GetComponentInChildren<SpriteRenderer>().flipX = true;
         }
     }
 
     private void OnAttack()
     {
-        // Attack the player
-        enemyData.speed *= enemyData.speedMultiplier; // Speed up
-        animator.SetTrigger("Attack"); // Trigger attack animation
+        _speed *= enemyData.speedMultiplier;
+        animator.SetTrigger("Attack");
 
-        // Optionally, reset the speed after a delay
         StartCoroutine(ResetSpeedAfterAttack());
     }
 
     private IEnumerator ResetSpeedAfterAttack()
     {
-        yield return new WaitForSeconds(1f); // Adjust the delay as needed
-        enemyData.speed /= enemyData.speedMultiplier; // Reset speed
+        yield return new WaitForSeconds(1f);
+        _speed /= enemyData.speedMultiplier;
         isAttacking = false;
-        isRetreating = true; // Start retreating after attack
+        isRetreating = true;
     }
 
     private void OnCollisionStay2D(Collision2D other)
@@ -163,12 +219,10 @@ public class EnemyAI : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
             Debug.Log("Hit-Player");
-            // Implement damage or other interaction logic here
             if (!PlayerScript.instance.isInvincible)
             {
                 PlayerScript.instance.PlayerHit(other.gameObject, enemyData, facingDirection);
             }
-
         }
     }
 

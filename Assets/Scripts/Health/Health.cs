@@ -6,6 +6,7 @@ public class Health : MonoBehaviour
     public float currentHealth;
 
     public HealthSystem healthBar;
+    public Animator animator;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -19,7 +20,15 @@ public class Health : MonoBehaviour
     {
         if (currentHealth <= 0)
         {
-            Destroy(gameObject);
+            if (animator != null)
+            {
+                gameObject.GetComponent<Collider2D>().enabled = false;
+                gameObject.GetComponent<Rigidbody2D>().linearVelocity = new(0, 0);
+                gameObject.GetComponent<Rigidbody2D>().simulated = false;
+                animator.Play("Death");
+            }
+            else
+                Destroy(gameObject);
         }
         // if (Input.GetKeyDown(KeyCode.Space))
         // {

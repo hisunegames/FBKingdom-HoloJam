@@ -101,7 +101,7 @@ public class FubuzillaSkill : MonoBehaviour
         if (hit.collider != null && hit.collider.CompareTag("Enemy"))
         {
             accumulatedDamage = damagePerSecond * Time.deltaTime;
-            hit.collider.GetComponent<Health>().Damage(accumulatedDamage);
+            hit.collider.gameObject.GetComponent<Health>().Damage(accumulatedDamage);
         }
     }
 

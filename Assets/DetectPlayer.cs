@@ -14,4 +14,12 @@ public class DetectPlayer : MonoBehaviour
         }
     }
 
+    void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            inRange = false;
+            Debug.Log("Player left!");
+        }
+    }
 }

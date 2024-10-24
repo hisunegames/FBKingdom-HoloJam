@@ -17,6 +17,10 @@ PrefabInstance:
       value: Default
       objectReference: {fileID: 0}
     - target: {fileID: 6869039254924171870, guid: 37973ecb7e0010e4b800c3b4de1aa907, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6869039254924171870, guid: 37973ecb7e0010e4b800c3b4de1aa907, type: 3}
       propertyPath: m_TagString
       value: Enemy
       objectReference: {fileID: 0}
@@ -26,15 +30,15 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 2d55a1efa9536d64e98fbadf0bb145eb, type: 2}
     - target: {fileID: 7556598812504879788, guid: 37973ecb7e0010e4b800c3b4de1aa907, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7556598812504879788, guid: 37973ecb7e0010e4b800c3b4de1aa907, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8747469441702161724, guid: 37973ecb7e0010e4b800c3b4de1aa907, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.17892264
+      value: 3.184
       objectReference: {fileID: 0}
     - target: {fileID: 8747469441702161724, guid: 37973ecb7e0010e4b800c3b4de1aa907, type: 3}
       propertyPath: m_LocalPosition.y

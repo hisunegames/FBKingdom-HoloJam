@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5319276e49eca2747aface8dd17ff165, type: 3}
   m_Name: DefaultBullet
   m_EditorClassIdentifier: 
-  bulletSpeed: 20
+  bulletSpeed: 10
   bulletDamage: 10
   bulletLifeTime: 2
   bulletKnockback: 0.3

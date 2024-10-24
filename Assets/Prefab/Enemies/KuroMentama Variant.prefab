@@ -143,9 +143,17 @@ PrefabInstance:
       value: KuroMentama Variant
       objectReference: {fileID: 0}
     - target: {fileID: 6869039254924171870, guid: 37973ecb7e0010e4b800c3b4de1aa907, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6869039254924171870, guid: 37973ecb7e0010e4b800c3b4de1aa907, type: 3}
       propertyPath: m_TagString
       value: Enemy
       objectReference: {fileID: 0}
+    - target: {fileID: 7494412865133428533, guid: 37973ecb7e0010e4b800c3b4de1aa907, type: 3}
+      propertyPath: animator
+      value: 
+      objectReference: {fileID: 3307242418419506644}
     - target: {fileID: 7494412865133428533, guid: 37973ecb7e0010e4b800c3b4de1aa907, type: 3}
       propertyPath: enemyData
       value: 
@@ -315,6 +323,11 @@ PrefabInstance:
 --- !u!212 &1128894515149652216 stripped
 SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 3626916397498700004, guid: 91349267652f7214b9ee0ad7a7bbc1f4, type: 3}
+  m_PrefabInstance: {fileID: 4467507796783583260}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &3307242418419506644 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 1160356261127867848, guid: 91349267652f7214b9ee0ad7a7bbc1f4, type: 3}
   m_PrefabInstance: {fileID: 4467507796783583260}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &5812532435470692113 stripped

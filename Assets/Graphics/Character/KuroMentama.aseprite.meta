@@ -11,6 +11,11 @@ ScriptedImporter:
   - first:
       type: UnityEngine:AnimationClip
       assembly: UnityEngine.AnimationModule
+      name: Death
+    second: {fileID: 7400000, guid: 0a591c239a0ad6748a192aa00eff1c32, type: 2}
+  - first:
+      type: UnityEngine:AnimationClip
+      assembly: UnityEngine.AnimationModule
       name: Idle
     second: {fileID: 7400000, guid: df3c761813124c74a8a34417a8113b63, type: 2}
   serializedVersion: 2
@@ -107,7 +112,7 @@ ScriptedImporter:
     addSortingGroup: 1
     addShadowCasters: 1
   importFileNodeState: 1
-  platformSettingsDirtyTick: 638653737089734519
+  platformSettingsDirtyTick: 638654042795780001
   textureAssetName: 
   singleSpriteImportData:
   - name: 

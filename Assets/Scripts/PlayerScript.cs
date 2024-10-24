@@ -67,7 +67,6 @@ public class PlayerScript : MonoBehaviour
         {
             currentWeapon = 2;
             m_Animator.SetBool("ShootReady", true);
-            m_Animator.SetTrigger("Fire");
             m_Animator.SetInteger("ActionState", 1);
         }
 
@@ -83,6 +82,7 @@ public class PlayerScript : MonoBehaviour
             else if (currentWeapon == 2 && Time.time >= nextFireTime)
             {
                 Shoot();
+                m_Animator.SetTrigger("Fire");
                 nextFireTime = Time.time + fireCooldown;
             }
             // if (m_Controller.FacingDirection == 1)
@@ -148,15 +148,15 @@ public class PlayerScript : MonoBehaviour
     public void PlayerHit(GameObject other, EnemyData enemyData, float facingDirection)
     {
         StartCoroutine(InvincibiltyFrames());
-        other.GetComponent<Health>().Damage(enemyData.attackPower);
-        StartCoroutine(FakeAddForceMotion(other, enemyData, facingDirection));
+        other.GetComponent<PlayerScript>().Damage(enemyData.attackPower);
+        StartCoroutine(FakeAddForceMotion(other, enemyData, -facingDirection));
     }
     public IEnumerator FakeAddForceMotion(GameObject target, EnemyData enemyData, float facingDirection)
     {
         float i = 0.01f;
         while (enemyData.knockbackForce >= i)
         {
-            target.GetComponent<Rigidbody2D>().linearVelocity = new Vector2(enemyData.knockbackForce / i * (-facingDirection), swordKnockback.y); // !! For X axis positive force
+            target.GetComponent<Rigidbody2D>().linearVelocity = new Vector2(enemyData.knockbackForce / i * facingDirection, 0.1f); // !! For X axis positive force
             i += Time.deltaTime;
             yield return new WaitForEndOfFrame();
 

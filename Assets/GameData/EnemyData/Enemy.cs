@@ -7,9 +7,9 @@ public class EnemyData : ScriptableObject
     public float maxHealth;
     public float speedMultiplier = 1;
     public float speed;
-    public int attackPower;
-    public float attackRange;
-    public float knockbackForce;
+    public int attackPower = 10;
+    public float attackRange = 1f;
+    public float knockbackForce = 0.1f;
     public float mass = 0.2f;
     public float retreatDistance = 0.5f;
 
