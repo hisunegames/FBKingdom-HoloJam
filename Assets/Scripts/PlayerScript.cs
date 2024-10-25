@@ -17,9 +17,12 @@ public class PlayerScript : MonoBehaviour
     public float playerSpeedMultipler = 1;
     public float multipler = 1.5f;
     int originalLayer;
+    float aerialMultiplier = .8f;
+    float comboMultiplier = 1.5f;
 
     [Header("Player Animation")]
     public Animator m_Animator;
+    public bool isSlashing = false;
 
     [Header("Equipment")]
     public int currentWeapon = 1;
@@ -79,14 +82,17 @@ public class PlayerScript : MonoBehaviour
             m_Animator.SetInteger("ActionState", 1);
         }
 
-        if (Input.GetButtonDown("Fire1"))
+        if (Input.GetButton("Fire1"))
         {
             if (currentWeapon == 1)
             {
-                if (attackOnCooldown)
-                    return;
-                sword.SetActive(true);
-                StartCoroutine(AttackCooldown());
+                // if (attackOnCooldown)
+                //     return;
+                m_Animator.SetTrigger("Slash");
+                isSlashing = true;
+                m_Animator.SetBool("isSlashing", isSlashing);
+                // sword.SetActive(true);
+                // StartCoroutine(AttackCooldown());
             }
             else if (currentWeapon == 2 && Time.time >= nextFireTime)
             {
@@ -98,11 +104,18 @@ public class PlayerScript : MonoBehaviour
             // else
             //     swordLeft.SetActive(true);
         }
-        // else if (Input.GetButtonUp("Fire1"))
+        else
+        {
+            isSlashing = false;
+            m_Animator.SetBool("isSlashing", isSlashing);
+        }
+        // if (isSlashing)
         // {
-        //     if (sword.activeSelf)
-        //         sword.SetActive(false);
-        //     // swordLeft.SetActive(false);
+        //     sword.SetActive(true);
+        // }
+        // else
+        // {
+        //     sword.SetActive(false);
         // }
 
         if (!gameObject.GetComponent<Animator>().GetBool("isGrounded"))
@@ -131,10 +144,15 @@ public class PlayerScript : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
 
-        if (other.gameObject.CompareTag("Enemy") && sword.activeSelf)
+        if (other.gameObject.CompareTag("Enemy"))
         {
             Debug.Log("Hit");
-            other.gameObject.GetComponent<Health>().Damage(swordDamage);
+            if (m_Animator.GetCurrentAnimatorStateInfo(0).IsName("Action-Slash-Aerial"))
+                other.gameObject.GetComponent<Health>().Damage(swordDamage * aerialMultiplier);
+            else if (m_Animator.GetInteger("ComboState") == 3)
+                other.gameObject.GetComponent<Health>().Damage(swordDamage * comboMultiplier);
+            else
+                other.gameObject.GetComponent<Health>().Damage(swordDamage);
             StartCoroutine(FakeAddForceMotionEnemy(other.gameObject, other.GetComponent<EnemyAI>().enemyData, m_Controller.FacingDirection));
             // other.gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(swordKnockback.x * m_Controller.FacingDirection * other.gameObject.GetComponent<Rigidbody2D>().mass, swordKnockback.y), ForceMode2D.Impulse);
         }
@@ -145,14 +163,14 @@ public class PlayerScript : MonoBehaviour
         //     other.gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(swordKnockback.x * m_Controller.FacingDirection, swordKnockback.y), ForceMode2D.Impulse);
         // }
     }
-    IEnumerator AttackCooldown()
-    {
-        yield return new WaitForSeconds(0.1f);
-        sword.SetActive(false);
-        attackOnCooldown = true;
-        yield return new WaitForSeconds(attackCooldown);
-        attackOnCooldown = false;
-    }
+    // public IEnumerator AttackCooldown()
+    // {
+    //     yield return new WaitForSeconds(0.1f);
+
+    //     attackOnCooldown = true;
+    //     yield return new WaitForSeconds(attackCooldown);
+    //     attackOnCooldown = false;
+    // }
 
     public void PlayerHit(GameObject other, EnemyData enemyData, float facingDirection)
     {

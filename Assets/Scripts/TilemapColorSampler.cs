@@ -36,6 +36,13 @@ public class TilemapColorSampler : MonoBehaviour
         // Convert world position to screen position
         Vector3 screenPos = colorCamera.WorldToScreenPoint(worldPosition);
 
+        // Check if the screen position is within the bounds of the RenderTexture
+        if (screenPos.x < 0 || screenPos.x >= colorTexture.width || screenPos.y < 0 || screenPos.y >= colorTexture.height)
+        {
+            // Debug.LogWarning("Screen position is outside the bounds of the RenderTexture.");
+            return Color.clear; // Return a default color if out of bounds
+        }
+
         // Read color at this position from the RenderTexture
         RenderTexture.active = colorTexture;
         Texture2D texture = new Texture2D(1, 1, TextureFormat.RGB24, false);

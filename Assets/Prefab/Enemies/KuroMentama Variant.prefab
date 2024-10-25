@@ -178,6 +178,10 @@ PrefabInstance:
       propertyPath: enemyData
       value: 
       objectReference: {fileID: 11400000, guid: 15a6eeae219f7304687fab9a1f53b291, type: 2}
+    - target: {fileID: 7494412865133428533, guid: 37973ecb7e0010e4b800c3b4de1aa907, type: 3}
+      propertyPath: damageDisplay
+      value: 
+      objectReference: {fileID: 5965853600710157558, guid: be7c8e071ab5f034e9f7834cd8a1cc98, type: 3}
     - target: {fileID: 7556598812504879788, guid: 37973ecb7e0010e4b800c3b4de1aa907, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0

@@ -1,3 +1,5 @@
+using System;
+using TMPro;
 using UnityEngine;
 
 public class Health : MonoBehaviour
@@ -7,6 +9,7 @@ public class Health : MonoBehaviour
 
     public HealthSystem healthBar;
     public Animator animator;
+    public GameObject damageDisplay;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -40,6 +43,24 @@ public class Health : MonoBehaviour
     {
         currentHealth -= damage;
 
+        // Instantiate the damage display
+        Canvas canvas = GetComponentInChildren<Canvas>();
+        GameObject _display = Instantiate(damageDisplay, new(0, 0), Quaternion.identity);
+
+        // Find the canvas component in the current game object
+
+        if (canvas != null)
+        {
+            // Set the canvas as the parent of the instantiated display
+            _display.transform.SetParent(canvas.transform, false);
+            _display.transform.GetComponent<RectTransform>().localPosition = new(15, 30);
+        }
+
+        // Set the text of the damage display
+        _display.GetComponent<TMP_Text>().text = $"{{size a=1}}<shake a=0.5>{damage}</shake>{{/size}}";
+        _display.GetComponent<Rigidbody2D>().AddForce(new(0.1f * Mathf.Sign(GetComponent<EnemyAI>().facingDirection), 0.5f));
+
+        // Update the health bar
         healthBar.SetHealth(currentHealth);
     }
 }

@@ -1,6 +1,7 @@
 using DYP;
 using UnityEngine;
 using FBK;
+using Unity.VisualScripting;
 namespace DYP
 {
     /// <summary>
@@ -27,6 +28,11 @@ namespace DYP
 
             var releaseJump = Input.GetButtonUp("Jump");
 
+            if (PlayerScript.instance.isSlashing && PlayerScript.instance.m_Animator.GetBool("isGrounded"))
+            {
+                horizontal = 0;
+                vertical = 0;
+            }
             m_Controller.InputMovement(new Vector2(horizontal, vertical));
 
             m_Controller.PressJump(jump);

@@ -541,7 +541,7 @@ BoxCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -585,9 +585,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   enemyData: {fileID: 0}
+  enemyAIType: 0
   distanceBetween: 4
   facingDirection: 0
-  distance: 0
+  _speed: 0
+  patrolPoints: []
+  flightLowerBound: 0
+  animator: {fileID: 0}
 --- !u!114 &643506788406736445
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -647,3 +651,5 @@ MonoBehaviour:
   enemyData: {fileID: 0}
   currentHealth: 0
   healthBar: {fileID: 643506788406736445}
+  animator: {fileID: 0}
+  damageDisplay: {fileID: 0}

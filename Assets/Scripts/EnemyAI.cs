@@ -19,8 +19,7 @@ public class EnemyAI : MonoBehaviour
     public EnemyData enemyData;
     public EnemyAIType enemyAIType;
     public float distanceBetween;
-    [SerializeField]
-    private float facingDirection;
+    public float facingDirection;
     [SerializeField]
     private float _speed;
 
@@ -94,24 +93,30 @@ public class EnemyAI : MonoBehaviour
         }
         else
         {
-            Vector2 targetPatrolPoint = patrolPoints[currentPatrolIndex];
-            if (Vector2.Distance(transform.position, targetPatrolPoint) < 0.1f)
+            if (patrolPoints != null && patrolPoints.Length > 0)
             {
-                currentPatrolIndex = (currentPatrolIndex + 1) % patrolPoints.Length;
-            }
-            else
-            {
-                transform.position = Vector2.MoveTowards(transform.position, targetPatrolPoint, enemyData.speed * Time.deltaTime);
-                // Adjust facing direction based on movement
-                if (targetPatrolPoint.x < transform.position.x)
+                // Ensure currentPatrolIndex is within bounds
+                currentPatrolIndex = Mathf.Clamp(currentPatrolIndex, 0, patrolPoints.Length - 1);
+
+                Vector2 targetPatrolPoint = patrolPoints[currentPatrolIndex];
+                if (Vector2.Distance(transform.position, targetPatrolPoint) < 0.1f)
                 {
-                    facingDirection = -1;
+                    currentPatrolIndex = (currentPatrolIndex + 1) % patrolPoints.Length;
                 }
                 else
                 {
-                    facingDirection = 1;
+                    transform.position = Vector2.MoveTowards(transform.position, targetPatrolPoint, enemyData.speed * Time.deltaTime);
+                    // Adjust facing direction based on movement
+                    if (targetPatrolPoint.x < transform.position.x)
+                    {
+                        facingDirection = -1;
+                    }
+                    else
+                    {
+                        facingDirection = 1;
+                    }
+                    FlipSprite();
                 }
-                FlipSprite();
             }
         }
     }
