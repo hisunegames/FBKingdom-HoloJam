@@ -5349,6 +5349,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -2253911629886400664, guid: 30b82fd6524d1f74ebf331fd8d0b842e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2486018594552485805}
+    - targetCorrespondingSourceObject: {fileID: -2253911629886400664, guid: 30b82fd6524d1f74ebf331fd8d0b842e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4231652599125224072}
   m_SourcePrefab: {fileID: -8435245712485981826, guid: 30b82fd6524d1f74ebf331fd8d0b842e, type: 3}
 --- !u!4 &418131856958287295 stripped
 Transform:
@@ -5597,7 +5600,10 @@ MonoBehaviour:
   maxHealth: 100
   playerHealth: 0
   invincibilityTime: 1
+  invincibilityPadding: 0.2
   isInvincible: 0
+  playerSpeedMultipler: 0
+  multipler: 1.5
   m_Animator: {fileID: 0}
   currentWeapon: 1
   sword: {fileID: 981159382683359254}
@@ -5633,6 +5639,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Animator: {fileID: 8683622559005073274}
+--- !u!114 &4231652599125224072
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 585602345195423194}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81d95d552262d534f82b613e42d2e1ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colorTexture: {fileID: 8400000, guid: 723b5e5dd45ebe84591101cbb8167846, type: 2}
+  colorCamera: {fileID: 0}
+  p_System: {fileID: 6709176031073658329}
+  checkInterval: 0.2
 --- !u!95 &8683622559005073274 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 1160356261127867848, guid: 30b82fd6524d1f74ebf331fd8d0b842e, type: 3}
