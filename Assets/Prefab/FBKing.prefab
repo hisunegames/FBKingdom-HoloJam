@@ -150,7 +150,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1734399568589148910
 Transform:
   m_ObjectHideFlags: 0
@@ -5448,7 +5448,7 @@ MonoBehaviour:
   <Collider>k__BackingField: {fileID: 3999179201293515908}
   m_CollisionLayer:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 1024
   m_HorizontalRayCount: 6
   m_VerticalRayCount: 4
 --- !u!114 &-3311104556210359631

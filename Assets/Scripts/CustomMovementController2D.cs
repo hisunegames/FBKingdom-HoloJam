@@ -922,7 +922,7 @@ public class CustomMovementController2D : MonoBehaviour, IHas2DAxisMovement, ICa
             }
 
             // setup velocity.x based on input
-            float targetVecX = input.x * m_MovementSettings.Speed * (GameManager.instance != null ? GameManager.instance.speed : 1.0f);
+            float targetVecX = input.x * m_MovementSettings.Speed /* * (PlayerScript.instance != null ? PlayerScript.instance.playerSpeedMultipler : 1.0f)*/;
 
             // smooth x direction motion
             if (IsOnGround())

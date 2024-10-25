@@ -8,13 +8,41 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 284676736538131417, guid: 37973ecb7e0010e4b800c3b4de1aa907, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 612930748240870024, guid: 37973ecb7e0010e4b800c3b4de1aa907, type: 3}
       propertyPath: enemyData
       value: 
       objectReference: {fileID: 11400000, guid: 2d55a1efa9536d64e98fbadf0bb145eb, type: 2}
+    - target: {fileID: 2512653116944142056, guid: 37973ecb7e0010e4b800c3b4de1aa907, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 3840702829292449102, guid: 37973ecb7e0010e4b800c3b4de1aa907, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 3925631128803832525, guid: 37973ecb7e0010e4b800c3b4de1aa907, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 4471178059283612167, guid: 37973ecb7e0010e4b800c3b4de1aa907, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 6655389410129327924, guid: 37973ecb7e0010e4b800c3b4de1aa907, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 6869039254924171870, guid: 37973ecb7e0010e4b800c3b4de1aa907, type: 3}
       propertyPath: m_Name
       value: Default
+      objectReference: {fileID: 0}
+    - target: {fileID: 6869039254924171870, guid: 37973ecb7e0010e4b800c3b4de1aa907, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 6869039254924171870, guid: 37973ecb7e0010e4b800c3b4de1aa907, type: 3}
       propertyPath: m_IsActive

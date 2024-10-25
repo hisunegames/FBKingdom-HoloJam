@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using DYP;
 using UnityEngine;
@@ -11,7 +12,11 @@ public class PlayerScript : MonoBehaviour
     public float maxHealth = 100;
     public float playerHealth;
     public float invincibilityTime = .2f;
+    public float invincibilityPadding = .2f;
     public bool isInvincible = false;
+    public float playerSpeedMultipler = 1;
+    public float multipler = 1.5f;
+    int originalLayer;
 
     [Header("Player Animation")]
     public Animator m_Animator;
@@ -54,7 +59,11 @@ public class PlayerScript : MonoBehaviour
         playerHealth = maxHealth;
         m_Animator = GetComponent<Animator>();
         emission = gameObject.GetComponentInChildren<ParticleSystem>().emission;
+        originalLayer = gameObject.layer;
+        m_Controller.OnDash += OnDash;
+        m_Controller.OnDashEnd += OnDashEnd;
     }
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
@@ -156,7 +165,7 @@ public class PlayerScript : MonoBehaviour
         float i = 0.01f;
         while (enemyData.knockbackForce >= i)
         {
-            target.GetComponent<Rigidbody2D>().linearVelocity = new Vector2(enemyData.knockbackForce / i * facingDirection, 0.1f); // !! For X axis positive force
+            target.GetComponent<Rigidbody2D>().linearVelocity = new Vector2(enemyData.knockbackForce / i * -facingDirection, 0.1f); // !! For X axis positive force
             i += Time.deltaTime;
             yield return new WaitForEndOfFrame();
 
@@ -190,6 +199,34 @@ public class PlayerScript : MonoBehaviour
         yield return new WaitForSeconds(instance.invincibilityTime);
         isInvincible = false;
         GetComponent<SpriteRenderer>().color = Color.white;
+    }
+
+    public void OnDash(int direction)
+    {
+        StopCoroutine(DashIFramesPadding());
+        // Change the player's layer to the dash layer
+        gameObject.layer = LayerMask.NameToLayer("DashLayer");
+
+        instance.isInvincible = true;
+
+        // Revert the player's layer back to the original layer
+    }
+    private void OnDashEnd()
+    {
+        StopCoroutine(DashIFramesPadding());
+        StartCoroutine(DashIFramesPadding());
+    }
+
+    public IEnumerator DashIFramesPadding()
+    {
+        // Store the original layer
+        // playerSpeedMultipler = multipler;
+        yield return new WaitForSeconds(invincibilityPadding);
+        // playerSpeedMultipler = 1;
+        gameObject.layer = originalLayer;
+
+        isInvincible = false;
+
     }
 
     void Shoot()
