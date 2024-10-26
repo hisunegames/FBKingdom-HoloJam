@@ -152,6 +152,7 @@ public class EnemyAI : MonoBehaviour
             if (Math.Abs(distance) < enemyData.attackRange && !GetComponentInChildren<DetectPlayer>().inRange && !isAttacking)
             {
                 isAttacking = true;
+                animator.SetBool("IsAttacking", true);
                 OnAttack();
             }
             if (direction.x < 0)
@@ -206,14 +207,17 @@ public class EnemyAI : MonoBehaviour
     private void OnAttack()
     {
         _speed *= enemyData.speedMultiplier;
-        animator.SetTrigger("Attack");
-
-        StartCoroutine(ResetSpeedAfterAttack());
+        Debug.Log("Attacking");
     }
 
-    private IEnumerator ResetSpeedAfterAttack()
+    private void ResetSpeedAfterAttack()
     {
-        yield return new WaitForSeconds(1f);
+        // if (player == null)
+        // {
+        //     yield break;
+        // }
+        // yield return new WaitForSeconds(1f);
+        animator.SetBool("IsAttacking", false);
         _speed /= enemyData.speedMultiplier;
         isAttacking = false;
         isRetreating = true;
@@ -227,6 +231,8 @@ public class EnemyAI : MonoBehaviour
             if (!PlayerScript.instance.isInvincible)
             {
                 PlayerScript.instance.PlayerHit(other.gameObject, enemyData, facingDirection);
+                if (EnemyAIType.Flying == enemyAIType)
+                    ResetSpeedAfterAttack();
             }
         }
     }
