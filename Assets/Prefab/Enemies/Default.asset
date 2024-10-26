@@ -14,8 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyName: Default
   maxHealth: 100
-  speed: 0.2
+  speedMultiplier: 1
+  speed: 1
   attackPower: 20
-  attackRange: 1
-  knockbackForce: 0.1
-  mass: 0.2
+  attackRange: 5
+  knockbackForce: 0.4
+  mass: 1
+  retreatDistance: 2.5

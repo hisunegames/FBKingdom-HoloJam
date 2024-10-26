@@ -66,7 +66,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.09, y: 0.95}
+  m_Offset: {x: -0.09, y: 0.9}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -76,7 +76,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1.22, y: 1.97}
+  m_Size: {x: 1.22, y: 2.58}
   m_EdgeRadius: 0
 --- !u!1 &981159382683359254
 GameObject:
@@ -144,7 +144,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.06, y: 0.74}
+  m_Offset: {x: -0.16, y: 0.74}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -154,7 +154,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1.1, y: 1.48}
+  m_Size: {x: 0.88, y: 1.48}
   m_EdgeRadius: 0
 --- !u!1 &1958328265948806135
 GameObject:
@@ -268,7 +268,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.02, y: 0.07, z: 0}
-  m_LocalScale: {x: 0.03, y: 0.03, z: 0.03}
+  m_LocalScale: {x: 0.05, y: 0.05, z: 0.05}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 418131856958287295}
@@ -5183,7 +5183,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1.23, y: 1.42}
+  m_Size: {x: 1.03, y: 1.42}
   m_EdgeRadius: 0
 --- !u!61 &1272469792772780062
 BoxCollider2D:
@@ -5229,7 +5229,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1.92, y: 0.9}
+  m_Size: {x: 1.71, y: 0.9}
   m_EdgeRadius: 0
 --- !u!50 &5870688941336870169
 Rigidbody2D:
@@ -5299,14 +5299,12 @@ CompositeCollider2D:
   m_ColliderPaths: []
   m_CompositePaths:
     m_Paths:
-    - - {x: 0.1319707, y: -0.0029999001}
-      - {x: 0.1319707, y: 0.267}
-      - {x: 0.1305, y: 0.2670294}
-      - {x: 0.13047071, y: 0.483}
-      - {x: -0.2385, y: 0.4829707}
-      - {x: -0.2385294, y: 0.267}
-      - {x: -0.444, y: 0.2669707}
-      - {x: -0.4439707, y: -0.0029999001}
+    - - {x: 0.1004707, y: -0.0029999001}
+      - {x: 0.1004706, y: 0.483}
+      - {x: -0.2085, y: 0.4829707}
+      - {x: -0.2085294, y: 0.267}
+      - {x: -0.4125, y: 0.2669707}
+      - {x: -0.4124707, y: -0.0029999001}
   m_VertexDistance: 0.0005
   m_OffsetDistance: 0.00005
   m_UseDelaunayMesh: 0
@@ -5385,15 +5383,15 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
     - target: {fileID: 7878350319992209165, guid: 30b82fd6524d1f74ebf331fd8d0b842e, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7878350319992209165, guid: 30b82fd6524d1f74ebf331fd8d0b842e, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7878350319992209165, guid: 30b82fd6524d1f74ebf331fd8d0b842e, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7878350319992209165, guid: 30b82fd6524d1f74ebf331fd8d0b842e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5689,7 +5687,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Motor: {fileID: -3311104556210359631}
   m_MovementSettings:
-    Speed: 1.3
+    Speed: 6.5
     AccelerationTimeAirborne: 0.1
     AccelerationTimeGrounded: 0.1
   m_OnLadderSettings:
@@ -5700,24 +5698,24 @@ MonoBehaviour:
   m_Jump:
     HasVariableJumpHeight: 1
     AirJumpAllowed: 1
-    MaxHeight: 0.55
+    MaxHeight: 2.75
     MinHeight: 0.33
     TimeToApex: 0.4
-    OnLadderJumpForce: 0.22
+    OnLadderJumpForce: 1.1
     FallingJumpPaddingTime: 0.09
     WillJumpPaddingTime: 0.15
   m_WallInteraction:
     CanWallSlide: 1
-    WallStickTime: 0.15
+    WallStickTime: 0.75
     WallStickTimer: 0
-    WallSlideSpeedLoss: 0.05
+    WallSlideSpeedLoss: 0.25
     WallSlidingSpeedMax: 2
     CanWallClimb: 0
     WallClimbSpeed: 2
     CanWallJump: 1
-    ClimbForce: {x: 2.25, y: 3}
-    OffForce: {x: 1.5, y: 2.8125}
-    LeapForce: {x: 3.375, y: 3.1875}
+    ClimbForce: {x: 11.25, y: 15}
+    OffForce: {x: 7.5, y: 14.0625}
+    LeapForce: {x: 16.875, y: 15.9375}
     CanGrabLedge: 0
     LedgeDetectionOffset: 0.1
     WallDirX: 0
@@ -5750,7 +5748,7 @@ MonoBehaviour:
   isSlashing: 0
   currentWeapon: 1
   sword: {fileID: 981159382683359254}
-  swordKnockback: {x: 0.2, y: 0.1}
+  swordKnockback: {x: 0.5, y: 0.25}
   swordDamage: 20
   attackCooldown: 0.2
   bulletPrefab: {fileID: 1545415302643014069, guid: ead0f0b162e9edc4ba922202f5c87c8e, type: 3}

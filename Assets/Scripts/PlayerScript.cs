@@ -194,16 +194,21 @@ public class PlayerScript : MonoBehaviour
 
     public IEnumerator FakeAddForceMotionEnemy(GameObject target, EnemyData enemyData, float facingDirection)
     {
-        float i = 0.01f;
-        while (swordKnockback.x >= i)
-        {
-            if (target == null)
-                yield break;
-            target.GetComponent<Rigidbody2D>().linearVelocity = new Vector2(swordKnockback.x * enemyData.mass / i * facingDirection, target.GetComponent<Rigidbody2D>().linearVelocity.y); // !! For X axis positive force
-            i += Time.deltaTime;
-            yield return new WaitForEndOfFrame();
+        // float i = 0.01f;
+        // while (swordKnockback.x >= i)
+        // {
+        //     if (target == null)
+        //         yield break;
 
-        }
+        //     target.GetComponent<Rigidbody2D>().linearVelocity = new Vector2(swordKnockback.x * enemyData.mass / i * facingDirection, swordKnockback.y); // !! For X axis positive force
+        //     i += Time.deltaTime;
+        //     yield return new WaitForEndOfFrame();
+
+        // }
+        if (target == null)
+            yield break;
+        target.GetComponent<Rigidbody2D>().AddForce(new Vector2(swordKnockback.x * facingDirection, swordKnockback.y), ForceMode2D.Impulse);
+        yield return new WaitForSeconds(0.1f);
         if (target == null)
             yield break;
         target.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
