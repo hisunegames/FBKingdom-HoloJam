@@ -589,6 +589,8 @@ MonoBehaviour:
   distanceBetween: 4
   facingDirection: 0
   _speed: 0
+  hitbox: {fileID: 0}
+  detection: {fileID: 0}
   patrolPoints: []
   flightLowerBound: 0
   animator: {fileID: 0}
