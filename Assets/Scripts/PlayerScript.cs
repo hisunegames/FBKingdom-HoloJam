@@ -182,14 +182,35 @@ public class PlayerScript : MonoBehaviour
     public IEnumerator FakeAddForceMotion(GameObject target, EnemyData enemyData, float facingDirection)
     {
         float i = 0.01f;
+        Rigidbody2D rb = target.GetComponent<Rigidbody2D>();
+        Vector2 raycastDirection = new Vector2(-facingDirection, 0); // Raycast direction opposite to the facing direction
+        float raycastDistance = .5f; // Adjust the distance as needed
+        int worldLayerMask = LayerMask.GetMask("World"); // Create a layer mask for the "world" layer
+
         while (enemyData.knockbackForce >= i)
         {
-            target.GetComponent<Rigidbody2D>().linearVelocity = new Vector2(enemyData.knockbackForce / i * -facingDirection, 0.1f); // !! For X axis positive force
+            // Perform the raycast
+            Vector2 raycastOrigin = new Vector2(target.transform.position.x, target.transform.position.y + 0.4f);
+            RaycastHit2D hit = Physics2D.Raycast(raycastOrigin, raycastDirection, raycastDistance, worldLayerMask);
+
+            // Draw the raycast line
+            Debug.DrawLine(raycastOrigin, raycastOrigin + raycastDirection * raycastDistance, Color.red);
+
+            if (hit.collider != null)
+            {
+                // Obstacle detected, stop the player's velocity
+                Debug.Log("Obstacle detected");
+                rb.linearVelocity = Vector2.zero;
+                yield break;
+            }
+
+            // Apply the knockback force
+            rb.linearVelocity = new Vector2(enemyData.knockbackForce / i * -facingDirection, 0.1f); // For X axis positive force
             i += Time.deltaTime;
             yield return new WaitForEndOfFrame();
-
         }
-        target.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
+
+        rb.linearVelocity = Vector2.zero;
         yield return null;
     }
 

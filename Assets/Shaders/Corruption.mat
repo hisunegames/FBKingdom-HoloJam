@@ -30,14 +30,20 @@ Material:
     m_Ints: []
     m_Floats:
     - _CorruptionStrength: 1
-    - _PosterizeLevels: 128
+    - _FlickerIntensity: 1
+    - _NumOriginPoints: 2
+    - _OriginRadii: 1
+    - _PosterizeLevels: 256
+    - _TimeScale: 0.39
     m_Colors:
     - _Color1: {r: 1, g: 1, b: 1, a: 1}
     - _Color2: {r: 1, g: 1, b: 1, a: 1}
     - _Color3: {r: 1, g: 0, b: 0.09058142, a: 1}
     - _CorruptionColor: {r: 0.6901961, g: 0, b: 0.09333724, a: 1}
     - _CorruptionPoint: {r: 0.053, g: 0, b: 0, a: 0}
+    - _CorruptionPoints: {r: 0, g: 0, b: 0, a: 0}
     - _EndPoint: {r: 3.66, g: -0.61, b: 0, a: 0}
+    - _OriginPoints: {r: 0, g: 0, b: 0, a: 0}
     - _Point1: {r: -1.93, g: -0.61, b: 0, a: 0}
     - _Point2: {r: 4, g: -0.61, b: 0, a: 0}
     - _Point3: {r: 10.44, g: -0.61, b: 0, a: 0}

@@ -3,13 +3,11 @@ Shader "Custom/UnlitCorruptionEffect"
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
-        _Point1 ("Corruption Start Point", Vector) = (0, 0, 0, 0)
-        _Point2 ("Corruption Mid Point", Vector) = (1, 0, 0, 0)
-        _Point3 ("Corruption End Point", Vector) = (2, 0, 0, 0)
-
         _CorruptionColor ("Corruption Color", Color) = (1, 0, 0, 1)
         _CorruptionStrength ("Corruption Strength", Range(0, 1)) = 0.5
         _PosterizeLevels ("Posterization Levels", Range(2, 256)) = 8
+        _FlickerIntensity ("Flicker Intensity", Range(0, 1)) = 0.2
+        _TimeScale ("Time Scale", Range(0, 10)) = 1.0
     }
     SubShader
     {
@@ -18,16 +16,25 @@ Shader "Custom/UnlitCorruptionEffect"
         Pass
         {
             CGPROGRAM
+            #pragma target 5.0
             #pragma vertex vert
             #pragma fragment frag
 
             sampler2D _MainTex;
-            float4 _Point1;
-            float4 _Point2;
-            float4 _Point3;
             float4 _CorruptionColor;
             float _CorruptionStrength;
-            int _PosterizeLevels;
+            float _PosterizeLevels;
+            float _FlickerIntensity;
+            float _TimeScale;
+
+            // Fixed max corruption points
+            #define MAX_CORRUPTION_POINTS 10
+            struct CorruptionPoint
+            {
+                float3 position;
+                float radius;
+            };
+            StructuredBuffer<CorruptionPoint> _CorruptionPoints;
 
             struct appdata
             {
@@ -52,29 +59,40 @@ Shader "Custom/UnlitCorruptionEffect"
                 return o;
             }
 
+            // Simple gradient noise function based on world position and time
+            float gradientNoise(float3 pos, float time)
+            {
+                return frac(sin(dot(pos * 12.9898, float3(78.233, 45.643, 83.542))) * 43758.5453 + time);
+            }
+
             fixed4 frag (v2f i) : SV_Target
             {
-                // Sample the original color from the texture
                 fixed4 baseColor = tex2D(_MainTex, i.uv);
+                float corruptionFactor = 0.0;
 
-                // Check if the current position is before the midpoint
-                if (i.worldPos.x < _Point2.x)
+                // Manually unroll up to MAX_CORRUPTION_POINTS
+                [unroll(MAX_CORRUPTION_POINTS)]
+                for (int j = 0; j < MAX_CORRUPTION_POINTS; j++)
                 {
-                    return baseColor; // No corruption before the midpoint
+                    if (j >= _CorruptionPoints.Length) break;
+
+                    float3 pointPos = _CorruptionPoints[j].position;
+                    float radius = _CorruptionPoints[j].radius;
+                    float distToPoint = distance(i.worldPos, pointPos);
+
+                    if (distToPoint < radius)
+                    {
+                        float pointCorruption = saturate((radius - distToPoint) / radius);
+                        corruptionFactor = max(corruptionFactor, pointCorruption);
+                    }
                 }
 
-                // Calculate distance factors from midpoint to endpoint
-                float distToMid = abs(i.worldPos.x - _Point2.x);
-                float distToEnd = abs(i.worldPos.x - _Point3.x);
-                float totalDistance = distToMid + distToEnd;
-                float corruptionFactor = saturate((i.worldPos.x - _Point2.x) / totalDistance) * _CorruptionStrength;
-
-                // Desaturate base color gradually as we approach the endpoint
-                float desaturationLevel = corruptionFactor * 0.8;
+                // Corruption desaturation
+                float desaturationLevel = corruptionFactor * _CorruptionStrength;
                 fixed3 grayscale = dot(baseColor.rgb, fixed3(0.3, 0.59, 0.11));
                 fixed3 desaturatedColor = lerp(baseColor.rgb, grayscale.xxx, desaturationLevel);
 
-                // Hard Light Blending
+                // Hard Light Blend for corruption color
                 fixed3 corruptColor = _CorruptionColor.rgb;
                 fixed3 hardLightBlend;
                 for (int channel = 0; channel < 3; channel++)
@@ -83,15 +101,16 @@ Shader "Custom/UnlitCorruptionEffect"
                         ? 2.0 * desaturatedColor[channel] * corruptColor[channel] 
                         : 1.0 - 2.0 * (1.0 - desaturatedColor[channel]) * (1.0 - corruptColor[channel]);
                 }
-                
-                // Blend the result with the corruption factor
                 fixed3 blendedColor = lerp(desaturatedColor, hardLightBlend, corruptionFactor);
 
-                // Improved Posterization
+                // Posterization effect
                 float stepSize = 1.0 / _PosterizeLevels;
                 blendedColor = floor((blendedColor + stepSize * 0.5) / stepSize) * stepSize;
 
-                // Return the final color with original alpha
+                // Apply brightness adjustment and flicker using gradient noise
+                float noise = gradientNoise(i.worldPos, _TimeScale * _Time.y) * _FlickerIntensity * corruptionFactor;
+                blendedColor *= 1.0 - noise; // Brightness adjustment with noise flicker
+
                 return fixed4(blendedColor, baseColor.a);
             }
             ENDCG

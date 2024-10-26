@@ -2,7 +2,32 @@ fileFormatVersion: 2
 guid: f24f07ffb3d0d1b46a129366e0b8efc4
 ScriptedImporter:
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:AnimationClip
+      assembly: UnityEngine.AnimationModule
+      name: Attack
+    second: {fileID: 7400000, guid: 9b38820a650704a4e818dbcddd8e1b22, type: 2}
+  - first:
+      type: UnityEngine:AnimationClip
+      assembly: UnityEngine.AnimationModule
+      name: Death
+    second: {fileID: 7400000, guid: c8e9bdca03a028e4ab476281f3d4c120, type: 2}
+  - first:
+      type: UnityEngine:AnimationClip
+      assembly: UnityEngine.AnimationModule
+      name: Idle
+    second: {fileID: 7400000, guid: 0721c62f6e6e2774997ae8e0f543636b, type: 2}
+  - first:
+      type: UnityEngine:AnimationClip
+      assembly: UnityEngine.AnimationModule
+      name: Move
+    second: {fileID: 7400000, guid: 640543b4127ca014280b8ecf0fe54749, type: 2}
+  - first:
+      type: UnityEngine:AnimationClip
+      assembly: UnityEngine.AnimationModule
+      name: Move-Start
+    second: {fileID: 7400000, guid: 5acd9d1fdbb2f5a4f82d54fc2229f06a, type: 2}
   serializedVersion: 2
   userData: 
   assetBundleName: 
@@ -97,7 +122,7 @@ ScriptedImporter:
     addSortingGroup: 1
     addShadowCasters: 0
   importFileNodeState: 1
-  platformSettingsDirtyTick: 638652084106354256
+  platformSettingsDirtyTick: 638655826577291316
   textureAssetName: 
   singleSpriteImportData:
   - name: 
