@@ -23,6 +23,9 @@ public class EnemyAI : MonoBehaviour
     [SerializeField]
     private float _speed;
 
+    public CheckTriggerCollider hitbox;
+    public CheckTriggerCollider detection;
+
     [SerializeField]
     private Vector2[] patrolPoints;
     private int currentPatrolIndex = 0;
@@ -36,6 +39,10 @@ public class EnemyAI : MonoBehaviour
     private bool isRetreating = false;
 
     private Vector3 startingScale;
+    void Awake()
+    {
+        hitbox.StayingInTrigger.AddListener(OnEnemyHitBoxTriggerStay);
+    }
 
     void Start()
     {
@@ -223,7 +230,7 @@ public class EnemyAI : MonoBehaviour
         isRetreating = true;
     }
 
-    private void OnCollisionStay2D(Collision2D other)
+    void OnEnemyHitBoxTriggerStay(Collider2D other)
     {
         if (other.gameObject.CompareTag("Player"))
         {
@@ -234,6 +241,14 @@ public class EnemyAI : MonoBehaviour
                 if (EnemyAIType.Flying == enemyAIType)
                     ResetSpeedAfterAttack();
             }
+        }
+    }
+    void OnEnemyDetectionTriggerStay(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Player"))
+        {
+            Debug.Log("Player Detected");
+            isChasing = true;
         }
     }
 
