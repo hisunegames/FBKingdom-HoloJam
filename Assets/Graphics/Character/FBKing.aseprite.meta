@@ -26,6 +26,11 @@ ScriptedImporter:
   - first:
       type: UnityEngine:AnimationClip
       assembly: UnityEngine.AnimationModule
+      name: Action-Hurt
+    second: {fileID: 7400000, guid: 9978a3b49edb081478d9d58e8e9e400e, type: 2}
+  - first:
+      type: UnityEngine:AnimationClip
+      assembly: UnityEngine.AnimationModule
       name: Action-Idle
     second: {fileID: 7400000, guid: e6c918d90b02304498a48377811fc69c, type: 2}
   - first:
@@ -172,7 +177,7 @@ ScriptedImporter:
     addSortingGroup: 1
     addShadowCasters: 1
   importFileNodeState: 1
-  platformSettingsDirtyTick: 638655019624202192
+  platformSettingsDirtyTick: 638655581643818923
   textureAssetName: 
   singleSpriteImportData:
   - name: 

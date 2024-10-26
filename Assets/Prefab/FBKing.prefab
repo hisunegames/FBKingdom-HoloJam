@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6573211655660807791}
   - component: {fileID: 8231713876053662460}
-  m_Layer: 6
+  m_Layer: 8
   m_Name: Sword-Aerial
   m_TagString: Sword
   m_Icon: {fileID: 0}
@@ -48,7 +48,7 @@ BoxCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -88,7 +88,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7282040565671404579}
   - component: {fileID: 4509938696970967988}
-  m_Layer: 6
+  m_Layer: 8
   m_Name: Sword-1
   m_TagString: Sword
   m_Icon: {fileID: 0}
@@ -126,7 +126,7 @@ BoxCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -5117,7 +5117,7 @@ GameObject:
   - component: {fileID: 1272469792772780062}
   - component: {fileID: 5870688941336870169}
   - component: {fileID: 3713839734328267232}
-  m_Layer: 6
+  m_Layer: 8
   m_Name: Sword-2
   m_TagString: Sword
   m_Icon: {fileID: 0}
@@ -5155,7 +5155,7 @@ BoxCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -5748,7 +5748,7 @@ MonoBehaviour:
   isSlashing: 0
   currentWeapon: 1
   sword: {fileID: 981159382683359254}
-  swordKnockback: {x: 0.5, y: 0.25}
+  swordKnockback: {x: 1, y: 1}
   swordDamage: 20
   attackCooldown: 0.2
   bulletPrefab: {fileID: 1545415302643014069, guid: ead0f0b162e9edc4ba922202f5c87c8e, type: 3}

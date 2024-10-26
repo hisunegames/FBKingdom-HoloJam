@@ -174,7 +174,8 @@ public class PlayerScript : MonoBehaviour
 
     public void PlayerHit(GameObject other, EnemyData enemyData, float facingDirection)
     {
-        StartCoroutine(InvincibiltyFrames());
+        m_Animator.Play("Action-Hurt");
+        // StartCoroutine(InvincibiltyFrames());
         other.GetComponent<PlayerScript>().Damage(enemyData.attackPower);
         StartCoroutine(FakeAddForceMotion(other, enemyData, -facingDirection));
     }
@@ -215,14 +216,25 @@ public class PlayerScript : MonoBehaviour
         yield return null;
     }
 
-    public IEnumerator InvincibiltyFrames()
-    {
-        GetComponent<SpriteRenderer>().color = Color.red;
-        instance.isInvincible = true;
-        yield return new WaitForSeconds(instance.invincibilityTime);
-        isInvincible = false;
-        GetComponent<SpriteRenderer>().color = Color.white;
-    }
+    // public IEnumerator InvincibiltyFrames()
+    // {
+    //     SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+    //     instance.isInvincible = true;
+    //     float blinkInterval = 0.1f; // Adjust the blink interval as needed
+    //     float elapsedTime = 0f;
+
+    //     while (elapsedTime < instance.invincibilityTime)
+    //     {
+    //         spriteRenderer.color = Color.white;
+    //         yield return new WaitForSeconds(blinkInterval);
+    //         spriteRenderer.color = Color.red;
+    //         yield return new WaitForSeconds(blinkInterval);
+    //         elapsedTime += 2 * blinkInterval;
+    //     }
+
+    //     instance.isInvincible = false;
+    //     spriteRenderer.color = Color.white;
+    // }
 
     public void OnDash(int direction)
     {
