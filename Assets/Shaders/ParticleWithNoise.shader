@@ -9,7 +9,7 @@ Shader "Custom/ParticleWithNoiseColorPosterizationAndNoiseMap" {
         _AlphaAdjustment ("Alpha Adjustment", Range(0, 1)) = 1.0 // New property for overall alpha adjustment
     }
     SubShader {
-        Tags { "RenderType" = "Transparent" }
+        Tags { "RenderType" = "TransparentCutout" }
         ZWrite On
         Blend SrcAlpha OneMinusSrcAlpha
 

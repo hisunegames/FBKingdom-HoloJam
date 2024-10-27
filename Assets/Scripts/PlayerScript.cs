@@ -187,20 +187,37 @@ public class PlayerScript : MonoBehaviour
         float raycastDistance = .5f; // Adjust the distance as needed
         int worldLayerMask = LayerMask.GetMask("World"); // Create a layer mask for the "world" layer
 
+        int numberOfRaycasts = 10; // Number of raycast lines
+        float padding = 0.1f; // Padding to avoid detecting the ground
+        Collider2D collider = target.GetComponent<Collider2D>(); // Get the Collider2D component
+        float colliderHeight = collider.bounds.size.y; // Get the height of the collider
+        float raycastSpacing = (colliderHeight - 2 * padding) / (numberOfRaycasts - 1); // Calculate the spacing between each raycast line
+
         while (enemyData.knockbackForce >= i)
         {
-            // Perform the raycast
-            Vector2 raycastOrigin = new Vector2(target.transform.position.x, target.transform.position.y + 0.4f);
-            RaycastHit2D hit = Physics2D.Raycast(raycastOrigin, raycastDirection, raycastDistance, worldLayerMask);
+            bool obstacleDetected = false;
 
-            // Draw the raycast line
-            Debug.DrawLine(raycastOrigin, raycastOrigin + raycastDirection * raycastDistance, Color.red);
-
-            if (hit.collider != null)
+            for (int j = 0; j < numberOfRaycasts; j++)
             {
-                // Obstacle detected, stop the player's velocity
-                Debug.Log("Obstacle detected");
-                rb.linearVelocity = Vector2.zero;
+                // Adjust the raycast origin for each raycast line
+                Vector2 raycastOrigin = new Vector2(target.transform.position.x, collider.bounds.min.y + padding + j * raycastSpacing);
+                RaycastHit2D hit = Physics2D.Raycast(raycastOrigin, raycastDirection, raycastDistance, worldLayerMask);
+
+                // Draw the raycast line
+                Debug.DrawLine(raycastOrigin, raycastOrigin + raycastDirection * raycastDistance, Color.red);
+
+                if (hit.collider != null)
+                {
+                    // Obstacle detected, stop the player's velocity
+                    Debug.Log("Obstacle detected");
+                    rb.linearVelocity = Vector2.zero;
+                    obstacleDetected = true;
+                    break;
+                }
+            }
+
+            if (obstacleDetected)
+            {
                 yield break;
             }
 

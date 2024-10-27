@@ -24,7 +24,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _MainTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 32635ca858690cf43b7f853ce367b985, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NoiseMap:
@@ -33,7 +33,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _AlphaAdjustment: 0.357
+    - _AlphaAdjustment: 1
     - _DistortionAmount: 0.239
     - _FalloffDistance: 0.52
     - _FlickerIntensity: 1
@@ -42,6 +42,6 @@ Material:
     - _PosterizeLevels: 256
     - _TimeScale: 1
     m_Colors:
-    - _Color: {r: 0.6132076, g: 0, b: 0, a: 1}
+    - _Color: {r: 0.4245283, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
