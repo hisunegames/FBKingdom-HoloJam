@@ -12,5 +12,5 @@ public class EnemyData : ScriptableObject
     public float knockbackForce = 0.1f;
     public float mass = 0.2f;
     public float retreatDistance = 0.5f;
-
+    public float attackInterval = 3f;
 }

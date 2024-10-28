@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.TextCore;
 using FBK;
+using Unity.VisualScripting;
 
 public class EnemyAI : MonoBehaviour
 {
@@ -42,6 +43,12 @@ public class EnemyAI : MonoBehaviour
     private Vector3 startingScale;
     private bool isFlashing = false;
 
+    [SerializeField]
+    private GameObject fireballPrefab;
+    public float fireballSpeed = 5f;
+    public float fireballArcAngle = 45f;
+    public float sightRange = 10f;
+
     void Awake()
     {
         hitbox.StayingInTrigger.AddListener(OnEnemyHitBoxTriggerStay);
@@ -67,6 +74,7 @@ public class EnemyAI : MonoBehaviour
                 HandleGroundedAI();
                 break;
             case EnemyAIType.Flying:
+            case EnemyAIType.Ranged:
                 HandleFlyingAI();
                 break;
         }
@@ -90,16 +98,11 @@ public class EnemyAI : MonoBehaviour
 
         if (isChasing)
         {
-            // if (Math.Abs(distance) < enemyData.attackRange)
-            // {
+            if (animator == null || GetComponent<Health>().currentHealth <= 0) return;
             StopCoroutine(TurnAround());
             animator.Play("Move");
             animator.SetBool("IsPatrolling", false);
             transform.position = Vector2.MoveTowards(transform.position, new Vector2(player.transform.position.x, transform.position.y), _speed * enemyData.speedMultiplier * Time.deltaTime);
-            // isAttacking = true;
-            // animator.SetBool("IsAttacking", true);
-            // OnAttack();
-            // }
             if (direction.x < 0)
             {
                 facingDirection = -1;
@@ -112,64 +115,14 @@ public class EnemyAI : MonoBehaviour
         }
         else
         {
-            if (patrolPoints != null && patrolPoints.Length > 0)
-            {
-                // Ensure currentPatrolIndex is within bounds
-                currentPatrolIndex = Mathf.Clamp(currentPatrolIndex, 0, patrolPoints.Length - 1);
-                animator.SetBool("IsPatrolling", true);
-                Vector2 targetPatrolPoint = patrolPoints[currentPatrolIndex];
-                if (Vector2.Distance(transform.position, targetPatrolPoint) < 0.5f && !isTurningAround)
-                {
-                    StartCoroutine(TurnAround());
-                }
-
-                if (Vector2.Distance(transform.position, targetPatrolPoint) < 0.1f)
-                {
-                    currentPatrolIndex = (currentPatrolIndex + 1) % patrolPoints.Length;
-                }
-                else
-                {
-                    transform.position = Vector2.MoveTowards(transform.position, targetPatrolPoint, enemyData.speed * Time.deltaTime);
-                    // Adjust facing direction based on movement
-                    if (targetPatrolPoint.x < transform.position.x)
-                    {
-                        facingDirection = -1;
-                    }
-                    else
-                    {
-                        facingDirection = 1;
-                    }
-                    FlipSprite();
-                }
-            }
+            Patrol();
         }
-    }
-
-    public IEnumerator TurnAround()
-    {
-        isTurningAround = true;
-        Debug.Log("Turning around");
-        // animator.SetTrigger("Flip");
-        animator.Play("Move-Start");
-        yield return new WaitForEndOfFrame();
-        yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length); // Adjust the duration as needed
-        float startingSpeed = _speed;
-        AdjustSpeed(0);
-        animator.Play("Idle");
-        yield return new WaitForEndOfFrame();
-        yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length); // Adjust the duration as needed
-        FlipSprite();
-        animator.Play("Move-Start");
-        AdjustSpeed(startingSpeed);
-        yield return new WaitForEndOfFrame();
-
-        yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length); // Adjust the duration as needed
-        animator.Play("Move");
-        isTurningAround = false;
     }
 
     private void HandleFlyingAI()
     {
+        if (isAttacking || isFlashing) return;
+
         Vector2 direction = player.transform.position - transform.position;
         float distance = direction.magnitude;
 
@@ -195,13 +148,32 @@ public class EnemyAI : MonoBehaviour
 
         if (isChasing)
         {
-            transform.position = Vector2.MoveTowards(transform.position, new Vector2(player.transform.position.x, player.transform.position.y + flightLowerBound), _speed * Time.deltaTime);
-            if (Math.Abs(distance) < enemyData.attackRange && !GetComponentInChildren<DetectPlayer>().inRange && !isAttacking)
+            if (enemyAIType == EnemyAIType.Flying)
             {
-                isAttacking = true;
-                animator.SetBool("IsAttacking", true);
-                OnAttack();
+                transform.position = Vector2.MoveTowards(transform.position, new Vector2(player.transform.position.x, player.transform.position.y + flightLowerBound), _speed * Time.deltaTime);
+                if (Math.Abs(distance) < enemyData.attackRange && GetComponentInChildren<DetectPlayer>().inRange && !isAttacking)
+                {
+                    isAttacking = true;
+                    animator.SetBool("IsAttacking", true);
+                    OnAttack();
+                }
             }
+            else if (enemyAIType == EnemyAIType.Ranged)
+            {
+                // Move in a circle around the player
+                float angle = Time.time * _speed;
+                Vector2 offset = new Vector2(Mathf.Sin(angle), Mathf.Cos(angle)) * distanceBetween;
+                transform.position = (Vector2)player.transform.position + offset;
+
+                // Shoot fireballs at intervals
+                if (!isAttacking)
+                {
+                    isAttacking = true;
+                    StartCoroutine(ShootFireballAtIntervals());
+                }
+            }
+
+
             if (direction.x < 0)
             {
                 facingDirection = -1;
@@ -214,29 +186,90 @@ public class EnemyAI : MonoBehaviour
         }
         else
         {
-            Vector2 targetPatrolPoint = patrolPoints[currentPatrolIndex];
-            if (Vector2.Distance(transform.position, targetPatrolPoint) < 0.1f)
+            Patrol();
+        }
+    }
+
+    private IEnumerator ShootFireballAtIntervals()
+    {
+        while (isChasing)
+        {
+            ShootFireball();
+            yield return new WaitForSeconds(enemyData.attackInterval);
+        }
+        isAttacking = false;
+    }
+
+    //TODO: Implement ShootFireball method by wait until the init state is finished then shoot
+    private void ShootFireball()
+    {
+        Vector3 playerPosition = player.transform.position;
+
+        // Calculate a random angle within the specified arc
+        float halfArcAngle = fireballArcAngle / 2f;
+        float randomAngle = UnityEngine.Random.Range(-halfArcAngle, halfArcAngle);
+
+        // Convert the angle to radians
+        float angleInRadians = randomAngle * Mathf.Deg2Rad;
+
+        // Determine the position to instantiate the fireball based on the random angle
+        Vector3 fireballPosition = transform.position + new Vector3(Mathf.Sin(angleInRadians), Mathf.Cos(angleInRadians), 0);
+
+        // Instantiate the fireball at the calculated position
+        GameObject fireball = Instantiate(fireballPrefab, fireballPosition, Quaternion.identity, transform);
+
+        // Calculate the direction from the fireball's position to the player's position
+        Vector3 direction = (playerPosition - fireball.transform.position).normalized;
+
+        // Apply force to the fireball to shoot it towards the player
+        Rigidbody2D rb = fireball.GetComponent<Rigidbody2D>();
+        rb.AddForce(direction * fireballSpeed, ForceMode2D.Impulse);
+    }
+
+    private void Patrol()
+    {
+        if (patrolPoints.Length == 0) return;
+
+        Vector2 targetPatrolPoint = patrolPoints[currentPatrolIndex];
+        transform.position = Vector2.MoveTowards(transform.position, targetPatrolPoint, _speed * Time.deltaTime);
+
+        if (Vector2.Distance(transform.position, targetPatrolPoint) < 0.1f)
+        {
+            currentPatrolIndex = (currentPatrolIndex + 1) % patrolPoints.Length;
+        }
+        else
+        {
+            if (targetPatrolPoint.x < transform.position.x)
             {
-                currentPatrolIndex = (currentPatrolIndex + 1) % patrolPoints.Length;
+                facingDirection = -1;
             }
             else
             {
-                transform.position = Vector2.MoveTowards(transform.position, targetPatrolPoint, _speed * Time.deltaTime);
-                // Adjust facing direction based on movement
-                if (targetPatrolPoint.x < transform.position.x)
-                {
-                    facingDirection = -1;
-                }
-                else
-                {
-                    facingDirection = 1;
-                }
-                FlipSprite();
+                facingDirection = 1;
             }
+            FlipSprite();
         }
+    }
 
-        // Adjust facing direction based on movement
-
+    public IEnumerator TurnAround()
+    {
+        isTurningAround = true;
+        Debug.Log("Turning around");
+        animator.Play("Move-Start");
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForSeconds(animator != null ? animator.GetCurrentAnimatorStateInfo(0).length : .1f);
+        float startingSpeed = _speed;
+        AdjustSpeed(0);
+        animator.Play("Idle");
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForSeconds(animator != null ? animator.GetCurrentAnimatorStateInfo(0).length : .1f);
+        FlipSprite();
+        animator.Play("Move-Start");
+        AdjustSpeed(startingSpeed);
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForSeconds(animator != null ? animator.GetCurrentAnimatorStateInfo(0).length : .1f);
+        animator.Play("Move");
+        isTurningAround = false;
     }
 
     private void FlipSprite()
@@ -256,6 +289,7 @@ public class EnemyAI : MonoBehaviour
         _speed *= enemyData.speedMultiplier;
         Debug.Log("Attacking");
     }
+
 
     private void ResetSpeedAfterAttack()
     {
@@ -331,6 +365,20 @@ public class EnemyAI : MonoBehaviour
             {
                 Gizmos.DrawLine(patrolPoints[i], patrolPoints[0]);
             }
+        }
+
+        if (enemyAIType == EnemyAIType.Ranged)
+        {
+            Gizmos.color = Color.red;
+            Vector3 direction = transform.right * sightRange;
+            // Gizmos.DrawRay(transform.position, direction);
+
+            Gizmos.color = Color.yellow;
+            float halfArc = fireballArcAngle / 2;
+            Vector3 leftArc = Quaternion.Euler(0, 0, -halfArc) * Vector3.up * sightRange;
+            Vector3 rightArc = Quaternion.Euler(0, 0, halfArc) * Vector3.up * sightRange;
+            Gizmos.DrawRay(transform.position, leftArc);
+            Gizmos.DrawRay(transform.position, rightArc);
         }
     }
 }

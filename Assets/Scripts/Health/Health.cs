@@ -30,8 +30,8 @@ public class Health : MonoBehaviour
                 gameObject.GetComponent<Rigidbody2D>().simulated = false;
                 animator.Play("Death");
             }
-            else
-                Destroy(gameObject);
+            // else
+            //     Destroy(gameObject);
         }
         // if (Input.GetKeyDown(KeyCode.Space))
         // {
@@ -41,6 +41,8 @@ public class Health : MonoBehaviour
 
     public void Damage(float damage)
     {
+        if (gameObject == null)
+            return;
         currentHealth -= damage;
 
         // Instantiate the damage display

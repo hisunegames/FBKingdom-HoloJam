@@ -103,6 +103,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 86fb52103a6e92d4ba0c56f23506eaa0, type: 2}
     - target: {fileID: 612930748240870024, guid: 37973ecb7e0010e4b800c3b4de1aa907, type: 3}
+      propertyPath: enemyAIType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 612930748240870024, guid: 37973ecb7e0010e4b800c3b4de1aa907, type: 3}
       propertyPath: patrolPoints.Array.data[0].x
       value: 15
       objectReference: {fileID: 0}
@@ -188,7 +192,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7787140669592730802, guid: 37973ecb7e0010e4b800c3b4de1aa907, type: 3}
       propertyPath: m_Mass
-      value: 2.54
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 8747469441702161724, guid: 37973ecb7e0010e4b800c3b4de1aa907, type: 3}
       propertyPath: m_LocalPosition.x
@@ -233,6 +237,8 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 3925631128803832525, guid: 37973ecb7e0010e4b800c3b4de1aa907, type: 3}
+    - {fileID: 1861609586480445956, guid: 37973ecb7e0010e4b800c3b4de1aa907, type: 3}
+    - {fileID: 46603977581480823, guid: 37973ecb7e0010e4b800c3b4de1aa907, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 8747469441702161724, guid: 37973ecb7e0010e4b800c3b4de1aa907, type: 3}
       insertIndex: 0

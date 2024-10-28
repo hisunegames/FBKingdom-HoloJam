@@ -2,7 +2,22 @@ fileFormatVersion: 2
 guid: d087ab27d32f7a34bb174257a1a8f0b0
 ScriptedImporter:
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:AnimationClip
+      assembly: UnityEngine.AnimationModule
+      name: Banzai
+    second: {fileID: 7400000, guid: 0c7b0a64143692949ac37f0baea4a757, type: 2}
+  - first:
+      type: UnityEngine:AnimationClip
+      assembly: UnityEngine.AnimationModule
+      name: Fear
+    second: {fileID: 7400000, guid: 5ab550bd83a44a845864cf8a08807ee5, type: 2}
+  - first:
+      type: UnityEngine:AnimationClip
+      assembly: UnityEngine.AnimationModule
+      name: Idle
+    second: {fileID: 7400000, guid: 6ba9539f32b959043b6802b75b432f3c, type: 2}
   serializedVersion: 2
   userData: 
   assetBundleName: 
@@ -97,7 +112,7 @@ ScriptedImporter:
     addSortingGroup: 1
     addShadowCasters: 0
   importFileNodeState: 1
-  platformSettingsDirtyTick: 638653166585469445
+  platformSettingsDirtyTick: 638657332798427005
   textureAssetName: 
   singleSpriteImportData:
   - name: 

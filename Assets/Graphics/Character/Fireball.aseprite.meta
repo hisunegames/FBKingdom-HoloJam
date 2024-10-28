@@ -2,7 +2,22 @@ fileFormatVersion: 2
 guid: 7912ffea52ba9f343b4e1509b447ffe6
 ScriptedImporter:
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:AnimationClip
+      assembly: UnityEngine.AnimationModule
+      name: Explode
+    second: {fileID: 7400000, guid: 909587f717ab6cc4d946088f298d6fae, type: 2}
+  - first:
+      type: UnityEngine:AnimationClip
+      assembly: UnityEngine.AnimationModule
+      name: Spawn
+    second: {fileID: 7400000, guid: 1762b3fe8929dc242863a3a29eac215d, type: 2}
+  - first:
+      type: UnityEngine:AnimationClip
+      assembly: UnityEngine.AnimationModule
+      name: Spin
+    second: {fileID: 7400000, guid: 5dfed522da1dcb3478d0d03cc3cb7510, type: 2}
   serializedVersion: 2
   userData: 
   assetBundleName: 
@@ -97,7 +112,7 @@ ScriptedImporter:
     addSortingGroup: 1
     addShadowCasters: 0
   importFileNodeState: 1
-  platformSettingsDirtyTick: 638657590697286212
+  platformSettingsDirtyTick: 638657575096716857
   textureAssetName: 
   singleSpriteImportData:
   - name: 

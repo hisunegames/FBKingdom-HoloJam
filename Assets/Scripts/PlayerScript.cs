@@ -179,6 +179,14 @@ public class PlayerScript : MonoBehaviour
         other.GetComponent<PlayerScript>().Damage(enemyData.attackPower);
         StartCoroutine(FakeAddForceMotion(other, enemyData, -facingDirection));
     }
+
+    public void PlayerObstacleHit(GameObject other, EnemyData enemyData)
+    {
+        m_Animator.Play("Action-Hurt");
+        // StartCoroutine(InvincibiltyFrames());
+        other.GetComponent<PlayerScript>().Damage(enemyData.attackPower);
+        StartCoroutine(FakeAddForceMotion(other, enemyData, -m_Controller.FacingDirection));
+    }
     public IEnumerator FakeAddForceMotion(GameObject target, EnemyData enemyData, float facingDirection)
     {
         float i = 0.01f;
@@ -187,7 +195,7 @@ public class PlayerScript : MonoBehaviour
         float raycastDistance = .5f; // Adjust the distance as needed
         int worldLayerMask = LayerMask.GetMask("World"); // Create a layer mask for the "world" layer
 
-        int numberOfRaycasts = 10; // Number of raycast lines
+        int numberOfRaycasts = 20; // Number of raycast lines
         float padding = 0.1f; // Padding to avoid detecting the ground
         Collider2D collider = target.GetComponent<Collider2D>(); // Get the Collider2D component
         float colliderHeight = collider.bounds.size.y; // Get the height of the collider
@@ -246,6 +254,7 @@ public class PlayerScript : MonoBehaviour
         // }
         if (target == null)
             yield break;
+        Debug.Log("Knockback" + new Vector2(swordKnockback.x * facingDirection, swordKnockback.y));
         target.GetComponent<Rigidbody2D>().AddForce(new Vector2(swordKnockback.x * facingDirection, swordKnockback.y), ForceMode2D.Impulse);
         yield return new WaitForSeconds(0.1f);
         if (target == null)

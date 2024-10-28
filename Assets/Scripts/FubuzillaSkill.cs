@@ -14,10 +14,14 @@ public class FubuzillaSkill : MonoBehaviour
 
     public ParticleSystem p_System;
     public ParticleSystem.EmissionModule emission;
+
+    private int enemyLayerMask;
+
     void Awake()
     {
         p_System = GetComponentInChildren<ParticleSystem>();
         emission = p_System.emission;
+        enemyLayerMask = LayerMask.GetMask("Enemy");
     }
 
     void Start()
@@ -25,9 +29,9 @@ public class FubuzillaSkill : MonoBehaviour
         laserSpriteRenderer.enabled = false;
         emission.enabled = false;
     }
+
     void Update()
     {
-
         Vector3 mousePosition = Input.mousePosition;
         mousePosition.z = Camera.main.nearClipPlane;
         Vector3 targetPosition = Camera.main.ScreenToWorldPoint(mousePosition);
@@ -59,7 +63,7 @@ public class FubuzillaSkill : MonoBehaviour
         startPoint.z = 0;
 
         Vector3 direction = targetPosition - startPoint;
-        RaycastHit2D hit = Physics2D.Raycast(startPoint, direction);
+        RaycastHit2D hit = Physics2D.Raycast(startPoint, direction, Mathf.Infinity, enemyLayerMask);
 
         ParticleSystem.EmissionModule emission = p_System.emission;
         if (hit.collider != null)
@@ -96,12 +100,16 @@ public class FubuzillaSkill : MonoBehaviour
         startPoint.z = 0;
 
         Vector3 direction = targetPosition - startPoint;
-        RaycastHit2D hit = Physics2D.Raycast(startPoint, direction);
+        RaycastHit2D hit = Physics2D.Raycast(startPoint, direction, Mathf.Infinity, enemyLayerMask);
 
         if (hit.collider != null && hit.collider.CompareTag("Enemy"))
         {
             accumulatedDamage = damagePerSecond * Time.deltaTime;
             hit.collider.gameObject.GetComponent<Health>().Damage(accumulatedDamage);
+        }
+        else
+        {
+            Debug.Log("No enemy hit");
         }
     }
 

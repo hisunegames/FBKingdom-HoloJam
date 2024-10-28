@@ -2,7 +2,22 @@ fileFormatVersion: 2
 guid: fbaa535a84295ed4e8e9ebd6526aa41f
 ScriptedImporter:
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:AnimationClip
+      assembly: UnityEngine.AnimationModule
+      name: Death
+    second: {fileID: 7400000, guid: adff9e36d27a06a408e2112fd3e84fc7, type: 2}
+  - first:
+      type: UnityEngine:AnimationClip
+      assembly: UnityEngine.AnimationModule
+      name: Float
+    second: {fileID: 7400000, guid: cd62fa79d77d4ef40b1564ac51ff4211, type: 2}
+  - first:
+      type: UnityEngine:AnimationClip
+      assembly: UnityEngine.AnimationModule
+      name: Idle
+    second: {fileID: 7400000, guid: 1a2252657cd894542923f873574c1dde, type: 2}
   serializedVersion: 2
   userData: 
   assetBundleName: 
@@ -97,7 +112,7 @@ ScriptedImporter:
     addSortingGroup: 1
     addShadowCasters: 0
   importFileNodeState: 1
-  platformSettingsDirtyTick: 638652084106354256
+  platformSettingsDirtyTick: 638657574959308109
   textureAssetName: 
   singleSpriteImportData:
   - name: 
