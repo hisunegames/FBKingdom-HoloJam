@@ -62,6 +62,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97e592b4da2ff674791790da9426bf85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-1621534253668044588
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97e592b4da2ff674791790da9426bf85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1102 &-867652838945073402
 AnimatorState:
   serializedVersion: 6
@@ -99,6 +111,12 @@ AnimatorController:
   m_AnimatorParameters:
   - m_Name: FireballActionState
     m_Type: 3
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 9100000}
+  - m_Name: Initialized
+    m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
@@ -193,7 +211,8 @@ AnimatorState:
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 1956722389041178569}
-  m_StateMachineBehaviours: []
+  m_StateMachineBehaviours:
+  - {fileID: -1621534253668044588}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1

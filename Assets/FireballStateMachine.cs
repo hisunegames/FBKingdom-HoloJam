@@ -17,7 +17,11 @@ public class FireballStateMachine : StateMachineBehaviour
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (stateInfo.IsName("Explode"))
+        if (stateInfo.IsName("Spawn"))
+        {
+            animator.SetBool("Initialized", true);
+        }
+        else if (stateInfo.IsName("Explode"))
         {
             Destroy(animator.gameObject);
         }

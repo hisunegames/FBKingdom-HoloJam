@@ -14,10 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyName: KuroSukonbu
   maxHealth: 50
-  speedMultiplier: 1
+  speedMultiplier: 2
   speed: 2
   attackPower: 15
   attackRange: 1
   knockbackForce: 0.1
   mass: 0.2
   retreatDistance: 0.5
+  attackInterval: 3

@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Corruption3_0: 3440360416545055772
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

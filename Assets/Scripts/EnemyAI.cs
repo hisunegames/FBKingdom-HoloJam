@@ -161,10 +161,11 @@ public class EnemyAI : MonoBehaviour
             else if (enemyAIType == EnemyAIType.Ranged)
             {
                 // Move in a circle around the player
-                float angle = Time.time * _speed;
-                Vector2 offset = new Vector2(Mathf.Sin(angle), Mathf.Cos(angle)) * distanceBetween;
-                transform.position = (Vector2)player.transform.position + offset;
-
+                // float angle = Time.time * _speed;
+                float offset = Mathf.Sin(Time.time * _speed) * distanceBetween;
+                // Vector2 offset = new Vector2(Mathf.Sin(angle), Mathf.Cos(angle)) * distanceBetween;
+                // transform.position = Vector2.MoveTowards(transform.position, (Vector2)player.transform.position + offset, _speed * Time.deltaTime);
+                transform.position = Vector2.MoveTowards(transform.position, new Vector2(player.transform.position.x + offset, player.transform.position.y + flightLowerBound), _speed * Time.deltaTime);
                 // Shoot fireballs at intervals
                 if (!isAttacking)
                 {
@@ -217,12 +218,19 @@ public class EnemyAI : MonoBehaviour
 
         // Instantiate the fireball at the calculated position
         GameObject fireball = Instantiate(fireballPrefab, fireballPosition, Quaternion.identity, transform);
-
+        StartCoroutine(WaitForFireball(playerPosition, fireball));
         // Calculate the direction from the fireball's position to the player's position
-        Vector3 direction = (playerPosition - fireball.transform.position).normalized;
+    }
+
+    IEnumerator WaitForFireball(Vector3 pos, GameObject fireball)
+    {
+        yield return new WaitUntil(() => fireball.GetComponent<Animator>().GetBool("Initialized"));
+        Debug.Log("Fireball initialized");
+        Vector3 direction = (pos - fireball.transform.position).normalized;
 
         // Apply force to the fireball to shoot it towards the player
         Rigidbody2D rb = fireball.GetComponent<Rigidbody2D>();
+        Animator f_animator = fireball.GetComponent<Animator>();
         rb.AddForce(direction * fireballSpeed, ForceMode2D.Impulse);
     }
 
