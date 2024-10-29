@@ -1,15 +1,15 @@
 using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class DetectPlayer : MonoBehaviour
 {
-
-    public bool inRange = false;
-    void OnTriggerEnter2D(Collider2D other)
+    public UnityEvent<bool> FoundPlayer;
+    void OnTriggerStay2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
         {
-            inRange = true;
+            FoundPlayer?.Invoke(true);
             Debug.Log("Player detected!");
         }
     }
@@ -18,7 +18,7 @@ public class DetectPlayer : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            inRange = false;
+            FoundPlayer?.Invoke(false);
             Debug.Log("Player left!");
         }
     }

@@ -82,7 +82,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 575c8d8ab28c4634d902f0ac3f73fb26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inRange: 0
+  FoundPlayer:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &6112440148566377520
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -131,9 +133,13 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 59809743786613838}
     - target: {fileID: 612930748240870024, guid: 37973ecb7e0010e4b800c3b4de1aa907, type: 3}
+      propertyPath: animator
+      value: 
+      objectReference: {fileID: 3307242418419506644}
+    - target: {fileID: 612930748240870024, guid: 37973ecb7e0010e4b800c3b4de1aa907, type: 3}
       propertyPath: detection
       value: 
-      objectReference: {fileID: 6112440148566377520}
+      objectReference: {fileID: 3873346799752542252}
     - target: {fileID: 612930748240870024, guid: 37973ecb7e0010e4b800c3b4de1aa907, type: 3}
       propertyPath: enemyData
       value: 
@@ -144,7 +150,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 612930748240870024, guid: 37973ecb7e0010e4b800c3b4de1aa907, type: 3}
       propertyPath: distanceBetween
-      value: 8
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 612930748240870024, guid: 37973ecb7e0010e4b800c3b4de1aa907, type: 3}
       propertyPath: flightLowerBound

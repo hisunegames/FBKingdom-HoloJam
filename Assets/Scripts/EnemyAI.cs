@@ -22,10 +22,10 @@ public class EnemyAI : MonoBehaviour
     public float distanceBetween;
     public float facingDirection;
     [SerializeField]
-    private float _speed;
+    private float curSpeed;
 
     public CheckTriggerCollider hitbox;
-    public CheckTriggerCollider detection;
+    public DetectPlayer detection;
 
     [SerializeField]
     private Vector2[] patrolPoints;
@@ -39,6 +39,7 @@ public class EnemyAI : MonoBehaviour
     private Animator animator;
     public bool isAttacking = false;
     private bool isRetreating = false;
+    private bool playerInRange = false;
 
     private Vector3 startingScale;
     private bool isFlashing = false;
@@ -48,17 +49,19 @@ public class EnemyAI : MonoBehaviour
     public float fireballSpeed = 5f;
     public float fireballArcAngle = 45f;
     public float sightRange = 10f;
+    private float fireballTimer = 0f;
 
     void Awake()
     {
         hitbox.StayingInTrigger.AddListener(OnEnemyHitBoxTriggerStay);
+        detection.FoundPlayer.AddListener(OnEnemyDetectionTriggerStay);
     }
 
     void Start()
     {
-        _speed = enemyData.speed;
+        curSpeed = enemyData.speed;
         startingScale = transform.localScale;
-        animator = GetComponentInChildren<Animator>();
+        // animator = GetComponentInChildren<Animator>();
         player = GameObject.FindGameObjectWithTag("Player");
     }
 
@@ -74,8 +77,10 @@ public class EnemyAI : MonoBehaviour
                 HandleGroundedAI();
                 break;
             case EnemyAIType.Flying:
-            case EnemyAIType.Ranged:
                 HandleFlyingAI();
+                break;
+            case EnemyAIType.Ranged:
+                HandleRangedAI();
                 break;
         }
     }
@@ -102,7 +107,7 @@ public class EnemyAI : MonoBehaviour
             StopCoroutine(TurnAround());
             animator.Play("Move");
             animator.SetBool("IsPatrolling", false);
-            transform.position = Vector2.MoveTowards(transform.position, new Vector2(player.transform.position.x, transform.position.y), _speed * enemyData.speedMultiplier * Time.deltaTime);
+            transform.position = Vector2.MoveTowards(transform.position, new Vector2(player.transform.position.x, transform.position.y), curSpeed * enemyData.speedMultiplier * Time.deltaTime);
             if (direction.x < 0)
             {
                 facingDirection = -1;
@@ -129,7 +134,7 @@ public class EnemyAI : MonoBehaviour
         if (isRetreating)
         {
             Vector2 retreatDirection = (transform.position - player.transform.position).normalized;
-            transform.position = Vector2.MoveTowards(transform.position, transform.position + (Vector3)retreatDirection * enemyData.retreatDistance, _speed * Time.deltaTime);
+            transform.position = Vector2.MoveTowards(transform.position, transform.position + (Vector3)retreatDirection * enemyData.retreatDistance, curSpeed * Time.deltaTime);
             if (Vector2.Distance(transform.position, player.transform.position) >= enemyData.retreatDistance)
             {
                 isRetreating = false;
@@ -140,6 +145,7 @@ public class EnemyAI : MonoBehaviour
         if (distance < distanceBetween)
         {
             isChasing = true;
+            // Debug.Log("IsChasing");
         }
         else if (distance > distanceBetween * 1.5f)
         {
@@ -148,31 +154,22 @@ public class EnemyAI : MonoBehaviour
 
         if (isChasing)
         {
-            if (enemyAIType == EnemyAIType.Flying)
-            {
-                transform.position = Vector2.MoveTowards(transform.position, new Vector2(player.transform.position.x, player.transform.position.y + flightLowerBound), _speed * Time.deltaTime);
-                if (Math.Abs(distance) < enemyData.attackRange && GetComponentInChildren<DetectPlayer>().inRange && !isAttacking)
-                {
-                    isAttacking = true;
-                    animator.SetBool("IsAttacking", true);
-                    OnAttack();
-                }
-            }
-            else if (enemyAIType == EnemyAIType.Ranged)
-            {
-                // Move in a circle around the player
-                // float angle = Time.time * _speed;
-                float offset = Mathf.Sin(Time.time * _speed) * distanceBetween;
-                // Vector2 offset = new Vector2(Mathf.Sin(angle), Mathf.Cos(angle)) * distanceBetween;
-                // transform.position = Vector2.MoveTowards(transform.position, (Vector2)player.transform.position + offset, _speed * Time.deltaTime);
-                transform.position = Vector2.MoveTowards(transform.position, new Vector2(player.transform.position.x + offset, player.transform.position.y + flightLowerBound), _speed * Time.deltaTime);
-                // Shoot fireballs at intervals
-                if (!isAttacking)
-                {
-                    isAttacking = true;
-                    StartCoroutine(ShootFireballAtIntervals());
-                }
-            }
+
+            transform.position = Vector2.MoveTowards(transform.position, new Vector2(player.transform.position.x, player.transform.position.y + flightLowerBound), curSpeed * Time.deltaTime);
+            animator.SetBool("IsAttacking", true);
+            AdjustSpeed(enemyData.speed * enemyData.speedMultiplier);
+            // transform.position = Vector2.MoveTowards(transform.position, new Vector2(player.transform.position.x, player.transform.position.y + flightLowerBound), curSpeed * Time.deltaTime);
+            // if (playerInRange)
+            // {
+            //     isAttacking = true;
+            //     AdjustSpeed(enemyData.speed * enemyData.speedMultiplier);
+            //     animator.SetBool("IsAttacking", true);
+            //     // OnAttack();
+            // }
+            // else if (!playerInRange)
+            // {
+            //     ResetSpeedAfterAttack();
+            // }
 
 
             if (direction.x < 0)
@@ -187,21 +184,78 @@ public class EnemyAI : MonoBehaviour
         }
         else
         {
+            animator.SetBool("IsAttacking", false);
+            AdjustSpeed(enemyData.speed);
+            Patrol();
+        }
+    }
+
+    private void HandleRangedAI()
+    {
+        if (isFlashing) return;
+
+        Vector2 direction = player.transform.position - transform.position;
+        float distance = direction.magnitude;
+
+        if (isRetreating)
+        {
+            Vector2 retreatDirection = (transform.position - player.transform.position).normalized;
+            transform.position = Vector2.MoveTowards(transform.position, transform.position + (Vector3)retreatDirection * enemyData.retreatDistance, curSpeed * Time.deltaTime);
+            if (Vector2.Distance(transform.position, player.transform.position) >= enemyData.retreatDistance)
+            {
+                isRetreating = false;
+            }
+            return;
+        }
+
+        if (distance < distanceBetween)
+        {
+            isChasing = true;
+            Debug.Log("IsChasing");
+        }
+        else if (distance > distanceBetween * 1.5f)
+        {
+            isChasing = false;
+        }
+
+        if (isChasing)
+        {
+            // Move in a circle around the player
+            float angle = Time.time * curSpeed;
+            Vector2 offset = new Vector2(Mathf.Sin(angle), Mathf.Cos(angle)) * distanceBetween;
+            transform.position = Vector2.MoveTowards(transform.position, (Vector2)player.transform.position + offset, curSpeed * Time.deltaTime);
+
+            if (direction.x < 0)
+            {
+                facingDirection = -1;
+            }
+            else
+            {
+                facingDirection = 1;
+            }
+            FlipSprite();
+
+            // Update fireball timer
+            fireballTimer += Time.deltaTime;
+            if (fireballTimer >= enemyData.attackInterval)
+            {
+                ShootFireball();
+                fireballTimer = 0f;
+            }
+        }
+        else
+        {
             Patrol();
         }
     }
 
     private IEnumerator ShootFireballAtIntervals()
     {
-        while (isChasing)
-        {
-            ShootFireball();
-            yield return new WaitForSeconds(enemyData.attackInterval);
-        }
+        ShootFireball();
+        yield return new WaitForSeconds(enemyData.attackInterval);
         isAttacking = false;
     }
 
-    //TODO: Implement ShootFireball method by wait until the init state is finished then shoot
     private void ShootFireball()
     {
         Vector3 playerPosition = player.transform.position;
@@ -219,18 +273,16 @@ public class EnemyAI : MonoBehaviour
         // Instantiate the fireball at the calculated position
         GameObject fireball = Instantiate(fireballPrefab, fireballPosition, Quaternion.identity, transform);
         StartCoroutine(WaitForFireball(playerPosition, fireball));
-        // Calculate the direction from the fireball's position to the player's position
     }
 
-    IEnumerator WaitForFireball(Vector3 pos, GameObject fireball)
+    private IEnumerator WaitForFireball(Vector3 targetPosition, GameObject fireball)
     {
         yield return new WaitUntil(() => fireball.GetComponent<Animator>().GetBool("Initialized"));
         Debug.Log("Fireball initialized");
-        Vector3 direction = (pos - fireball.transform.position).normalized;
+        Vector3 direction = (targetPosition - fireball.transform.position).normalized;
 
         // Apply force to the fireball to shoot it towards the player
         Rigidbody2D rb = fireball.GetComponent<Rigidbody2D>();
-        Animator f_animator = fireball.GetComponent<Animator>();
         rb.AddForce(direction * fireballSpeed, ForceMode2D.Impulse);
     }
 
@@ -239,7 +291,7 @@ public class EnemyAI : MonoBehaviour
         if (patrolPoints.Length == 0) return;
 
         Vector2 targetPatrolPoint = patrolPoints[currentPatrolIndex];
-        transform.position = Vector2.MoveTowards(transform.position, targetPatrolPoint, _speed * Time.deltaTime);
+        transform.position = Vector2.MoveTowards(transform.position, targetPatrolPoint, curSpeed * Time.deltaTime);
 
         if (Vector2.Distance(transform.position, targetPatrolPoint) < 0.1f)
         {
@@ -266,7 +318,7 @@ public class EnemyAI : MonoBehaviour
         animator.Play("Move-Start");
         yield return new WaitForEndOfFrame();
         yield return new WaitForSeconds(animator != null ? animator.GetCurrentAnimatorStateInfo(0).length : .1f);
-        float startingSpeed = _speed;
+        float startingSpeed = curSpeed;
         AdjustSpeed(0);
         animator.Play("Idle");
         yield return new WaitForEndOfFrame();
@@ -292,24 +344,24 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-    private void OnAttack()
-    {
-        _speed *= enemyData.speedMultiplier;
-        Debug.Log("Attacking");
-    }
+    // private void OnAttack()
+    // {
+    //     curSpeed *= enemyData.speedMultiplier;
+    //     Debug.Log("Attacking");
+    // }
 
 
     private void ResetSpeedAfterAttack()
     {
         animator.SetBool("IsAttacking", false);
-        _speed /= enemyData.speedMultiplier;
+        AdjustSpeed(enemyData.speed);
         isAttacking = false;
         isRetreating = true;
     }
 
     public void AdjustSpeed(float newSpeed)
     {
-        _speed = newSpeed;
+        curSpeed = newSpeed;
     }
 
     void OnEnemyHitBoxTriggerStay(Collider2D other)
@@ -320,7 +372,7 @@ public class EnemyAI : MonoBehaviour
             if (!PlayerScript.instance.isInvincible)
             {
                 PlayerScript.instance.PlayerHit(other.gameObject, enemyData, facingDirection);
-                if (EnemyAIType.Flying == enemyAIType)
+                if (EnemyAIType.Flying == enemyAIType && EnemyAIType.Ranged == enemyAIType)
                 {
                     ResetSpeedAfterAttack();
                 }
@@ -347,13 +399,9 @@ public class EnemyAI : MonoBehaviour
         isFlashing = false;
     }
 
-    void OnEnemyDetectionTriggerStay(Collider2D other)
+    void OnEnemyDetectionTriggerStay(bool isPlayerDetected)
     {
-        if (other.gameObject.CompareTag("Player"))
-        {
-            Debug.Log("Player Detected");
-            isChasing = true;
-        }
+        playerInRange = isPlayerDetected;
     }
 
     private void OnDrawGizmos()

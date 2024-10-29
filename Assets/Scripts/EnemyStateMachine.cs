@@ -4,9 +4,6 @@ public class EnemyStateMachine : StateMachineBehaviour
 {
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (stateInfo.IsName("Death"))
-        {
-        }
     }
     override public void OnStateExit(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
