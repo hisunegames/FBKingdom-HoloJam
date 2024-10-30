@@ -5,7 +5,6 @@ using FBK;
 public class BulletObject : ScriptableObject
 {
     public float bulletSpeed;
-    public float bulletDamage;
     public float bulletLifeTime;
     public float bulletKnockback;
     public float bulletSize;

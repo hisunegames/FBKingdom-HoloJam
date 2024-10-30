@@ -5739,6 +5739,8 @@ MonoBehaviour:
   m_Controller: {fileID: 3616460292221755585}
   maxHealth: 100
   playerHealth: 0
+  maxMana: 100
+  playerMana: 0
   invincibilityTime: 1
   invincibilityPadding: 0.2
   isInvincible: 0
@@ -5748,12 +5750,13 @@ MonoBehaviour:
   isSlashing: 0
   currentWeapon: 1
   sword: {fileID: 981159382683359254}
-  swordKnockback: {x: 1, y: 1}
+  swordKnockback: {x: 1.2, y: 1}
   swordDamage: 20
-  attackCooldown: 0.2
-  bulletPrefab: {fileID: 1545415302643014069, guid: ead0f0b162e9edc4ba922202f5c87c8e, type: 3}
+  bulletPrefab: {fileID: 7681183172502465057, guid: ead0f0b162e9edc4ba922202f5c87c8e, type: 3}
   firePoint: {fileID: 1484036097631343962}
+  gunDamage: 10
   fireCooldown: 0.2
+  gameOver: {fileID: 0}
 --- !u!114 &7794118624668774543
 MonoBehaviour:
   m_ObjectHideFlags: 0

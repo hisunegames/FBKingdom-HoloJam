@@ -1,9 +1,13 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class PlayerScript : MonoBehaviour
 {
+    public event Action<float, float> EventHealthUpdate;
+    public event Action<float, float> EventManaUpdate;
+
     public static PlayerScript instance;
     public CustomMovementController2D m_Controller;
 
@@ -38,11 +42,11 @@ public class PlayerScript : MonoBehaviour
     public Vector2 swordKnockback;
     public float swordDamage = 20;
 
-    public float attackCooldown = 0.25f;
+    private float attackCooldown = 0.25f;
     private bool attackOnCooldown = false;
 
     [Header("Gun")]
-    public GameObject bulletPrefab;
+    public Bullet bulletPrefab;
     public Transform firePoint;
     public float gunDamage = 10; //TODO: Implement is needed.
     public float fireCooldown = 1f;
@@ -136,6 +140,12 @@ public class PlayerScript : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        EventHealthUpdate = null;
+        EventManaUpdate = null;
+    }
+
     private void SetStats()
     {
         currentBuff = PlayerStatsHandler.GetPlayerBuff();
@@ -150,6 +160,8 @@ public class PlayerScript : MonoBehaviour
     public void Damage(float damage)
     {
         playerHealth -= damage;
+        EventHealthUpdate?.Invoke(playerHealth, maxHealth);
+
         if (playerHealth <= 0)
         {
             Debug.Log("Player Dead");
@@ -334,7 +346,8 @@ public class PlayerScript : MonoBehaviour
 
     void Shoot()
     {
-        Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+        var bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+        bullet.Initialize(gunDamage);
     }
 
     public void GameOver()
