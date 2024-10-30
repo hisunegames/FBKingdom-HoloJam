@@ -33,7 +33,7 @@ public class PlayerScript : MonoBehaviour
     public GameObject sword;
 
     public Vector2 swordKnockback;
-    public float swordDamage;
+    public float swordDamage; //Sword stat
 
     public float attackCooldown = 0.25f;
     private bool attackOnCooldown = false;

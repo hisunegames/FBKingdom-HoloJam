@@ -82,6 +82,8 @@ public class EnemyAI : MonoBehaviour
             case EnemyAIType.Ranged:
                 HandleRangedAI();
                 break;
+            case EnemyAIType.Boss:
+                break;
         }
     }
 
@@ -248,6 +250,7 @@ public class EnemyAI : MonoBehaviour
             Patrol();
         }
     }
+
 
     private IEnumerator ShootFireballAtIntervals()
     {
