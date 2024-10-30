@@ -1,7 +1,6 @@
-using System;
 using System.Collections;
-using DYP;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class PlayerScript : MonoBehaviour
 {
@@ -11,14 +10,18 @@ public class PlayerScript : MonoBehaviour
     [Header("PlayerData")]
     public float maxHealth = 100;
     public float playerHealth;
+    public float maxMana = 100;
+    public float playerMana;
     public float invincibilityTime = .2f;
     public float invincibilityPadding = .2f;
     public bool isInvincible = false;
-    public float playerSpeedMultipler = 1;
+    public float playerSpeedMultipler = 1; //TODO: Implement is needed.
     public float multipler = 1.5f;
     int originalLayer;
     float aerialMultiplier = .8f;
     float comboMultiplier = 1.5f;
+
+    private PlayerBuff currentBuff;
 
     [Header("Player Animation")]
     public Animator m_Animator;
@@ -33,7 +36,7 @@ public class PlayerScript : MonoBehaviour
     public GameObject sword;
 
     public Vector2 swordKnockback;
-    public float swordDamage;
+    public float swordDamage = 20;
 
     public float attackCooldown = 0.25f;
     private bool attackOnCooldown = false;
@@ -41,6 +44,7 @@ public class PlayerScript : MonoBehaviour
     [Header("Gun")]
     public GameObject bulletPrefab;
     public Transform firePoint;
+    public float gunDamage = 10; //TODO: Implement is needed.
     public float fireCooldown = 1f;
     private float nextFireTime = 0f;
     private ParticleSystem.EmissionModule emission;
@@ -51,7 +55,6 @@ public class PlayerScript : MonoBehaviour
     {
         if (instance == null)
         {
-
             instance = this;
         }
         // swordLeft = transform.GetChild(0).gameObject;
@@ -60,7 +63,10 @@ public class PlayerScript : MonoBehaviour
     }
     void Start()
     {
+        SetStats();
         playerHealth = maxHealth;
+        playerMana = maxMana;
+
         m_Animator = GetComponent<Animator>();
         emission = gameObject.GetComponentInChildren<ParticleSystem>().emission;
         originalLayer = gameObject.layer;
@@ -128,6 +134,17 @@ public class PlayerScript : MonoBehaviour
             emission.enabled = true;
 
         }
+    }
+
+    private void SetStats()
+    {
+        currentBuff = PlayerStatsHandler.GetPlayerBuff();
+
+        maxHealth = currentBuff.MaxHealth;
+        maxMana = currentBuff.MaxMana;
+        playerSpeedMultipler = currentBuff.Speed;
+        swordDamage = currentBuff.SwordDamage;
+        gunDamage = currentBuff.GunDamage;
     }
 
     public void Damage(float damage)
@@ -323,5 +340,35 @@ public class PlayerScript : MonoBehaviour
     public void GameOver()
     {
         gameOver.SetActive(true);
+    }
+
+    public void GetRandomBuff()
+    {
+        int rand = Random.Range(0, 5);
+
+        switch (rand)
+        {
+            case 0:
+                currentBuff.MaxHealth++;
+                break;
+            case 1:
+                currentBuff.MaxMana++;
+                break;
+            case 2:
+                currentBuff.Speed++;
+                break;
+            case 3:
+                currentBuff.SwordDamage++;
+                break;
+            case 4:
+                currentBuff.GunDamage++;
+                break;
+            default:
+                currentBuff.MaxHealth++;
+                break;
+        }
+
+        PlayerStatsHandler.SetPlayerBuff(currentBuff);
+        SetStats();
     }
 }

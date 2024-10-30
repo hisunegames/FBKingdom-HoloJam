@@ -11,6 +11,9 @@ public class SukonbuAnimationController : MonoBehaviour
     [SerializeField]
     private DetectPlayerMascot detectPlayerMascot;
     bool enemyInRange = false;
+
+    bool hasBuff = true;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
@@ -21,31 +24,34 @@ public class SukonbuAnimationController : MonoBehaviour
     public void SukobuEnemyState(bool inRange)
     {
         enemyInRange = inRange;
+
         if (inRange)
         {
             s_animator.Play("Fear");
             h_animator.gameObject.SetActive(true);
         }
-        else if (!inRange)
+        else
         {
             s_animator.Play("Idle");
             h_animator.gameObject.SetActive(false);
-
         }
     }
     public void SukobuPlayerState(bool inRange)
     {
-        if (!enemyInRange)
-        {
-            if (inRange)
-            {
-                s_animator.Play("Banzai");
-            }
-            else if (!inRange)
-            {
-                s_animator.Play("Idle");
+        if (enemyInRange) return;
 
-            }
+        if (inRange)
+        {
+            s_animator.Play("Banzai");
+
+            if (!hasBuff) return;
+
+            PlayerScript.instance.GetRandomBuff();
+            hasBuff = false;
+        }
+        else
+        {
+            s_animator.Play("Idle");
         }
     }
     // Update is called once per frame
