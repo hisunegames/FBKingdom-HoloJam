@@ -45,6 +45,7 @@ public class PlayerScript : MonoBehaviour
     private float nextFireTime = 0f;
     private ParticleSystem.EmissionModule emission;
 
+    public GameObject gameOver;
 
     void Awake()
     {
@@ -135,6 +136,9 @@ public class PlayerScript : MonoBehaviour
         if (playerHealth <= 0)
         {
             Debug.Log("Player Dead");
+            GameOver();
+            m_Controller.enabled = false;
+            this.enabled = false;
         }
         else
         {
@@ -314,5 +318,10 @@ public class PlayerScript : MonoBehaviour
     void Shoot()
     {
         Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+    }
+
+    public void GameOver()
+    {
+        gameOver.SetActive(true);
     }
 }
