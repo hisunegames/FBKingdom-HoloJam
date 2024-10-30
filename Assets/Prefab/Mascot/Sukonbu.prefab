@@ -277,6 +277,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Sukonbu
       objectReference: {fileID: 0}
+    - target: {fileID: 3455754036493594446, guid: 0021f9d19c4f89f438028017a362e1a3, type: 3}
+      propertyPath: m_TagString
+      value: Mascot
+      objectReference: {fileID: 0}
     - target: {fileID: 4189182100692468395, guid: 0021f9d19c4f89f438028017a362e1a3, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -319,11 +323,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7906746871504666389, guid: 0021f9d19c4f89f438028017a362e1a3, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.0150548
+      value: 9.65
       objectReference: {fileID: 0}
     - target: {fileID: 7906746871504666389, guid: 0021f9d19c4f89f438028017a362e1a3, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.17961983
+      value: -3.995
       objectReference: {fileID: 0}
     - target: {fileID: 7906746871504666389, guid: 0021f9d19c4f89f438028017a362e1a3, type: 3}
       propertyPath: m_LocalPosition.z
@@ -335,15 +339,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7906746871504666389, guid: 0021f9d19c4f89f438028017a362e1a3, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 7906746871504666389, guid: 0021f9d19c4f89f438028017a362e1a3, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 7906746871504666389, guid: 0021f9d19c4f89f438028017a362e1a3, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 7906746871504666389, guid: 0021f9d19c4f89f438028017a362e1a3, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

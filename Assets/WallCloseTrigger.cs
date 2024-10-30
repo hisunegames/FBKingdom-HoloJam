@@ -1,0 +1,27 @@
+using Unity.Cinemachine;
+using UnityEngine;
+using UnityEngine.Experimental.Rendering.Universal;
+using UnityEngine.Rendering.Universal;
+
+public class WallCloseTrigger : MonoBehaviour
+{
+    public GameObject wall;
+    public CinemachineCamera bossCamera;
+    public PixelPerfectCamera pixelPerfectCamera;
+    public int resolutionMultiplier;
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        wall.SetActive(true);
+        CameraManager.instance.SetActiveCamera(bossCamera);
+
+        // Change the resolution of the Pixel Perfect Camera
+        pixelPerfectCamera.refResolutionX *= resolutionMultiplier;
+        pixelPerfectCamera.refResolutionY *= resolutionMultiplier;
+    }
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        this.gameObject.SetActive(false);
+    }
+
+}
