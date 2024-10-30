@@ -82,7 +82,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 575c8d8ab28c4634d902f0ac3f73fb26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inRange: 0
+  FoundPlayer:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &7244156852602970423
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -495,14 +497,14 @@ MonoBehaviour:
   enemyAIType: 2
   distanceBetween: 4
   facingDirection: 0
-  _speed: 0
+  curSpeed: 0
   hitbox: {fileID: 0}
   detection: {fileID: 0}
   patrolPoints:
   - {x: 13.48, y: -3.33}
   - {x: 5.6, y: -3.33}
   flightLowerBound: 0
-  animator: {fileID: 0}
+  animator: {fileID: 7599774348185067684}
   isAttacking: 0
   fireballPrefab: {fileID: 7918718884837047722, guid: 4614c630393c165419d81953c07ce75e, type: 3}
   fireballSpeed: 5
@@ -567,7 +569,7 @@ MonoBehaviour:
   enemyData: {fileID: 11400000, guid: c1c50f127ff6daa4586c8ccb407e75a5, type: 2}
   currentHealth: 0
   healthBar: {fileID: 643506788406736445}
-  animator: {fileID: 0}
+  animator: {fileID: 7599774348185067684}
   damageDisplay: {fileID: 5965853600710157558, guid: be7c8e071ab5f034e9f7834cd8a1cc98, type: 3}
 --- !u!50 &7787140669592730802
 Rigidbody2D:
@@ -776,3 +778,8 @@ MonoBehaviour:
   StayingInTrigger:
     m_PersistentCalls:
       m_Calls: []
+--- !u!95 &7599774348185067684 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 1160356261127867848, guid: fbaa535a84295ed4e8e9ebd6526aa41f, type: 3}
+  m_PrefabInstance: {fileID: 8749855664422989164}
+  m_PrefabAsset: {fileID: 0}

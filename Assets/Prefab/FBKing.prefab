@@ -5592,8 +5592,8 @@ MonoBehaviour:
   m_CollisionLayer:
     serializedVersion: 2
     m_Bits: 1024
-  m_HorizontalRayCount: 6
-  m_VerticalRayCount: 4
+  m_HorizontalRayCount: 16
+  m_VerticalRayCount: 9
 --- !u!114 &-3311104556210359631
 MonoBehaviour:
   m_ObjectHideFlags: 0

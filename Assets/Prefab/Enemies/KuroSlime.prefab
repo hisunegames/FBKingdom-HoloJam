@@ -142,7 +142,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6929973663462535606, guid: 37973ecb7e0010e4b800c3b4de1aa907, type: 3}
       propertyPath: m_Offset.y
-      value: 0.31
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 6929973663462535606, guid: 37973ecb7e0010e4b800c3b4de1aa907, type: 3}
       propertyPath: m_IsTrigger
@@ -150,7 +150,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6929973663462535606, guid: 37973ecb7e0010e4b800c3b4de1aa907, type: 3}
       propertyPath: m_EdgeRadius
-      value: 0.24
+      value: 0.33
       objectReference: {fileID: 0}
     - target: {fileID: 6929973663462535606, guid: 37973ecb7e0010e4b800c3b4de1aa907, type: 3}
       propertyPath: m_ExcludeLayers.m_Bits
@@ -275,6 +275,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: KuroSlime
       objectReference: {fileID: 0}
+    - target: {fileID: -2253911629886400664, guid: f24f07ffb3d0d1b46a129366e0b8efc4, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 1160356261127867848, guid: f24f07ffb3d0d1b46a129366e0b8efc4, type: 3}
       propertyPath: m_Controller
       value: 
@@ -285,7 +289,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7878350319992209165, guid: f24f07ffb3d0d1b46a129366e0b8efc4, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.24
+      value: -0.54
       objectReference: {fileID: 0}
     - target: {fileID: 7878350319992209165, guid: f24f07ffb3d0d1b46a129366e0b8efc4, type: 3}
       propertyPath: m_LocalPosition.z

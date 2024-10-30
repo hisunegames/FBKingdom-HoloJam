@@ -192,14 +192,14 @@ public class PlayerScript : MonoBehaviour
         float i = 0.01f;
         Rigidbody2D rb = target.GetComponent<Rigidbody2D>();
         Vector2 raycastDirection = new Vector2(-facingDirection, 0); // Raycast direction opposite to the facing direction
-        float raycastDistance = .5f; // Adjust the distance as needed
+        float raycastDistance = .7f; // Adjust the distance as needed
         int worldLayerMask = LayerMask.GetMask("World"); // Create a layer mask for the "world" layer
 
         int numberOfRaycasts = 20; // Number of raycast lines
         float padding = 0.1f; // Padding to avoid detecting the ground
         Collider2D collider = target.GetComponent<Collider2D>(); // Get the Collider2D component
         float colliderHeight = collider.bounds.size.y; // Get the height of the collider
-        float raycastSpacing = (colliderHeight - 2 * padding) / (numberOfRaycasts - 1); // Calculate the spacing between each raycast line
+        float raycastSpacing = (colliderHeight /*- 2 * padding*/) / (numberOfRaycasts - 1); // Calculate the spacing between each raycast line
 
         while (enemyData.knockbackForce >= i)
         {

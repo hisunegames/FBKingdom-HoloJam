@@ -293,7 +293,7 @@ public class EnemyAI : MonoBehaviour
         Vector2 targetPatrolPoint = patrolPoints[currentPatrolIndex];
         transform.position = Vector2.MoveTowards(transform.position, targetPatrolPoint, curSpeed * Time.deltaTime);
 
-        if (Vector2.Distance(transform.position, targetPatrolPoint) < 0.1f)
+        if (Vector2.Distance(transform.position, targetPatrolPoint) <= 0.1f)
         {
             currentPatrolIndex = (currentPatrolIndex + 1) % patrolPoints.Length;
         }

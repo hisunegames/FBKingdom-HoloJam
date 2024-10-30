@@ -10,7 +10,7 @@ public class DetectPlayer : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             FoundPlayer?.Invoke(true);
-            Debug.Log("Player detected!");
+            // Debug.Log("Player detected!");
         }
     }
 

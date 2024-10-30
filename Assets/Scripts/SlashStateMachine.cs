@@ -15,7 +15,7 @@ public class SlashStateMachine : StateMachineBehaviour
         else if (stateInfo.IsName("Action-Slash-Ground-1"))
         {
             PlayerScript.instance.transform.GetChild(0).gameObject.SetActive(true);
-            if (animator.GetInteger("ComboState") == 2)
+            if (animator.GetInteger("ComboState") == 3)
             {
                 // Define the step size to move the player by one step
                 Vector3 moveStep = new Vector3(.05f * PlayerScript.instance.m_Controller.FacingDirection, 0, 0); // Adjust the x value as needed for the step size
