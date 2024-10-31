@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Health : MonoBehaviour
 {
+    public event Action<float, float> EventHealthUpdate;
+
     public EnemyData enemyData;
     public float currentHealth;
 
@@ -64,5 +66,7 @@ public class Health : MonoBehaviour
 
         // Update the health bar
         healthBar.SetHealth(currentHealth);
+
+        EventHealthUpdate?.Invoke(currentHealth, enemyData.maxHealth);
     }
 }

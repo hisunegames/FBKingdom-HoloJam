@@ -1,9 +1,9 @@
-using System.Collections;
 using UnityEngine;
 
 public class FireballController : MonoBehaviour
 {
     private Animator f_animator;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
@@ -13,7 +13,7 @@ public class FireballController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        StartCoroutine(DestroyFireball());
+        Destroy(gameObject, 10f);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -35,11 +35,5 @@ public class FireballController : MonoBehaviour
         {
             f_animator.Play("Explode");
         }
-    }
-
-    private IEnumerator DestroyFireball()
-    {
-        yield return new WaitForSeconds(8f);
-        Destroy(gameObject);
     }
 }

@@ -510,6 +510,18 @@ MonoBehaviour:
   fireballSpeed: 5
   fireballArcAngle: 45
   sightRange: 10
+  fireWavePrefab: {fileID: 0}
+  fireWaveSpeed: 0
+  bossAttackPhases: []
+  dashPointHandler: {fileID: 0}
+  dashSpeed: 0
+  canBoss: 0
+  bulletPrefab: {fileID: 0}
+  firePoint: {fileID: 0}
+  firePointLeft: {fileID: 0}
+  firePointRight: {fileID: 0}
+  telegrapher: {fileID: 0}
+  gunDamage: 10
 --- !u!114 &643506788406736445
 MonoBehaviour:
   m_ObjectHideFlags: 0
