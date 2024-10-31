@@ -10,11 +10,11 @@ public static class PlayerStatsHandler
 
     public static void ResetPlayerBuff()
     {
-        PlayerPrefs.SetFloat(MAX_HEALTH_KEY, 0);
-        PlayerPrefs.SetFloat(RECOVER_MANA_KEY, 0);
-        PlayerPrefs.SetFloat(SPEED_KEY, 0);
-        PlayerPrefs.SetFloat(SWORD_DAMAGE_KEY, 0);
-        PlayerPrefs.SetFloat(GUN_DAMAGE_KEY, 0);
+        PlayerPrefs.SetInt(MAX_HEALTH_KEY, 0);
+        PlayerPrefs.SetInt(RECOVER_MANA_KEY, 0);
+        PlayerPrefs.SetInt(SPEED_KEY, 0);
+        PlayerPrefs.SetInt(SWORD_DAMAGE_KEY, 0);
+        PlayerPrefs.SetInt(GUN_DAMAGE_KEY, 0);
     }
 
     public static PlayerBuff GetPlayerBuff()
@@ -24,31 +24,36 @@ public static class PlayerStatsHandler
             ResetPlayerBuff();
         }
 
-        return new(PlayerPrefs.GetFloat(MAX_HEALTH_KEY),
-                   PlayerPrefs.GetFloat(RECOVER_MANA_KEY),
-                   PlayerPrefs.GetFloat(SPEED_KEY),
-                   PlayerPrefs.GetFloat(SWORD_DAMAGE_KEY),
-                   PlayerPrefs.GetFloat(GUN_DAMAGE_KEY)
+        return new(PlayerPrefs.GetInt(MAX_HEALTH_KEY),
+                   PlayerPrefs.GetInt(RECOVER_MANA_KEY),
+                   PlayerPrefs.GetInt(SPEED_KEY),
+                   PlayerPrefs.GetInt(SWORD_DAMAGE_KEY),
+                   PlayerPrefs.GetInt(GUN_DAMAGE_KEY)
         );
     }
 
-    public static void SetPlayerBuff(PlayerBuff buff)
+    public static void SavePlayerBuff(PlayerBuff buff)
     {
-        PlayerPrefs.SetFloat(MAX_HEALTH_KEY, buff.MaxHealth);
-        PlayerPrefs.SetFloat(RECOVER_MANA_KEY, buff.RecoverMana);
-        PlayerPrefs.SetFloat(SPEED_KEY, buff.Speed);
-        PlayerPrefs.SetFloat(SWORD_DAMAGE_KEY, buff.SwordDamage);
-        PlayerPrefs.SetFloat(GUN_DAMAGE_KEY, buff.GunDamage);
+        PlayerPrefs.SetInt(MAX_HEALTH_KEY, buff.MaxHealth);
+        PlayerPrefs.SetInt(RECOVER_MANA_KEY, buff.RecoverMana);
+        PlayerPrefs.SetInt(SPEED_KEY, buff.Speed);
+        PlayerPrefs.SetInt(SWORD_DAMAGE_KEY, buff.SwordDamage);
+        PlayerPrefs.SetInt(GUN_DAMAGE_KEY, buff.GunDamage);
+    }
+
+    public static int GetBuffCount()
+    {
+        return GetPlayerBuff().GetSum();
     }
 }
 
 public class PlayerBuff
 {
-    public float MaxHealth;
-    public float RecoverMana;
-    public float Speed;
-    public float SwordDamage;
-    public float GunDamage;
+    public int MaxHealth;
+    public int RecoverMana;
+    public int Speed;
+    public int SwordDamage;
+    public int GunDamage;
 
     public PlayerBuff()
     {
@@ -59,12 +64,17 @@ public class PlayerBuff
         GunDamage = 0;
     }
 
-    public PlayerBuff(float maxHealth, float recoverMana, float speed, float swordDamage, float gunDamage)
+    public PlayerBuff(int maxHealth, int recoverMana, int speed, int swordDamage, int gunDamage)
     {
         MaxHealth = maxHealth;
         RecoverMana = recoverMana;
         Speed = speed;
         SwordDamage = swordDamage;
         GunDamage = gunDamage;
+    }
+
+    public int GetSum()
+    {
+        return MaxHealth + RecoverMana + Speed + SwordDamage + GunDamage;
     }
 }

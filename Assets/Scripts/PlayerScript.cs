@@ -7,6 +7,7 @@ public class PlayerScript : MonoBehaviour
 {
     public event Action<float, float> EventHealthUpdate;
     public event Action<float, float> EventManaUpdate;
+    public event Action EventGameOver;
 
     public static PlayerScript instance;
     public CustomMovementController2D m_Controller;
@@ -51,8 +52,6 @@ public class PlayerScript : MonoBehaviour
     public float fireCooldown = 1f;
     private float nextFireTime = 0f;
     private ParticleSystem.EmissionModule emission;
-
-    public GameObject gameOver;
 
     void Awake()
     {
@@ -144,7 +143,7 @@ public class PlayerScript : MonoBehaviour
 
         gunDamage = Stats.GunDamage;
 
-        currentBuff = new();
+        currentBuff = PlayerStatsHandler.GetPlayerBuff();
     }
 
     private void UpdateStats()
@@ -173,8 +172,8 @@ public class PlayerScript : MonoBehaviour
 
         if (playerHealth > 0) return;
 
-        Debug.Log("Player Dead");
-        GameOver();
+        OnGameOver();
+
         m_Controller.enabled = false;
         enabled = false;
     }
@@ -357,11 +356,6 @@ public class PlayerScript : MonoBehaviour
         bullet.Initialize(gunDamage);
     }
 
-    public void GameOver()
-    {
-        gameOver.SetActive(true);
-    }
-
     public int GetRandomBuff()
     {
         int rand = Random.Range(0, 5);
@@ -388,7 +382,6 @@ public class PlayerScript : MonoBehaviour
                 break;
         }
 
-        PlayerStatsHandler.SetPlayerBuff(currentBuff);
         UpdateStats();
 
         return rand;
@@ -410,4 +403,17 @@ public class PlayerScript : MonoBehaviour
 
         EventManaUpdate(playerMana, maxMana);
     }
+
+    #region subscribe events   
+    private void OnGameOver()
+    {
+        EventGameOver?.Invoke();
+    }
+
+    //TODO: Implement method to call this function to save player progress.
+    private void OnFinishStage()
+    {
+        PlayerStatsHandler.SavePlayerBuff(currentBuff);
+    }
+    #endregion
 }
