@@ -76,16 +76,23 @@ public class EnemyAI : MonoBehaviour
     private float teleportChance = 1f;
     [SerializeField]
     private DashPointHandler dashPointHandler;
-    Vector2 positionToMoveTo;
+    Vector2 positionToTeleportTo;
+    Vector2 positionToDashTo;
     bool isDashing;
     [SerializeField]
     float dashSpeed;
     [HideInInspector] public bool canBoss;
     public Bullet bulletPrefab;
     public Transform firePoint;
+    public Transform firePointLeft;
+    public Transform firePointRight;
+    public GameObject telegrapher;
+
     public float gunDamage = 10;
     private float gunPostTeleportWaitTime;
+    int shotPhase;
 
+    int teleportPhase;
 
 
     void Awake()
@@ -191,6 +198,24 @@ public class EnemyAI : MonoBehaviour
 
             case BossAttackPattern.Dash:
 
+                switch (teleportPhase)
+                {
+                    case 0:
+                        TelegraphTeleport(true);
+                        teleportPhase = 1;
+                        return;
+
+                    case 1:
+                        teleportTimer += Time.deltaTime;
+                        if (teleportTimer >= 1.5f)
+                        {
+                            teleportPhase = 2;
+                            teleportTimer = 0f;
+                            ExecuteTeleport();
+                        }
+                        return;
+                }
+
                 if (isDashing)
                 {
                     Dash();
@@ -205,8 +230,6 @@ public class EnemyAI : MonoBehaviour
 
                     if (UnityEngine.Random.Range(0.0f, 1.0f) <= dashChance)
                     {
-                        Teleport(true);
-
                         isDashing = true;
 
                         Dash();
@@ -217,6 +240,8 @@ public class EnemyAI : MonoBehaviour
                     }
                     else
                     {
+                        teleportPhase = 0;
+
                         dashChance = 1f;
 
                         UpdateBossAttackPattern();
@@ -227,49 +252,190 @@ public class EnemyAI : MonoBehaviour
 
             case BossAttackPattern.Teleport:
 
-                teleportTimer += Time.deltaTime;
-
-                if (teleportTimer >= .5f)
+                switch (teleportPhase)
                 {
+                    case 0:
+                        TelegraphTeleport(false);
+                        teleportPhase = 1;
+                        return;
 
-                    if (UnityEngine.Random.Range(0.0f, 1.0f) <= teleportChance)
-                    {
-                        Teleport(false);
+                    case 1:
+                        teleportTimer += Time.deltaTime;
+                        if (teleportTimer >= 1.5f)
+                        {
+                            teleportPhase = 0;
+                            teleportTimer = 0f;
 
-                        teleportTimer = 0f;
 
-                        teleportChance /= 2;
-                    }
-                    else
-                    {
-                        teleportChance = 1f;
+                            ExecuteTeleport();
 
-                        UpdateBossAttackPattern();
-                    }
+                            if (UnityEngine.Random.Range(0.0f, 1.0f) <= teleportChance)
+                            {
+                                teleportChance /= 2;
+                            }
+                            else
+                            {
+                                teleportChance = 1f;
+
+                                UpdateBossAttackPattern();
+                            }
+                        }
+                        return;
                 }
 
                 break;
 
             case BossAttackPattern.Gun:
 
+                switch (teleportPhase)
+                {
+                    case 0:
+                        TelegraphTeleport(true);
+                        teleportPhase = 1;
+                        return;
+
+                    case 1:
+                        teleportTimer += Time.deltaTime;
+                        if (teleportTimer >= 1.5f)
+                        {
+                            teleportPhase = 2;
+                            teleportTimer = 0f;
+                            ExecuteTeleport();
+                        }
+                        return;
+                }
+
+                if (shotPhase == 0)
+                {
+                    shotPhase = 1;
+                    return;
+                }
+
+                if (shotPhase == 1)
+                {
+                    gunPostTeleportWaitTime += Time.deltaTime;
+
+                    if (gunPostTeleportWaitTime >= 0.5f)
+                    {
+                        gunPostTeleportWaitTime = 0;
+
+                        Shoot();
+
+                        shotPhase = 2;
+                    }
+
+                    return;
+                }
+
+
                 gunPostTeleportWaitTime += Time.deltaTime;
 
-                if (gunPostTeleportWaitTime >= 1f)
+                if (gunPostTeleportWaitTime >= 2f)
                 {
+
+                    teleportPhase = 0;
+
                     gunPostTeleportWaitTime = 0;
 
-                    Teleport(true);
-
-                    Shoot();
+                    shotPhase = 0;
 
                     UpdateBossAttackPattern();
                 }
 
-                
 
                 break;
         }
 
+    }
+
+    void TelegraphTeleport(bool toPlayer)
+    {
+        var teleportToPos = (UnityEngine.Random.Range(0, 2));
+
+        int dashToPos = 0;
+
+        if (teleportToPos == 0)
+        {
+            dashToPos = 1;
+        }
+
+        if (toPlayer)
+        {
+
+            if (player.transform.position.y <= 0.61f)//bottom
+            {
+                if (player.transform.position.x <= -4.3f) //left
+                {
+                    positionToTeleportTo = dashPointHandler.bottomLeft[teleportToPos].transform.position;
+                    positionToDashTo = dashPointHandler.bottomLeft[dashToPos].transform.position;
+
+                }
+                else if (player.transform.position.x > -4.3f && player.transform.position.x <= 3.96f)//center
+                {
+                    positionToTeleportTo = dashPointHandler.bottomCenter[teleportToPos].transform.position;
+                    positionToDashTo = dashPointHandler.bottomCenter[dashToPos].transform.position;
+
+                }
+                else //right
+                {
+                    positionToTeleportTo = dashPointHandler.bottomRight[teleportToPos].transform.position;
+                    positionToDashTo = dashPointHandler.bottomRight[dashToPos].transform.position;
+                }
+
+            }
+            else//top
+            {
+                if (player.transform.position.x <= -4.3f) //left
+                {
+                    positionToTeleportTo = dashPointHandler.topLeft[teleportToPos].transform.position;
+                    positionToDashTo = dashPointHandler.topLeft[dashToPos].transform.position;
+                }
+                else if (player.transform.position.x > -4.3f && player.transform.position.x <= 3.96f)//center
+                {
+                    positionToTeleportTo = dashPointHandler.topCenter[teleportToPos].transform.position;
+                    positionToDashTo = dashPointHandler.topCenter[dashToPos].transform.position;
+                }
+                else //right
+                {
+                    positionToTeleportTo = dashPointHandler.topRight[teleportToPos].transform.position;
+                    positionToDashTo = dashPointHandler.topRight[dashToPos].transform.position;
+                }
+            }
+
+
+
+        }
+        else
+        {
+            switch (UnityEngine.Random.Range(0, 6))
+            {
+                case 0:
+                    positionToTeleportTo = dashPointHandler.bottomLeft[teleportToPos].transform.position;
+                    break;
+                case 1:
+                    positionToTeleportTo = dashPointHandler.bottomCenter[teleportToPos].transform.position;
+                    break;
+                case 2:
+                    positionToTeleportTo = dashPointHandler.bottomRight[teleportToPos].transform.position;
+                    break;
+                case 3:
+                    positionToTeleportTo = dashPointHandler.topLeft[teleportToPos].transform.position;
+                    break;
+                case 4:
+                    positionToTeleportTo = dashPointHandler.topCenter[teleportToPos].transform.position;
+                    break;
+                case 5:
+                    positionToTeleportTo = dashPointHandler.topRight[teleportToPos].transform.position;
+                    break;
+
+
+            }
+
+        }
+
+        telegrapher.SetActive(true);
+
+        telegrapher.transform.position = positionToTeleportTo;
     }
 
     void Shoot()
@@ -288,92 +454,9 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-    private void Teleport(bool toPlayer)
+    private void ExecuteTeleport()
     {
-        //spawn particle thing
-
-        var teleportToPos = (UnityEngine.Random.Range(0, 2));
-
-        int dashToPos = 0;
-
-        if(teleportToPos == 0)
-        {
-            dashToPos = 1;
-        }
-
-        if (toPlayer)
-        {
-
-            if (player.transform.position.y <= 0.61f)//bottom
-            {
-                if (player.transform.position.x <= -4.3f) //left
-                {
-                    transform.position = dashPointHandler.bottomLeft[teleportToPos].transform.position;
-                    positionToMoveTo = dashPointHandler.bottomLeft[dashToPos].transform.position;
-
-                }
-                else if (player.transform.position.x > -4.3f && player.transform.position.x <= 3.96f)//center
-                {
-                    transform.position = dashPointHandler.bottomCenter[teleportToPos].transform.position;
-                    positionToMoveTo = dashPointHandler.bottomCenter[dashToPos].transform.position;
-
-                }
-                else //right
-                {
-                    transform.position = dashPointHandler.bottomRight[teleportToPos].transform.position;
-                    positionToMoveTo = dashPointHandler.bottomRight[dashToPos].transform.position;
-                }
-
-            }
-            else//top
-            {
-                if (player.transform.position.x <= -4.3f) //left
-                {
-                    transform.position = dashPointHandler.topLeft[teleportToPos].transform.position;
-                    positionToMoveTo = dashPointHandler.topLeft[dashToPos].transform.position;
-                }
-                else if (player.transform.position.x > -4.3f && player.transform.position.x <= 3.96f)//center
-                {
-                    transform.position = dashPointHandler.topCenter[teleportToPos].transform.position;
-                    positionToMoveTo = dashPointHandler.topCenter[dashToPos].transform.position;
-                }
-                else //right
-                {
-                    transform.position = dashPointHandler.topRight[teleportToPos].transform.position;
-                    positionToMoveTo = dashPointHandler.topRight[dashToPos].transform.position;
-                }
-            }
-
-            
-
-        }
-        else
-        {
-            switch (UnityEngine.Random.Range(0,6))
-            {
-                case 0:
-                    transform.position = dashPointHandler.bottomLeft[teleportToPos].transform.position;
-                    break;
-                case 1:
-                    transform.position = dashPointHandler.bottomCenter[teleportToPos].transform.position;
-                    break;
-                case 2:
-                    transform.position = dashPointHandler.bottomRight[teleportToPos].transform.position;
-                    break;
-                case 3:
-                    transform.position = dashPointHandler.topLeft[teleportToPos].transform.position;
-                    break;
-                case 4:
-                    transform.position = dashPointHandler.topCenter[teleportToPos].transform.position;
-                    break;
-                case 5:
-                    transform.position = dashPointHandler.topRight[teleportToPos].transform.position;
-                    break;
-
-
-            }
-
-        }
+        transform.position = positionToTeleportTo;
 
         Vector2 direction = player.transform.position - transform.position;
         if (direction.x < 0)
@@ -392,9 +475,11 @@ public class EnemyAI : MonoBehaviour
     private void Dash()
     {
 
-        transform.position = Vector2.MoveTowards(transform.position, new Vector2(positionToMoveTo.x, positionToMoveTo.y), curSpeed * enemyData.speedMultiplier * Time.deltaTime * dashSpeed);
+        transform.position = Vector2.MoveTowards(transform.position, new Vector2(positionToDashTo.x, positionToDashTo.y), curSpeed * enemyData.speedMultiplier * Time.deltaTime * dashSpeed);
 
-        if (Mathf.Abs(transform.position.x - positionToMoveTo.x) < 0.1f)
+        animator.Play("Dash");
+
+        if (Mathf.Abs(transform.position.x - positionToDashTo.x) < 0.1f)
         {
             isDashing = false;
         }
@@ -653,10 +738,19 @@ public class EnemyAI : MonoBehaviour
         if (facingDirection == -1)
         {
             GetComponentInChildren<SpriteRenderer>().flipX = false;
+            if (enemyAIType == EnemyAIType.Boss)
+            {
+                firePoint = firePointLeft;
+            }
         }
         else if (facingDirection == 1)
         {
             GetComponentInChildren<SpriteRenderer>().flipX = true;
+
+            if (enemyAIType == EnemyAIType.Boss)
+            {
+                firePoint = firePointRight;
+            }
         }
     }
 
@@ -699,8 +793,7 @@ public class EnemyAI : MonoBehaviour
                 }
                 else if (EnemyAIType.Boss == enemyAIType)
                 {
-                    StartCoroutine(FlashOnDamage());
-                    animator.Play("Attack");
+                    StartCoroutine(FlashOnDamage());  
                 }
 
             }

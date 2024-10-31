@@ -29,8 +29,8 @@ public class Bullet : MonoBehaviour
             {
                 direction = -1;
             }
-
             Destroy(gameObject, bullet.bulletLifeTime);
+
         }
     }
 
@@ -66,11 +66,9 @@ public class Bullet : MonoBehaviour
         else
         {
             if (other.CompareTag("Player"))
-                hit = true;
-            GetComponent<Animator>().Play("Burst");
-            if (other.CompareTag("Player"))
             {
-
+                hit = true;
+                GetComponent<Animator>().Play("Burst");
                 other.GetComponent<PlayerScript>().PlayerHit(other.gameObject, new EnemyData() { attackPower = 10 }, direction);
             }
         }

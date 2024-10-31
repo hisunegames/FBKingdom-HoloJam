@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace DYP
 {
-    [CreateAssetMenuAttribute(fileName = "TeleportDashModule", menuName = "MovementModule/DashModule/Teleport")]
+    [CreateAssetMenuAttribute(fileName = "TeleportDashModule", menuName = "MovementModule/DashModule/ExecuteTeleport")]
     public class TeleportDashModule : BaseDashModule
     {
         public override bool CanDashToSlidingWall { get { return true; } }
