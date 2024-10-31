@@ -1,16 +1,13 @@
 using System.Collections;
-using DYP;
-using Febucci.UI;
 using UnityEngine;
 
 namespace FBK
 {
     public class GameManager : MonoBehaviour
     {
-
+        public GameDatabase Database;
         public static GameManager instance;
 
-        public GameObject player;
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         public float speed = 1f;
         [Range(0, 4.0f)]
@@ -26,14 +23,14 @@ namespace FBK
 
         void Start()
         {
-            if (instance == null)
+            if (instance != null && instance != this)
             {
-                instance = this;
-                DontDestroyOnLoad(gameObject);
+                Destroy(gameObject);
+                return;
             }
 
-            if (instance != this)
-                Destroy(gameObject);
+            instance = this;
+            DontDestroyOnLoad(gameObject);
 
             startTimeScale = Time.timeScale;
             startFixedDeltaTime = Time.fixedDeltaTime;

@@ -362,7 +362,7 @@ public class PlayerScript : MonoBehaviour
         gameOver.SetActive(true);
     }
 
-    public void GetRandomBuff()
+    public int GetRandomBuff()
     {
         int rand = Random.Range(0, 5);
 
@@ -390,6 +390,8 @@ public class PlayerScript : MonoBehaviour
 
         PlayerStatsHandler.SetPlayerBuff(currentBuff);
         UpdateStats();
+
+        return rand;
     }
 
     public bool CanDash()

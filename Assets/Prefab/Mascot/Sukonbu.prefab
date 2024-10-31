@@ -404,6 +404,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af4775a1384418b4ab98cdf282845f42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buffBubblePrefab: {fileID: 2258771630034666438, guid: 05403fff1d52b17479fd463db34f1bcd, type: 3}
   s_animator: {fileID: 221748389489371086}
   h_animator: {fileID: 5313441415818625229}
   detectEnemy: {fileID: 5197289925393355398}

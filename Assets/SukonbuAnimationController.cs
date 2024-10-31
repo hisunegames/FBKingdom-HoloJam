@@ -1,8 +1,9 @@
+using FBK;
 using UnityEngine;
 
 public class SukonbuAnimationController : MonoBehaviour
 {
-
+    [SerializeField] private UIBuffBubble buffBubblePrefab;
     public Animator s_animator;
     public Animator h_animator;
 
@@ -46,17 +47,23 @@ public class SukonbuAnimationController : MonoBehaviour
 
             if (!hasBuff) return;
 
-            PlayerScript.instance.GetRandomBuff();
-            hasBuff = false;
+            BuffPlayer();
         }
         else
         {
             s_animator.Play("Idle");
         }
     }
-    // Update is called once per frame
-    void Update()
-    {
 
+    private void BuffPlayer()
+    {
+        hasBuff = false;
+
+        var content = GameManager.instance.Database.MascotMessage;
+        var buffIdx = PlayerScript.instance.GetRandomBuff();
+        var messageIdx = Random.Range(0, content.MessageList.Length);
+
+        var bubble = Instantiate(buffBubblePrefab, transform.position, Quaternion.identity);
+        bubble.Initialize(content.MessageList[messageIdx], content.BuffList[buffIdx]);
     }
 }

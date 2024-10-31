@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class GameDatabase : MonoBehaviour
 {
@@ -24,9 +22,7 @@ public class GameDatabase : MonoBehaviour
     private ImportantItemList m_ImportantItems;
     public ImportantItemList ImportantItems { get { return m_ImportantItems; } }
 
-    public void Awake()
-    {
-        DontDestroyOnLoad(this.gameObject);
-    }
-
+    [SerializeField]
+    private MascotMessageSO m_mascotMessage;
+    public MascotMessageSO MascotMessage => m_mascotMessage;
 }

@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84b35393713d7d5498893d53f7d12db2, type: 3}
+  m_Name: MascotMessage
+  m_EditorClassIdentifier: 
+  MessageList:
+  - Thank You Fubuki-sama
+  - "10QQQQ, FBK-samaa \u2661\u2661"
+  - Thanks a ton!
+  - Thanks a million!
+  - Thanks for saving me from those scary monster, Fubuki-sama
+  - 'I am forever thankful! '
+  - 'You are a lifesaver! '
+  - You just saved my life!
+  - My life just flashed before my eyes!
+  - I owe you my life, my king
+  - "I\u2019m forever indebted to you! Fubuki-sama"
+  - How can I ever repay you
+  - "I\u2019m grateful, Fubuki-sama~~"
+  - Accept my endless gratitude
+  - Please accept my deepest gratitude
+  - I'll never forget what you did today
+  - "You\u2019re the best, Fubuki-sama!"
+  - OMG Fubuki-sama, is so cool!!!  >///<
+  - You're my hero Fubuki-sama!!!
+  - That was amazing!
+  - They are no match for Fubuki-sama!
+  BuffList:
+  - Max Hp ++
+  - Mana Recover ++
+  - Speed ++
+  - Melee Atk ++
+  - Range Atk ++
