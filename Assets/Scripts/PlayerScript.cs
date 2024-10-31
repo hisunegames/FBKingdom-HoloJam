@@ -26,6 +26,7 @@ public class PlayerScript : MonoBehaviour
     float comboMultiplier = 1.5f;
 
     private PlayerBuff currentBuff;
+    private bool isFlashing;
 
     [Header("Player Animation")]
     public Animator m_Animator;
@@ -211,6 +212,7 @@ public class PlayerScript : MonoBehaviour
     public void PlayerHit(GameObject other, EnemyData enemyData, float facingDirection)
     {
         m_Animator.Play("Action-Hurt");
+        StartCoroutine(FlashOnDamage());
         // StartCoroutine(InvincibiltyFrames());
         other.GetComponent<PlayerScript>().Damage(enemyData.attackPower);
         StartCoroutine(FakeAddForceMotion(other, enemyData, -facingDirection));
@@ -220,8 +222,23 @@ public class PlayerScript : MonoBehaviour
     {
         m_Animator.Play("Action-Hurt");
         // StartCoroutine(InvincibiltyFrames());
+        StartCoroutine(FlashOnDamage());
         other.GetComponent<PlayerScript>().Damage(enemyData.attackPower);
         StartCoroutine(FakeAddForceMotion(other, enemyData, -m_Controller.FacingDirection));
+    }
+
+    private IEnumerator FlashOnDamage()
+    {
+        isFlashing = true;
+        SpriteRenderer spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        for (int i = 0; i < 5; i++)
+        {
+            spriteRenderer.color = Color.red;
+            yield return new WaitForSeconds(0.1f);
+            spriteRenderer.color = Color.white;
+            yield return new WaitForSeconds(0.1f);
+        }
+        isFlashing = false;
     }
     public IEnumerator FakeAddForceMotion(GameObject target, EnemyData enemyData, float facingDirection)
     {
