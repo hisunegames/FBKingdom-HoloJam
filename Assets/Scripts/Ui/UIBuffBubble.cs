@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class UIBuffBubble : MonoBehaviour
 {
-    [SerializeField] private TMP_Text message;
+    [SerializeField] private Febucci.UI.TypewriterByCharacter message;
     [SerializeField] private TMP_Text buff;
 
     [SerializeField] private float lifetime = 5f;
@@ -12,8 +12,8 @@ public class UIBuffBubble : MonoBehaviour
 
     public void Initialize(string messageText, string buffText)
     {
-        message.text = messageText;
-        buff.text = buffText;
+        message.ShowText(messageText);
+        buff.text = $"{{vertexp}}<bounce>{buffText}</bounce>{{/vertexp}}";
 
         disposeTime = Time.time + lifetime;
     }

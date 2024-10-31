@@ -142,7 +142,7 @@ public class EnemyAI : MonoBehaviour
 
                 bossFireballTimer += Time.deltaTime;
 
-                if(bossFireballTimer >= 5)
+                if (bossFireballTimer >= 5)
                 {
                     bossSubFireBallTimer += Time.deltaTime;
 
@@ -225,7 +225,7 @@ public class EnemyAI : MonoBehaviour
 
                 dashTimer += Time.deltaTime;
 
-                if(dashTimer >= .5f)
+                if (dashTimer >= .5f)
                 {
 
                     if (UnityEngine.Random.Range(0.0f, 1.0f) <= dashChance)
@@ -478,7 +478,7 @@ public class EnemyAI : MonoBehaviour
         transform.position = Vector2.MoveTowards(transform.position, new Vector2(positionToDashTo.x, positionToDashTo.y), curSpeed * enemyData.speedMultiplier * Time.deltaTime * dashSpeed);
 
         animator.Play("Dash");
-
+        StartCoroutine(KurokamiAfterImageGenerator.instance.GenerateAfterImage());
         if (Mathf.Abs(transform.position.x - positionToDashTo.x) < 0.1f)
         {
             isDashing = false;
@@ -788,12 +788,12 @@ public class EnemyAI : MonoBehaviour
                 }
                 else if (EnemyAIType.Grounded == enemyAIType)
                 {
-                    StartCoroutine(FlashOnDamage());
+                    // StartCoroutine(FlashOnDamage());
                     animator.Play("Attack");
                 }
                 else if (EnemyAIType.Boss == enemyAIType)
                 {
-                    StartCoroutine(FlashOnDamage());  
+                    // StartCoroutine(FlashOnDamage());
                 }
 
             }
