@@ -171,6 +171,18 @@ PrefabInstance:
       propertyPath: enemyAIType
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 3821045193267963775, guid: 37973ecb7e0010e4b800c3b4de1aa907, type: 3}
+      propertyPath: m_Radius
+      value: 2.97
+      objectReference: {fileID: 0}
+    - target: {fileID: 5692880034170024056, guid: 37973ecb7e0010e4b800c3b4de1aa907, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5692880034170024056, guid: 37973ecb7e0010e4b800c3b4de1aa907, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.47
+      objectReference: {fileID: 0}
     - target: {fileID: 6869039254924171870, guid: 37973ecb7e0010e4b800c3b4de1aa907, type: 3}
       propertyPath: m_Name
       value: KurokamiBoss

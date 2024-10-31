@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93de18f7b3be3d448b4ad5ae09227fe6, type: 3}
   m_Name: KurokamiBoss
   m_EditorClassIdentifier: 
-  enemyName: 
-  maxHealth: 0
-  speedMultiplier: 1
-  speed: 0
-  attackPower: 10
+  enemyName: fbkBoss
+  maxHealth: 1500
+  speedMultiplier: 5
+  speed: 1
+  attackPower: 20
   attackRange: 1
   knockbackForce: 0.1
   mass: 0.2

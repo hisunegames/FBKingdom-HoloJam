@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.TextCore;
 using FBK;
 using Unity.VisualScripting;
+using JetBrains.Annotations;
+using UnityEngine.Events;
 
 public class EnemyAI : MonoBehaviour
 {
@@ -13,7 +15,7 @@ public class EnemyAI : MonoBehaviour
         Flying,
         Ranged,
         Jumper,
-        Boss,
+        Boss
     }
     public GameObject player;
 
@@ -51,6 +53,41 @@ public class EnemyAI : MonoBehaviour
     public float sightRange = 10f;
     private float fireballTimer = 0f;
 
+
+    public enum BossAttackPattern { FireballNormal, FireballHoming, Dash, Teleport, Gun }
+
+    [Serializable]
+    public struct BossAttackPhase
+    {
+        public BossAttackPattern[] pattern;
+    }
+
+    [Header("BOSS ONLY")]
+    [SerializeField]
+    private BossAttackPhase[] bossAttackPhases;
+    private int phases;
+    private int patternNum;
+    private float bossFireballTimer;
+    private float bossSubFireBallTimer;
+    private int bossFireBallCount;
+    private float dashTimer;
+    private float dashChance = 1f;
+    private float teleportTimer;
+    private float teleportChance = 1f;
+    [SerializeField]
+    private DashPointHandler dashPointHandler;
+    Vector2 positionToMoveTo;
+    bool isDashing;
+    [SerializeField]
+    float dashSpeed;
+    [HideInInspector] public bool canBoss;
+    public Bullet bulletPrefab;
+    public Transform firePoint;
+    public float gunDamage = 10;
+    private float gunPostTeleportWaitTime;
+
+
+
     void Awake()
     {
         hitbox.StayingInTrigger.AddListener(OnEnemyHitBoxTriggerStay);
@@ -83,7 +120,283 @@ public class EnemyAI : MonoBehaviour
                 HandleRangedAI();
                 break;
             case EnemyAIType.Boss:
+                HandleBossAI();
                 break;
+        }
+    }
+
+    private void HandleBossAI()
+    {
+        if (isFlashing || !canBoss) return;
+
+        switch (bossAttackPhases[phases].pattern[patternNum])
+        {
+            case BossAttackPattern.FireballNormal:
+
+                bossFireballTimer += Time.deltaTime;
+
+                if(bossFireballTimer >= 5)
+                {
+                    bossSubFireBallTimer += Time.deltaTime;
+
+                    if (bossSubFireBallTimer >= 0.1f)
+                    {
+                        ShootFireball();
+
+                        bossSubFireBallTimer = 0f;
+
+                        bossFireBallCount++;
+
+                        if (bossFireBallCount >= 5)
+                        {
+                            bossFireballTimer = 0;
+                            bossFireBallCount = 0;
+
+                            UpdateBossAttackPattern();
+                        }
+
+                    }
+                }
+
+                break;
+
+            case BossAttackPattern.FireballHoming:
+
+                bossFireballTimer += Time.deltaTime;
+
+                if (bossFireballTimer >= 5)
+                {
+                    bossSubFireBallTimer += Time.deltaTime;
+
+                    if (bossSubFireBallTimer >= 0.5f)
+                    {
+                        ShootFireball();//ill let you edit these to the homing ones
+
+                        bossSubFireBallTimer = 0f;
+
+                        bossFireBallCount++;
+
+                        if (bossFireBallCount >= 3)
+                        {
+                            bossFireballTimer = 0;
+                            bossFireBallCount = 0;
+
+                            UpdateBossAttackPattern();
+                        }
+
+                    }
+                }
+
+                break;
+
+            case BossAttackPattern.Dash:
+
+                if (isDashing)
+                {
+                    Dash();
+
+                    return;
+                }
+
+                dashTimer += Time.deltaTime;
+
+                if(dashTimer >= .5f)
+                {
+
+                    if (UnityEngine.Random.Range(0.0f, 1.0f) <= dashChance)
+                    {
+                        Teleport(true);
+
+                        isDashing = true;
+
+                        Dash();
+
+                        dashTimer = 0f;
+
+                        dashChance /= 2f;
+                    }
+                    else
+                    {
+                        dashChance = 1f;
+
+                        UpdateBossAttackPattern();
+                    }
+                }
+
+                break;
+
+            case BossAttackPattern.Teleport:
+
+                teleportTimer += Time.deltaTime;
+
+                if (teleportTimer >= .5f)
+                {
+
+                    if (UnityEngine.Random.Range(0.0f, 1.0f) <= teleportChance)
+                    {
+                        Teleport(false);
+
+                        teleportTimer = 0f;
+
+                        teleportChance /= 2;
+                    }
+                    else
+                    {
+                        teleportChance = 1f;
+
+                        UpdateBossAttackPattern();
+                    }
+                }
+
+                break;
+
+            case BossAttackPattern.Gun:
+
+                gunPostTeleportWaitTime += Time.deltaTime;
+
+                if (gunPostTeleportWaitTime >= 1f)
+                {
+                    gunPostTeleportWaitTime = 0;
+
+                    Teleport(true);
+
+                    Shoot();
+
+                    UpdateBossAttackPattern();
+                }
+
+                
+
+                break;
+        }
+
+    }
+
+    void Shoot()
+    {
+        var bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+        bullet.Initialize(gunDamage);
+    }
+
+    private void UpdateBossAttackPattern()
+    {
+        patternNum++;
+
+        if (patternNum >= bossAttackPhases[phases].pattern.Length)
+        {
+            patternNum = 0;
+        }
+    }
+
+    private void Teleport(bool toPlayer)
+    {
+        //spawn particle thing
+
+        var teleportToPos = (UnityEngine.Random.Range(0, 2));
+
+        int dashToPos = 0;
+
+        if(teleportToPos == 0)
+        {
+            dashToPos = 1;
+        }
+
+        if (toPlayer)
+        {
+
+            if (player.transform.position.y <= 0.61f)//bottom
+            {
+                if (player.transform.position.x <= -4.3f) //left
+                {
+                    transform.position = dashPointHandler.bottomLeft[teleportToPos].transform.position;
+                    positionToMoveTo = dashPointHandler.bottomLeft[dashToPos].transform.position;
+
+                }
+                else if (player.transform.position.x > -4.3f && player.transform.position.x <= 3.96f)//center
+                {
+                    transform.position = dashPointHandler.bottomCenter[teleportToPos].transform.position;
+                    positionToMoveTo = dashPointHandler.bottomCenter[dashToPos].transform.position;
+
+                }
+                else //right
+                {
+                    transform.position = dashPointHandler.bottomRight[teleportToPos].transform.position;
+                    positionToMoveTo = dashPointHandler.bottomRight[dashToPos].transform.position;
+                }
+
+            }
+            else//top
+            {
+                if (player.transform.position.x <= -4.3f) //left
+                {
+                    transform.position = dashPointHandler.topLeft[teleportToPos].transform.position;
+                    positionToMoveTo = dashPointHandler.topLeft[dashToPos].transform.position;
+                }
+                else if (player.transform.position.x > -4.3f && player.transform.position.x <= 3.96f)//center
+                {
+                    transform.position = dashPointHandler.topCenter[teleportToPos].transform.position;
+                    positionToMoveTo = dashPointHandler.topCenter[dashToPos].transform.position;
+                }
+                else //right
+                {
+                    transform.position = dashPointHandler.topRight[teleportToPos].transform.position;
+                    positionToMoveTo = dashPointHandler.topRight[dashToPos].transform.position;
+                }
+            }
+
+            
+
+        }
+        else
+        {
+            switch (UnityEngine.Random.Range(0,6))
+            {
+                case 0:
+                    transform.position = dashPointHandler.bottomLeft[teleportToPos].transform.position;
+                    break;
+                case 1:
+                    transform.position = dashPointHandler.bottomCenter[teleportToPos].transform.position;
+                    break;
+                case 2:
+                    transform.position = dashPointHandler.bottomRight[teleportToPos].transform.position;
+                    break;
+                case 3:
+                    transform.position = dashPointHandler.topLeft[teleportToPos].transform.position;
+                    break;
+                case 4:
+                    transform.position = dashPointHandler.topCenter[teleportToPos].transform.position;
+                    break;
+                case 5:
+                    transform.position = dashPointHandler.topRight[teleportToPos].transform.position;
+                    break;
+
+
+            }
+
+        }
+
+        Vector2 direction = player.transform.position - transform.position;
+        if (direction.x < 0)
+        {
+            facingDirection = -1;
+        }
+        else
+        {
+            facingDirection = 1;
+        }
+
+        FlipSprite();
+
+    }
+
+    private void Dash()
+    {
+
+        transform.position = Vector2.MoveTowards(transform.position, new Vector2(positionToMoveTo.x, positionToMoveTo.y), curSpeed * enemyData.speedMultiplier * Time.deltaTime * dashSpeed);
+
+        if (Mathf.Abs(transform.position.x - positionToMoveTo.x) < 0.1f)
+        {
+            isDashing = false;
         }
     }
 
@@ -281,7 +594,7 @@ public class EnemyAI : MonoBehaviour
     private IEnumerator WaitForFireball(Vector3 targetPosition, GameObject fireball)
     {
         yield return new WaitUntil(() => fireball.GetComponent<Animator>().GetBool("Initialized"));
-        Debug.Log("Fireball initialized");
+        Debug.Log("FireballNormal initialized");
         Vector3 direction = (targetPosition - fireball.transform.position).normalized;
 
         // Apply force to the fireball to shoot it towards the player
@@ -384,6 +697,12 @@ public class EnemyAI : MonoBehaviour
                     StartCoroutine(FlashOnDamage());
                     animator.Play("Attack");
                 }
+                else if (EnemyAIType.Boss == enemyAIType)
+                {
+                    StartCoroutine(FlashOnDamage());
+                    animator.Play("Attack");
+                }
+
             }
         }
     }
