@@ -14,6 +14,8 @@ namespace DYP
         {
             //m_Controller.ClearInputBuffer(Time.deltaTime);
 
+            if (TriggerStageChange.instance.startSceneChange)
+                return;
             var horizontal = Input.GetAxisRaw("Horizontal");
             var vertical = Input.GetAxisRaw("Vertical");
 
