@@ -12,15 +12,14 @@ public class PlayerScript : MonoBehaviour
     public CustomMovementController2D m_Controller;
 
     [Header("PlayerData")]
+    public PlayerStatsSO Stats;
     public float maxHealth = 100;
     public float playerHealth;
     public float maxMana = 100;
     public float playerMana;
-    public float invincibilityTime = .2f;
     public float invincibilityPadding = .2f;
     public bool isInvincible = false;
     public float playerSpeedMultipler = 1; //TODO: Implement is needed.
-    public float multipler = 1.5f;
     int originalLayer;
     float aerialMultiplier = .8f;
     float comboMultiplier = 1.5f;
@@ -67,9 +66,7 @@ public class PlayerScript : MonoBehaviour
     }
     void Start()
     {
-        SetStats();
-        playerHealth = maxHealth;
-        playerMana = maxMana;
+        InitialStats();
 
         m_Animator = GetComponent<Animator>();
         emission = gameObject.GetComponentInChildren<ParticleSystem>().emission;
@@ -97,13 +94,9 @@ public class PlayerScript : MonoBehaviour
         {
             if (currentWeapon == 1)
             {
-                // if (attackOnCooldown)
-                //     return;
                 m_Animator.SetTrigger("Slash");
                 isSlashing = true;
                 m_Animator.SetBool("isSlashing", isSlashing);
-                // sword.SetActive(true);
-                // StartCoroutine(AttackCooldown());
             }
             else if (currentWeapon == 2 && Time.time >= nextFireTime)
             {
@@ -111,23 +104,12 @@ public class PlayerScript : MonoBehaviour
                 m_Animator.SetTrigger("Fire");
                 nextFireTime = Time.time + fireCooldown;
             }
-            // if (m_Controller.FacingDirection == 1)
-            // else
-            //     swordLeft.SetActive(true);
         }
         else
         {
             isSlashing = false;
             m_Animator.SetBool("isSlashing", isSlashing);
         }
-        // if (isSlashing)
-        // {
-        //     sword.SetActive(true);
-        // }
-        // else
-        // {
-        //     sword.SetActive(false);
-        // }
 
         if (!gameObject.GetComponent<Animator>().GetBool("isGrounded"))
         {
@@ -138,6 +120,8 @@ public class PlayerScript : MonoBehaviour
             emission.enabled = true;
 
         }
+
+        CheckMana();
     }
 
     private void OnDestroy()
@@ -146,15 +130,40 @@ public class PlayerScript : MonoBehaviour
         EventManaUpdate = null;
     }
 
-    private void SetStats()
+    private void InitialStats()
+    {
+        maxHealth = Stats.MaxHealth;
+        playerHealth = maxHealth;
+
+        maxMana = Stats.MaxMana;
+        playerMana = maxMana;
+
+        playerSpeedMultipler = Stats.SpeedMultiplier;
+
+        swordDamage = Stats.SwordDamage;
+
+        gunDamage = Stats.GunDamage;
+
+        currentBuff = new();
+    }
+
+    private void UpdateStats()
     {
         currentBuff = PlayerStatsHandler.GetPlayerBuff();
 
-        maxHealth = currentBuff.MaxHealth;
-        maxMana = currentBuff.MaxMana;
-        playerSpeedMultipler = currentBuff.Speed;
-        swordDamage = currentBuff.SwordDamage;
-        gunDamage = currentBuff.GunDamage;
+        maxHealth = Stats.MaxHealth + currentBuff.MaxHealth * Stats.BuffMaxHealth;
+        playerSpeedMultipler = Stats.SpeedMultiplier + currentBuff.Speed * Stats.BuffSpeedMultiplier;
+        swordDamage = Stats.SwordDamage + currentBuff.SwordDamage * Stats.BuffSwordDamage;
+        gunDamage = Stats.GunDamage + currentBuff.GunDamage * Stats.BuffGunDamage;
+
+        playerHealth += maxHealth / 5;
+
+        if (playerHealth > maxHealth)
+        {
+            playerHealth = maxHealth;
+        }
+
+        EventHealthUpdate?.Invoke(playerHealth, maxMana);
     }
 
     public void Damage(float damage)
@@ -162,17 +171,12 @@ public class PlayerScript : MonoBehaviour
         playerHealth -= damage;
         EventHealthUpdate?.Invoke(playerHealth, maxHealth);
 
-        if (playerHealth <= 0)
-        {
-            Debug.Log("Player Dead");
-            GameOver();
-            m_Controller.enabled = false;
-            this.enabled = false;
-        }
-        else
-        {
-            Debug.Log("Player Health: " + playerHealth);
-        }
+        if (playerHealth > 0) return;
+
+        Debug.Log("Player Dead");
+        GameOver();
+        m_Controller.enabled = false;
+        enabled = false;
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -324,6 +328,9 @@ public class PlayerScript : MonoBehaviour
 
         instance.isInvincible = true;
 
+        playerMana -= Stats.DashManaCost;
+        EventManaUpdate(playerMana, maxMana);
+
         // Revert the player's layer back to the original layer
     }
     private void OnDashEnd()
@@ -365,7 +372,7 @@ public class PlayerScript : MonoBehaviour
                 currentBuff.MaxHealth++;
                 break;
             case 1:
-                currentBuff.MaxMana++;
+                currentBuff.RecoverMana++;
                 break;
             case 2:
                 currentBuff.Speed++;
@@ -382,6 +389,23 @@ public class PlayerScript : MonoBehaviour
         }
 
         PlayerStatsHandler.SetPlayerBuff(currentBuff);
-        SetStats();
+        UpdateStats();
+    }
+
+    public bool CanDash()
+    {
+        return playerMana >= Stats.DashManaCost;
+    }
+
+    private void CheckMana()
+    {
+        playerMana += (Stats.ManaRecoverPerSec + currentBuff.RecoverMana * Stats.BuffManaRecover) * Time.deltaTime;
+
+        if (playerMana > maxMana)
+        {
+            playerMana = maxMana;
+        }
+
+        EventManaUpdate(playerMana, maxMana);
     }
 }

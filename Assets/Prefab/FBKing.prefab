@@ -5737,10 +5737,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Controller: {fileID: 3616460292221755585}
+  Stats: {fileID: 11400000, guid: b9f9f04b6553f014e87ab420f85ce5fc, type: 2}
   maxHealth: 100
   playerHealth: 0
   maxMana: 100
   playerMana: 0
+  dashManaCost: 30
+  manaRecoverPerSec: 10
   invincibilityTime: 1
   invincibilityPadding: 0.2
   isInvincible: 0

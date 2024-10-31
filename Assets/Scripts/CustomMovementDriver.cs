@@ -1,7 +1,4 @@
-using DYP;
 using UnityEngine;
-using FBK;
-using Unity.VisualScripting;
 namespace DYP
 {
     /// <summary>
@@ -37,7 +34,10 @@ namespace DYP
 
             m_Controller.PressJump(jump);
 
-            m_Controller.PressDash(dash);
+            if (PlayerScript.instance.CanDash())
+            {
+                m_Controller.PressDash(dash);
+            }
 
             m_Controller.HoldJump(holdingJump);
 

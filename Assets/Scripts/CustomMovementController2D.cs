@@ -1,9 +1,6 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using DYP;
-using FBK;
 
 /*
  * -- CustomCharacterController2D
@@ -922,7 +919,7 @@ public class CustomMovementController2D : MonoBehaviour, IHas2DAxisMovement, ICa
             }
 
             // setup velocity.x based on input
-            float targetVecX = input.x * m_MovementSettings.Speed /* * (PlayerScript.instance != null ? PlayerScript.instance.playerSpeedMultipler : 1.0f)*/;
+            float targetVecX = input.x * m_MovementSettings.Speed * PlayerScript.instance.playerSpeedMultipler;
 
             // smooth x direction motion
             if (IsOnGround())
