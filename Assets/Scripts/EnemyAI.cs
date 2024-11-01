@@ -98,6 +98,13 @@ public class EnemyAI : MonoBehaviour
 
     int teleportPhase;
 
+    [Header("SFX")]
+    [SerializeField] private AudioSource shootSound;
+    [SerializeField] private AudioSource fireballSound;
+    [SerializeField] private AudioSource fireWallSound;
+    [SerializeField] private AudioSource jumpSound;
+    [SerializeField] private AudioSource hurtSound;
+    [SerializeField] private AudioSource dashSound;
 
     void Awake()
     {
@@ -366,6 +373,8 @@ public class EnemyAI : MonoBehaviour
 
     private void CheckPhase(float currentHealth, float maxHealth)
     {
+        PlaySound(hurtSound);
+
         if (phases == 0 && currentHealth < maxHealth * 0.5f)
         {
             phases = 1;
@@ -470,6 +479,8 @@ public class EnemyAI : MonoBehaviour
     {
         var bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
         bullet.Initialize(gunDamage);
+
+        PlaySound(shootSound);
     }
 
     private void UpdateBossAttackPattern()
@@ -498,11 +509,11 @@ public class EnemyAI : MonoBehaviour
 
         FlipSprite();
 
+        PlaySound(dashSound);
     }
 
     private void Dash()
     {
-
         transform.position = Vector2.MoveTowards(transform.position, new Vector2(positionToDashTo.x, positionToDashTo.y), curSpeed * enemyData.speedMultiplier * Time.deltaTime * dashSpeed);
 
         animator.Play("Dash");
@@ -511,6 +522,8 @@ public class EnemyAI : MonoBehaviour
         {
             isDashing = false;
         }
+
+        PlaySound(dashSound);
     }
 
     private void HandleGroundedAI()
@@ -582,7 +595,6 @@ public class EnemyAI : MonoBehaviour
 
         if (isChasing)
         {
-
             transform.position = Vector2.MoveTowards(transform.position, new Vector2(player.transform.position.x, player.transform.position.y + flightLowerBound), curSpeed * Time.deltaTime);
             animator.SetBool("IsAttacking", true);
             AdjustSpeed(enemyData.speed * enemyData.speedMultiplier);
@@ -705,6 +717,8 @@ public class EnemyAI : MonoBehaviour
         // Apply force to the fireball to shoot it towards the player
         Rigidbody2D rb = fireball.GetComponent<Rigidbody2D>();
         rb.AddForce(direction * fireballSpeed, ForceMode2D.Impulse);
+
+        PlaySound(fireballSound);
     }
 
     private void CastFireWave()
@@ -715,6 +729,8 @@ public class EnemyAI : MonoBehaviour
         GameObject fireWave = Instantiate(fireWavePrefab, firePosition, Quaternion.identity, transform);
         fireWave.GetComponent<SpriteRenderer>().flipX = directionX == 1;
         fireWave.GetComponent<Rigidbody2D>().AddForce(directionX * fireWaveSpeed * Vector3.right, ForceMode2D.Impulse);
+
+        PlaySound(fireWallSound);
     }
 
     private void Patrol()
@@ -881,5 +897,13 @@ public class EnemyAI : MonoBehaviour
             Gizmos.DrawRay(transform.position, leftArc);
             Gizmos.DrawRay(transform.position, rightArc);
         }
+    }
+
+    private void PlaySound(AudioSource audio)
+    {
+        if (audio == null) return;
+
+        audio.pitch = SFXHelper.GetRandomPitch();
+        audio.Play();
     }
 }

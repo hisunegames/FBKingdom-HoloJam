@@ -54,6 +54,13 @@ public class PlayerScript : MonoBehaviour
     private float nextFireTime = 0f;
     private ParticleSystem.EmissionModule emission;
 
+    [Header("SFX")]
+    [SerializeField] private AudioSource slashSound;
+    [SerializeField] private AudioSource shootSound;
+    [SerializeField] private AudioSource jumpSound;
+    [SerializeField] private AudioSource hurtSound;
+    [SerializeField] private AudioSource dashSound;
+
     void Awake()
     {
         if (instance == null)
@@ -73,6 +80,7 @@ public class PlayerScript : MonoBehaviour
         originalLayer = gameObject.layer;
         m_Controller.OnDash += OnDash;
         m_Controller.OnDashEnd += OnDashEnd;
+        m_Controller.OnJump += OnJump;
     }
 
     void Update()
@@ -97,12 +105,16 @@ public class PlayerScript : MonoBehaviour
                 m_Animator.SetTrigger("Slash");
                 isSlashing = true;
                 m_Animator.SetBool("isSlashing", isSlashing);
+
+                PlaySound(slashSound);
             }
             else if (currentWeapon == 2 && Time.time >= nextFireTime)
             {
                 Shoot();
                 m_Animator.SetTrigger("Fire");
                 nextFireTime = Time.time + fireCooldown;
+
+                PlaySound(shootSound);
             }
         }
         else
@@ -156,12 +168,7 @@ public class PlayerScript : MonoBehaviour
         swordDamage = Stats.SwordDamage + currentBuff.SwordDamage * Stats.BuffSwordDamage;
         gunDamage = Stats.GunDamage + currentBuff.GunDamage * Stats.BuffGunDamage;
 
-        playerHealth += maxHealth / 5;
-
-        if (playerHealth > maxHealth)
-        {
-            playerHealth = maxHealth;
-        }
+        playerHealth = maxHealth;
 
         EventHealthUpdate?.Invoke(playerHealth, maxMana);
     }
@@ -170,6 +177,8 @@ public class PlayerScript : MonoBehaviour
     {
         playerHealth -= damage;
         EventHealthUpdate?.Invoke(playerHealth, maxHealth);
+
+        PlaySound(hurtSound);
 
         if (playerHealth > 0) return;
 
@@ -347,12 +356,18 @@ public class PlayerScript : MonoBehaviour
         playerMana -= Stats.DashManaCost;
         EventManaUpdate(playerMana, maxMana);
 
+        PlaySound(dashSound);
         // Revert the player's layer back to the original layer
     }
     private void OnDashEnd()
     {
         StopCoroutine(DashIFramesPadding());
         StartCoroutine(DashIFramesPadding());
+    }
+
+    private void OnJump()
+    {
+        PlaySound(jumpSound);
     }
 
     public IEnumerator DashIFramesPadding()
@@ -364,7 +379,6 @@ public class PlayerScript : MonoBehaviour
         gameObject.layer = originalLayer;
 
         isInvincible = false;
-
     }
 
     void Shoot()
@@ -428,9 +442,17 @@ public class PlayerScript : MonoBehaviour
     }
 
     //TODO: Implement method to call this function to save player progress.
-    private void OnFinishStage()
+    public void OnFinishStage()
     {
         PlayerStatsHandler.SavePlayerBuff(currentBuff);
     }
     #endregion
+
+    private void PlaySound(AudioSource audio)
+    {
+        if (audio == null) return;
+
+        audio.pitch = SFXHelper.GetRandomPitch();
+        audio.Play();
+    }
 }
