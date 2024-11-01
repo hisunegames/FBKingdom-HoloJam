@@ -24,6 +24,8 @@ public class TriggerStageChange : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (!other.CompareTag("Player")) return;
+
+        PlayerScript.instance.OnFinishStage();
         startSceneChange = true;
     }
 
