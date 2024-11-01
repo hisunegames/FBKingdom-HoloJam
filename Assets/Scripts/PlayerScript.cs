@@ -188,6 +188,10 @@ public class PlayerScript : MonoBehaviour
 
             m_Controller.enabled = false;
             GetComponent<Collider2D>().enabled = false;
+            foreach (Collider2D col in GetComponentsInChildren<Collider2D>())
+            {
+                col.enabled = false;
+            }
             enabled = false;
 
         }
