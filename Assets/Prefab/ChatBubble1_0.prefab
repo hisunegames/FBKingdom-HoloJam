@@ -28,7 +28,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_LocalScale: {x: 4.5, y: 4.5, z: 4.5}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 719435559988090681}
@@ -198,8 +198,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 0.1
-  m_fontSizeBase: 0.1
+  m_fontSize: 0.07
+  m_fontSizeBase: 0.07
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 0.05
@@ -259,7 +259,7 @@ MonoBehaviour:
   timeScale: 0
   _text: 
   useDynamicScaling: 1
-  referenceFontSize: 10
+  referenceFontSize: 48
   isResettingTimeOnNewText: 1
   useDefaultDatabases: 1
   databaseBehaviors: {fileID: 0}
@@ -616,16 +616,16 @@ MonoBehaviour:
   typewriterStartsAutomatically: 0
   animationLoop: 0
   timeScale: 0
-  _text: 
+  _text: Text
   useDynamicScaling: 1
-  referenceFontSize: 10
+  referenceFontSize: 48
   isResettingTimeOnNewText: 1
   useDefaultDatabases: 1
-  databaseBehaviors: {fileID: 0}
-  databaseAppearances: {fileID: 0}
+  databaseBehaviors: {fileID: 11400000, guid: 951c9dea89f78fd4fb025e27c072e71a, type: 2}
+  databaseAppearances: {fileID: 11400000, guid: e5b5be3d7a95a9a4990dd2538d323ab6, type: 2}
   useDefaultStyleSheet: 1
   styleSheet: {fileID: 0}
-  databaseActions: {fileID: 0}
+  databaseActions: {fileID: 11400000, guid: 20352aeb99f350147a09ed1fd888b7c6, type: 2}
   defaultAppearancesTags:
   - size
   defaultDisappearancesTags:

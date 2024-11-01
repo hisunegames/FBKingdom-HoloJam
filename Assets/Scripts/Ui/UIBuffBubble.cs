@@ -13,7 +13,7 @@ public class UIBuffBubble : MonoBehaviour
     public void Initialize(string messageText, string buffText)
     {
         message.ShowText(messageText);
-        buff.text = $"{{vertexp}}<bounce>{buffText}</bounce>{{/vertexp}}";
+        buff.text = $"{{vertexp}}<bounce a=0.3>{buffText}</bounce>{{/vertexp}}";
 
         disposeTime = Time.time + lifetime;
     }
