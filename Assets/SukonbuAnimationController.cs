@@ -65,5 +65,7 @@ public class SukonbuAnimationController : MonoBehaviour
 
         var bubble = Instantiate(buffBubblePrefab, transform.position, Quaternion.identity);
         bubble.Initialize(content.MessageList[messageIdx], content.BuffList[buffIdx]);
+        int currentBuffAmount = PlayerPrefs.GetInt("buff", 0);
+        PlayerPrefs.SetInt("buff", currentBuffAmount + 1);
     }
 }

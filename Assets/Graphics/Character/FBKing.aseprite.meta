@@ -7,82 +7,87 @@ ScriptedImporter:
       type: UnityEngine:AnimationClip
       assembly: UnityEngine.AnimationModule
       name: Action-Fall
-    second: {fileID: 7400000, guid: 97a9caf48f191914aa76b42990fe82b5, type: 2}
+    second: {fileID: 7400000, guid: 2f61f2c64e3fd844eb272b68222fccb6, type: 2}
   - first:
       type: UnityEngine:AnimationClip
       assembly: UnityEngine.AnimationModule
       name: Action-Fall-Gun
-    second: {fileID: 7400000, guid: 1edcf018c2f01cc48ad23e9504366a7c, type: 2}
+    second: {fileID: 7400000, guid: 1283a96126a35fc45abb1b0500053368, type: 2}
   - first:
       type: UnityEngine:AnimationClip
       assembly: UnityEngine.AnimationModule
       name: Action-Float
-    second: {fileID: 7400000, guid: 4b7027189e29149469cdbb92943732f5, type: 2}
+    second: {fileID: 7400000, guid: 55d033e59be51634ab5b7646694abc74, type: 2}
   - first:
       type: UnityEngine:AnimationClip
       assembly: UnityEngine.AnimationModule
       name: Action-Float-Gun
-    second: {fileID: 7400000, guid: b3a7b8d399916cf43b5bbc9d4f341fcb, type: 2}
+    second: {fileID: 7400000, guid: f743b4a62db47054e8cb586436ab6f9a, type: 2}
   - first:
       type: UnityEngine:AnimationClip
       assembly: UnityEngine.AnimationModule
       name: Action-Hurt
-    second: {fileID: 7400000, guid: 9978a3b49edb081478d9d58e8e9e400e, type: 2}
+    second: {fileID: 7400000, guid: 205144e82f80a9143be44039ce3253b0, type: 2}
   - first:
       type: UnityEngine:AnimationClip
       assembly: UnityEngine.AnimationModule
       name: Action-Idle
-    second: {fileID: 7400000, guid: e6c918d90b02304498a48377811fc69c, type: 2}
+    second: {fileID: 7400000, guid: c704cbbbffa629545911019553183409, type: 2}
   - first:
       type: UnityEngine:AnimationClip
       assembly: UnityEngine.AnimationModule
       name: Action-Idle-Gun
-    second: {fileID: 7400000, guid: d8bb0b1e4671fc14d81a6252234a9942, type: 2}
+    second: {fileID: 7400000, guid: fb4ed7ff4798aae47865ea66fb964857, type: 2}
   - first:
       type: UnityEngine:AnimationClip
       assembly: UnityEngine.AnimationModule
       name: Action-Jump
-    second: {fileID: 7400000, guid: b7be99e327f41d04287bbfabc430b234, type: 2}
+    second: {fileID: 7400000, guid: 58f35f990c576794e94a35fc1bf71d46, type: 2}
   - first:
       type: UnityEngine:AnimationClip
       assembly: UnityEngine.AnimationModule
       name: Action-Run
-    second: {fileID: 7400000, guid: ac134d7d2ae4d754cbf4d33d384689c9, type: 2}
+    second: {fileID: 7400000, guid: 1aa444fba1e455a46a536bc8eb3c53c3, type: 2}
   - first:
       type: UnityEngine:AnimationClip
       assembly: UnityEngine.AnimationModule
       name: Action-Run-Gun
-    second: {fileID: 7400000, guid: 6ecae5af8032e5c4ba17d08fbb5e5a43, type: 2}
+    second: {fileID: 7400000, guid: d7c5165efccd11444977e01d0667e2d5, type: 2}
   - first:
       type: UnityEngine:AnimationClip
       assembly: UnityEngine.AnimationModule
       name: Action-Slash-Aerial
-    second: {fileID: 7400000, guid: 450101e5058ec884d9b9985674af9f89, type: 2}
+    second: {fileID: 7400000, guid: c028a00c52191864cb5a27f623c4361e, type: 2}
   - first:
       type: UnityEngine:AnimationClip
       assembly: UnityEngine.AnimationModule
       name: Action-Slash-Ground-1
-    second: {fileID: 7400000, guid: ac5d7d78578f87245b0fe8ae2228e07c, type: 2}
+    second: {fileID: 7400000, guid: ad128a46e02d712419193607dd7050a1, type: 2}
   - first:
       type: UnityEngine:AnimationClip
       assembly: UnityEngine.AnimationModule
       name: Action-Slash-Ground-2
-    second: {fileID: 7400000, guid: 7539405a6ac1bf4419853eef18192966, type: 2}
+    second: {fileID: 7400000, guid: 1546ae33eb102064da36829fc5100cf1, type: 2}
   - first:
       type: UnityEngine:AnimationClip
       assembly: UnityEngine.AnimationModule
       name: Action-Slash-Ground-Start
-    second: {fileID: 7400000, guid: 93bc72a909612b74f99306608681ab31, type: 2}
+    second: {fileID: 7400000, guid: 76b68a56b17b9cc428faa1ff5f44979a, type: 2}
+  - first:
+      type: UnityEngine:AnimationClip
+      assembly: UnityEngine.AnimationModule
+      name: Defeat
+    second: {fileID: 7400000, guid: 34b5879151dc5a04e9c9b5c570b381f7, type: 2}
   - first:
       type: UnityEngine:AnimationClip
       assembly: UnityEngine.AnimationModule
       name: Idle
-    second: {fileID: 7400000, guid: 0721c62f6e6e2774997ae8e0f543636b, type: 2}
+    second: {fileID: 7400000, guid: 120095243232f8a4ab34957bd51f4350, type: 2}
   - first:
       type: UnityEngine:AnimationClip
       assembly: UnityEngine.AnimationModule
       name: Idle-To-Action
-    second: {fileID: 7400000, guid: 482e997e9443b7a43904493afe75105a, type: 2}
+    second: {fileID: 7400000, guid: 13bb1128780eb2c4c9ba5cf5f647a73f, type: 2}
   serializedVersion: 2
   userData: 
   assetBundleName: 
@@ -177,7 +182,7 @@ ScriptedImporter:
     addSortingGroup: 1
     addShadowCasters: 1
   importFileNodeState: 1
-  platformSettingsDirtyTick: 638655891627586080
+  platformSettingsDirtyTick: 638661095597179732
   textureAssetName: 
   singleSpriteImportData:
   - name: 

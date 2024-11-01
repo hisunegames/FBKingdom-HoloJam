@@ -28,11 +28,13 @@ public class Health : MonoBehaviour
         {
             if (animator != null)
             {
+                // Debug.Log("Enemy died");
                 gameObject.GetComponent<Collider2D>().enabled = false;
                 gameObject.GetComponent<Rigidbody2D>().linearVelocity = new(0, 0);
                 gameObject.GetComponent<Rigidbody2D>().simulated = false;
-                animator.Play("Death");
                 OnDeath?.Invoke();
+                if (enemyData.name != "fbkBoss")
+                    animator.Play("Death");
             }
             // else
             //     Destroy(gameObject);

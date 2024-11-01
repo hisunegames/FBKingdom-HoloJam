@@ -50,6 +50,8 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] private GameObject fireWavePrefab;
     [SerializeField] private float fireWaveSpeed;
 
+    bool isBossDead = false;
+
     public enum BossAttackPattern
     {
         Fireball = 1,
@@ -111,7 +113,10 @@ public class EnemyAI : MonoBehaviour
         hitbox.StayingInTrigger.AddListener(OnEnemyHitBoxTriggerStay);
         detection.FoundPlayer.AddListener(OnEnemyDetectionTriggerStay);
 
-        if (enemyAIType != EnemyAIType.Boss) return;
+        if (enemyAIType != EnemyAIType.Boss)
+            return;
+
+        GetComponent<Health>().OnDeath.AddListener(InitiateBossDeath);
 
         if (TryGetComponent<Health>(out var heath))
         {
@@ -152,7 +157,7 @@ public class EnemyAI : MonoBehaviour
 
     private void HandleBossAI()
     {
-        if (isFlashing || !canBoss) return;
+        if (isFlashing || !canBoss || isBossDead) return;
 
         switch (bossAttackPhases[phases].pattern[patternNum])
         {
@@ -548,7 +553,10 @@ public class EnemyAI : MonoBehaviour
             StopCoroutine(TurnAround());
             animator.Play("Move");
             animator.SetBool("IsPatrolling", false);
-            transform.position = Vector2.MoveTowards(transform.position, new Vector2(player.transform.position.x, transform.position.y), curSpeed * enemyData.speedMultiplier * Time.deltaTime);
+            Rigidbody2D rb = GetComponent<Rigidbody2D>();
+            if (rb.linearVelocityY == 0)
+                transform.position = Vector2.MoveTowards(transform.position, new Vector2(player.transform.position.x, transform.position.y), curSpeed * enemyData.speedMultiplier * Time.deltaTime);
+
             if (direction.x < 0)
             {
                 facingDirection = -1;
@@ -905,5 +913,19 @@ public class EnemyAI : MonoBehaviour
 
         audio.pitch = SFXHelper.GetRandomPitch();
         audio.Play();
+    }
+
+    private void InitiateBossDeath()
+    {
+        // animator.Play("Death");
+        if (isBossDead) return;
+        isBossDead = true;
+        Debug.Log("Boss Death");
+        animator.Play("Death");
+        GetComponent<Collider2D>().enabled = false;
+        // GetComponent<Rigidbody2D>().simulated = false;
+        GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
+        telegrapher.SetActive(false);
+        this.enabled = false;
     }
 }

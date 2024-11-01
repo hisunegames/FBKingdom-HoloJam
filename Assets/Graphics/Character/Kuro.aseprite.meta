@@ -2,7 +2,42 @@ fileFormatVersion: 2
 guid: df55a5369077e4f469ef34257088dd17
 ScriptedImporter:
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:AnimationClip
+      assembly: UnityEngine.AnimationModule
+      name: Dash
+    second: {fileID: 7400000, guid: 4a5c0878fcf84b2479be2be318a3a737, type: 2}
+  - first:
+      type: UnityEngine:AnimationClip
+      assembly: UnityEngine.AnimationModule
+      name: Defeat
+    second: {fileID: 7400000, guid: cd029b01d86ec5a4c8a7fb1f24e66a3a, type: 2}
+  - first:
+      type: UnityEngine:AnimationClip
+      assembly: UnityEngine.AnimationModule
+      name: Fire
+    second: {fileID: 7400000, guid: 7ebb2df8236d09c4fb7ac09082103549, type: 2}
+  - first:
+      type: UnityEngine:AnimationClip
+      assembly: UnityEngine.AnimationModule
+      name: Hurt
+    second: {fileID: 7400000, guid: a9712684452a9b34cb3e2579b12cdc08, type: 2}
+  - first:
+      type: UnityEngine:AnimationClip
+      assembly: UnityEngine.AnimationModule
+      name: Idle
+    second: {fileID: 7400000, guid: e97f201be4cd1f14fae8e84cb90a4809, type: 2}
+  - first:
+      type: UnityEngine:AnimationClip
+      assembly: UnityEngine.AnimationModule
+      name: Intro
+    second: {fileID: 7400000, guid: c569426966c9d32439f93385bcc29fea, type: 2}
+  - first:
+      type: UnityEngine:AnimationClip
+      assembly: UnityEngine.AnimationModule
+      name: Special
+    second: {fileID: 7400000, guid: 6e52100b5c57549489e905cdf10cfe46, type: 2}
   serializedVersion: 2
   userData: 
   assetBundleName: 
@@ -97,7 +132,7 @@ ScriptedImporter:
     addSortingGroup: 1
     addShadowCasters: 0
   importFileNodeState: 1
-  platformSettingsDirtyTick: 638659823665848386
+  platformSettingsDirtyTick: 638661075300715833
   textureAssetName: 
   singleSpriteImportData:
   - name: 

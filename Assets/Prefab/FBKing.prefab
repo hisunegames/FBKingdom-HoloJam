@@ -66,7 +66,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.09, y: 0.9}
+  m_Offset: {x: 0.09, y: 1.02}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -76,7 +76,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1.22, y: 2.58}
+  m_Size: {x: 1.43, y: 2.58}
   m_EdgeRadius: 0
 --- !u!1 &928744772072286062
 GameObject:
@@ -191,7 +191,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.88, y: 1.48}
+  m_Size: {x: 1.24, y: 1.48}
   m_EdgeRadius: 0
 --- !u!1 &1543964250274453798
 GameObject:
@@ -5726,7 +5726,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 1
   m_CompositeOrder: 0
-  m_Offset: {x: -0.18, y: 0.9}
+  m_Offset: {x: 0.02, y: 0.9}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -5736,7 +5736,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1.03, y: 1.42}
+  m_Size: {x: 1.07, y: 1.42}
   m_EdgeRadius: 0
 --- !u!61 &1272469792772780062
 BoxCollider2D:
@@ -5782,7 +5782,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1.71, y: 0.9}
+  m_Size: {x: 2.15, y: 0.9}
   m_EdgeRadius: 0
 --- !u!50 &5870688941336870169
 Rigidbody2D:
@@ -5852,12 +5852,12 @@ CompositeCollider2D:
   m_ColliderPaths: []
   m_CompositePaths:
     m_Paths:
-    - - {x: 0.1004707, y: -0.0029999001}
-      - {x: 0.1004706, y: 0.483}
-      - {x: -0.2085, y: 0.4829707}
-      - {x: -0.2085294, y: 0.267}
-      - {x: -0.4125, y: 0.2669707}
-      - {x: -0.4124707, y: -0.0029999001}
+    - - {x: 0.5549707, y: -0.0099999}
+      - {x: 0.5549707, y: 1.6099999}
+      - {x: -0.515, y: 1.6099706}
+      - {x: -0.51502943, y: 0.89}
+      - {x: -1.595, y: 0.8899707}
+      - {x: -1.5949707, y: -0.0099999}
   m_VertexDistance: 0.0005
   m_OffsetDistance: 0.00005
   m_UseDelaunayMesh: 0
@@ -6406,8 +6406,8 @@ MonoBehaviour:
   m_CollisionLayer:
     serializedVersion: 2
     m_Bits: 1024
-  m_HorizontalRayCount: 16
-  m_VerticalRayCount: 9
+  m_HorizontalRayCount: 32
+  m_VerticalRayCount: 24
 --- !u!114 &-3311104556210359631
 MonoBehaviour:
   m_ObjectHideFlags: 0

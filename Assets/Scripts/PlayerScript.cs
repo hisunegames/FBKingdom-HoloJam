@@ -328,8 +328,8 @@ public class PlayerScript : MonoBehaviour
         if (target == null)
             yield break;
         Debug.Log("Knockback" + new Vector2(swordKnockback.x * facingDirection, swordKnockback.y));
-        target.GetComponent<Rigidbody2D>().AddForce(new Vector2(swordKnockback.x * facingDirection, swordKnockback.y), ForceMode2D.Impulse);
-        yield return new WaitForSeconds(0.1f);
+        target.GetComponent<Rigidbody2D>().AddForce(new Vector2(swordKnockback.x * facingDirection / enemyData.mass, swordKnockback.y / enemyData.mass), ForceMode2D.Impulse);
+        yield return new WaitUntil(() => { if (target.GetComponent<Rigidbody2D>().linearVelocity.y <= 0.2f) return true; else return false; });
         if (target == null)
             yield break;
         target.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;

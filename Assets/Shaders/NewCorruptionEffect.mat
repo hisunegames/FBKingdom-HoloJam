@@ -76,7 +76,7 @@ Material:
     - _TimeScale: 1
     - _WorldScale: 100
     m_Colors:
-    - _CameraPosition: {r: -7.5552664, g: 4.2004805, b: -3.2, a: 0}
+    - _CameraPosition: {r: 0.20999992, g: 1.95, b: -32.064728, a: 0}
     - _CorruptionColor: {r: 1, g: 0, b: 0, a: 1}
     - _OverlayColor: {r: 0, g: 0, b: 0, a: 1}
     - _WorldOffset: {r: 0, g: 0, b: 0, a: 0}

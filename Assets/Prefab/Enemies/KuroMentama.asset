@@ -19,6 +19,6 @@ MonoBehaviour:
   attackPower: 8
   attackRange: 5
   knockbackForce: 0.4
-  mass: 0.5
+  mass: 2
   retreatDistance: 5
   attackInterval: 3
