@@ -120,6 +120,8 @@ public class PlayerScript : MonoBehaviour
         {
             isSlashing = false;
             m_Animator.SetBool("isSlashing", isSlashing);
+
+            StopSound(slashSound);
         }
 
         if (!gameObject.GetComponent<Animator>().GetBool("isGrounded"))
@@ -456,5 +458,12 @@ public class PlayerScript : MonoBehaviour
 
         audio.pitch = SFXHelper.GetRandomPitch();
         audio.Play();
+    }
+
+    private void StopSound(AudioSource audio)
+    {
+        if (audio == null) return;
+
+        audio.Stop();
     }
 }
