@@ -181,12 +181,17 @@ public class PlayerScript : MonoBehaviour
 
         PlaySound(hurtSound);
 
-        if (playerHealth > 0) return;
+        if (playerHealth <= 0)
+        {
 
-        OnGameOver();
+            OnGameOver();
 
-        m_Controller.enabled = false;
-        enabled = false;
+            m_Controller.enabled = false;
+            GetComponent<Collider2D>().enabled = false;
+            enabled = false;
+
+        }
+
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
