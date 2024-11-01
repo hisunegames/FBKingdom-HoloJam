@@ -186,7 +186,7 @@ GameObject:
   - component: {fileID: 1645527957148458370}
   - component: {fileID: 8466344386232146823}
   m_Layer: 6
-  m_Name: Fireball (NEEDED)
+  m_Name: Fireball
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -217,8 +217,8 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: fb45e32a9cf3a6640ad8aafbc0dcd87d, type: 3}
+  m_Resource: {fileID: 8300000, guid: fb45e32a9cf3a6640ad8aafbc0dcd87d, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -876,7 +876,7 @@ GameObject:
   - component: {fileID: 3847040017495093046}
   - component: {fileID: 5635256052736715835}
   m_Layer: 6
-  m_Name: Hurt (NEEDED)
+  m_Name: Hurt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -907,8 +907,8 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 88f794b705860d64e955eabdf4621011, type: 3}
+  m_Resource: {fileID: 8300000, guid: 88f794b705860d64e955eabdf4621011, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -1360,7 +1360,7 @@ GameObject:
   - component: {fileID: 7531541713380816572}
   - component: {fileID: 8140082303622690136}
   m_Layer: 6
-  m_Name: FireWall (NEEDED)
+  m_Name: 'FireWall '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1391,8 +1391,8 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 5c952164a6b23434fae4590af39327ba, type: 3}
+  m_Resource: {fileID: 8300000, guid: 5c952164a6b23434fae4590af39327ba, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1

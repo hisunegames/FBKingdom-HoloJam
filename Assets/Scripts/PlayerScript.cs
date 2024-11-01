@@ -121,7 +121,7 @@ public class PlayerScript : MonoBehaviour
             isSlashing = false;
             m_Animator.SetBool("isSlashing", isSlashing);
 
-            StopSound(slashSound);
+            //StopSound(slashSound);
         }
 
         if (!gameObject.GetComponent<Animator>().GetBool("isGrounded"))
