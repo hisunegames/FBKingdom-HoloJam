@@ -6,7 +6,7 @@ public class TelegrapherTeleport : MonoBehaviour
 
     private void OnEnable()
     {
-        anim.Play("Telegrapher", 0, 0);
+        // anim.Play("Telegrapher", 0, 0);
     }
 
     public void Despawn()

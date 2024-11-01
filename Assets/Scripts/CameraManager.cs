@@ -1,6 +1,6 @@
 using UnityEngine;
-using Unity.Cinemachine;
 using System;
+using Unity.Cinemachine;
 
 public class CameraManager : MonoBehaviour
 {
@@ -18,6 +18,16 @@ public class CameraManager : MonoBehaviour
             camera.Priority = camera == currentCamera ? 10 : 0;
         }
     }
+
+    public void DisableCameraFollow()
+    {
+        var cinemachineComponent = currentCamera.GetCinemachineComponent(CinemachineCore.Stage.Body) as CinemachinePositionComposer;
+        if (cinemachineComponent != null)
+        {
+            cinemachineComponent.enabled = false;
+        }
+    }
+
     private void Awake()
     {
         if (instance == null)
@@ -29,6 +39,8 @@ public class CameraManager : MonoBehaviour
         currentCamera = defaultCamera;
         SetActiveCamera(currentCamera);
     }
+
+
 
     private void Update()
     {

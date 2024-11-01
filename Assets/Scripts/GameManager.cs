@@ -34,6 +34,8 @@ namespace FBK
 
             startTimeScale = Time.timeScale;
             startFixedDeltaTime = Time.fixedDeltaTime;
+
+            Database = GetComponent<GameDatabase>();
         }
         void Update()
         {

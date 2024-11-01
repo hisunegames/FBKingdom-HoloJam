@@ -13,11 +13,12 @@ MonoBehaviour:
   m_Name: KuroMentama
   m_EditorClassIdentifier: 
   enemyName: KuroMentama
-  maxHealth: 100
+  maxHealth: 50
   speedMultiplier: 3
   speed: 1
-  attackPower: 20
+  attackPower: 8
   attackRange: 5
   knockbackForce: 0.4
   mass: 0.5
   retreatDistance: 5
+  attackInterval: 3

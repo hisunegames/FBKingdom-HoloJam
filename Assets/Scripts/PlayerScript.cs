@@ -26,6 +26,7 @@ public class PlayerScript : MonoBehaviour
     float comboMultiplier = 1.5f;
 
     private PlayerBuff currentBuff;
+    private bool isFlashing;
 
     [Header("Player Animation")]
     public Animator m_Animator;
@@ -53,6 +54,14 @@ public class PlayerScript : MonoBehaviour
     private float nextFireTime = 0f;
     private ParticleSystem.EmissionModule emission;
 
+    [Header("SFX")]
+    [SerializeField] private AudioSource slashSound;
+    [SerializeField] private AudioSource shootSound;
+    [SerializeField] private AudioSource jumpSound;
+    [SerializeField] private AudioSource hurtSound;
+    [SerializeField] private AudioSource dashSound;
+    [SerializeField] private AudioSource deadSound;
+
     void Awake()
     {
         if (instance == null)
@@ -72,6 +81,7 @@ public class PlayerScript : MonoBehaviour
         originalLayer = gameObject.layer;
         m_Controller.OnDash += OnDash;
         m_Controller.OnDashEnd += OnDashEnd;
+        m_Controller.OnJump += OnJump;
     }
 
     void Update()
@@ -96,6 +106,8 @@ public class PlayerScript : MonoBehaviour
                 m_Animator.SetTrigger("Slash");
                 isSlashing = true;
                 m_Animator.SetBool("isSlashing", isSlashing);
+
+                PlaySound(slashSound);
             }
             else if (currentWeapon == 2 && Time.time >= nextFireTime)
             {
@@ -108,6 +120,8 @@ public class PlayerScript : MonoBehaviour
         {
             isSlashing = false;
             m_Animator.SetBool("isSlashing", isSlashing);
+
+            //StopSound(slashSound);
         }
 
         if (!gameObject.GetComponent<Animator>().GetBool("isGrounded"))
@@ -155,12 +169,7 @@ public class PlayerScript : MonoBehaviour
         swordDamage = Stats.SwordDamage + currentBuff.SwordDamage * Stats.BuffSwordDamage;
         gunDamage = Stats.GunDamage + currentBuff.GunDamage * Stats.BuffGunDamage;
 
-        playerHealth += maxHealth / 5;
-
-        if (playerHealth > maxHealth)
-        {
-            playerHealth = maxHealth;
-        }
+        playerHealth = maxHealth;
 
         EventHealthUpdate?.Invoke(playerHealth, maxMana);
     }
@@ -169,6 +178,8 @@ public class PlayerScript : MonoBehaviour
     {
         playerHealth -= damage;
         EventHealthUpdate?.Invoke(playerHealth, maxHealth);
+
+        PlaySound(hurtSound);
 
         if (playerHealth > 0) return;
 
@@ -211,6 +222,7 @@ public class PlayerScript : MonoBehaviour
     public void PlayerHit(GameObject other, EnemyData enemyData, float facingDirection)
     {
         m_Animator.Play("Action-Hurt");
+        StartCoroutine(FlashOnDamage());
         // StartCoroutine(InvincibiltyFrames());
         other.GetComponent<PlayerScript>().Damage(enemyData.attackPower);
         StartCoroutine(FakeAddForceMotion(other, enemyData, -facingDirection));
@@ -220,8 +232,23 @@ public class PlayerScript : MonoBehaviour
     {
         m_Animator.Play("Action-Hurt");
         // StartCoroutine(InvincibiltyFrames());
+        StartCoroutine(FlashOnDamage());
         other.GetComponent<PlayerScript>().Damage(enemyData.attackPower);
         StartCoroutine(FakeAddForceMotion(other, enemyData, -m_Controller.FacingDirection));
+    }
+
+    private IEnumerator FlashOnDamage()
+    {
+        isFlashing = true;
+        SpriteRenderer spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        for (int i = 0; i < 5; i++)
+        {
+            spriteRenderer.color = Color.red;
+            yield return new WaitForSeconds(0.1f);
+            spriteRenderer.color = Color.white;
+            yield return new WaitForSeconds(0.1f);
+        }
+        isFlashing = false;
     }
     public IEnumerator FakeAddForceMotion(GameObject target, EnemyData enemyData, float facingDirection)
     {
@@ -330,12 +357,18 @@ public class PlayerScript : MonoBehaviour
         playerMana -= Stats.DashManaCost;
         EventManaUpdate(playerMana, maxMana);
 
+        PlaySound(dashSound);
         // Revert the player's layer back to the original layer
     }
     private void OnDashEnd()
     {
         StopCoroutine(DashIFramesPadding());
         StartCoroutine(DashIFramesPadding());
+    }
+
+    private void OnJump()
+    {
+        PlaySound(jumpSound);
     }
 
     public IEnumerator DashIFramesPadding()
@@ -347,13 +380,14 @@ public class PlayerScript : MonoBehaviour
         gameObject.layer = originalLayer;
 
         isInvincible = false;
-
     }
 
     void Shoot()
     {
         var bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
         bullet.Initialize(gunDamage);
+
+        PlaySound(shootSound);
     }
 
     public int GetRandomBuff()
@@ -407,13 +441,29 @@ public class PlayerScript : MonoBehaviour
     #region subscribe events   
     private void OnGameOver()
     {
+        PlaySound(deadSound);
         EventGameOver?.Invoke();
     }
 
     //TODO: Implement method to call this function to save player progress.
-    private void OnFinishStage()
+    public void OnFinishStage()
     {
         PlayerStatsHandler.SavePlayerBuff(currentBuff);
     }
     #endregion
+
+    private void PlaySound(AudioSource audio)
+    {
+        if (audio == null) return;
+
+        audio.pitch = SFXHelper.GetRandomPitch();
+        audio.Play();
+    }
+
+    private void StopSound(AudioSource audio)
+    {
+        if (audio == null) return;
+
+        audio.Stop();
+    }
 }

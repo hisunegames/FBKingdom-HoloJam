@@ -17,9 +17,10 @@ MonoBehaviour:
   MaxMana: 100
   ManaRecoverPerSec: 10
   BuffManaRecover: 1
+  DashManaCost: 30
   SpeedMultiplier: 1
   BuffSpeedMultiplier: 0.1
-  SwordDamage: 20
+  SwordDamage: 25
   BuffSwordDamage: 4
-  GunDamage: 10
+  GunDamage: 8
   BuffGunDamage: 2

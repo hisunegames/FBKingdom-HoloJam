@@ -1,16 +1,19 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Health : MonoBehaviour
 {
+    public event Action<float, float> EventHealthUpdate;
+
     public EnemyData enemyData;
     public float currentHealth;
 
     public HealthSystem healthBar;
     public Animator animator;
     public GameObject damageDisplay;
-
+    public UnityEvent OnDeath;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -29,6 +32,7 @@ public class Health : MonoBehaviour
                 gameObject.GetComponent<Rigidbody2D>().linearVelocity = new(0, 0);
                 gameObject.GetComponent<Rigidbody2D>().simulated = false;
                 animator.Play("Death");
+                OnDeath?.Invoke();
             }
             // else
             //     Destroy(gameObject);
@@ -64,5 +68,7 @@ public class Health : MonoBehaviour
 
         // Update the health bar
         healthBar.SetHealth(currentHealth);
+
+        EventHealthUpdate?.Invoke(currentHealth, enemyData.maxHealth);
     }
 }

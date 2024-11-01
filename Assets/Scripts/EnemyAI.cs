@@ -1,11 +1,6 @@
 using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.TextCore;
-using FBK;
-using Unity.VisualScripting;
-using JetBrains.Annotations;
-using UnityEngine.Events;
 
 public class EnemyAI : MonoBehaviour
 {
@@ -52,9 +47,17 @@ public class EnemyAI : MonoBehaviour
     public float fireballArcAngle = 45f;
     public float sightRange = 10f;
     private float fireballTimer = 0f;
+    [SerializeField] private GameObject fireWavePrefab;
+    [SerializeField] private float fireWaveSpeed;
 
-
-    public enum BossAttackPattern { FireballNormal, FireballHoming, Dash, Teleport, Gun }
+    public enum BossAttackPattern
+    {
+        Fireball = 1,
+        FireWall = 2,
+        Gun = 3,
+        Dash = 10,
+        Teleport = 11,
+    }
 
     [Serializable]
     public struct BossAttackPhase
@@ -65,6 +68,7 @@ public class EnemyAI : MonoBehaviour
     [Header("BOSS ONLY")]
     [SerializeField]
     private BossAttackPhase[] bossAttackPhases;
+    [SerializeField]
     private int phases;
     private int patternNum;
     private float bossFireballTimer;
@@ -94,11 +98,25 @@ public class EnemyAI : MonoBehaviour
 
     int teleportPhase;
 
+    [Header("SFX")]
+    [SerializeField] private AudioSource shootSound;
+    [SerializeField] private AudioSource fireballSound;
+    [SerializeField] private AudioSource fireWallSound;
+    [SerializeField] private AudioSource jumpSound;
+    [SerializeField] private AudioSource hurtSound;
+    [SerializeField] private AudioSource dashSound;
 
     void Awake()
     {
         hitbox.StayingInTrigger.AddListener(OnEnemyHitBoxTriggerStay);
         detection.FoundPlayer.AddListener(OnEnemyDetectionTriggerStay);
+
+        if (enemyAIType != EnemyAIType.Boss) return;
+
+        if (TryGetComponent<Health>(out var heath))
+        {
+            heath.EventHealthUpdate += CheckPhase;
+        }
     }
 
     void Start()
@@ -138,20 +156,21 @@ public class EnemyAI : MonoBehaviour
 
         switch (bossAttackPhases[phases].pattern[patternNum])
         {
-            case BossAttackPattern.FireballNormal:
+            case BossAttackPattern.Fireball:
 
                 bossFireballTimer += Time.deltaTime;
 
-                if (bossFireballTimer >= 5)
+                if (bossFireballTimer >= 2)
                 {
                     bossSubFireBallTimer += Time.deltaTime;
 
-                    if (bossSubFireBallTimer >= 0.1f)
+                    animator.SetBool("Fireball", true);
+
+                    if (bossSubFireBallTimer >= 0.3f)
                     {
                         ShootFireball();
 
                         bossSubFireBallTimer = 0f;
-
                         bossFireBallCount++;
 
                         if (bossFireBallCount >= 5)
@@ -160,14 +179,15 @@ public class EnemyAI : MonoBehaviour
                             bossFireBallCount = 0;
 
                             UpdateBossAttackPattern();
-                        }
 
+                            animator.SetBool("Fireball", false);
+                        }
                     }
                 }
 
                 break;
 
-            case BossAttackPattern.FireballHoming:
+            case BossAttackPattern.FireWall:
 
                 bossFireballTimer += Time.deltaTime;
 
@@ -177,10 +197,11 @@ public class EnemyAI : MonoBehaviour
 
                     if (bossSubFireBallTimer >= 0.5f)
                     {
-                        ShootFireball();//ill let you edit these to the homing ones
+                        animator.SetTrigger("Special");
+
+                        CastFireWave();
 
                         bossSubFireBallTimer = 0f;
-
                         bossFireBallCount++;
 
                         if (bossFireBallCount >= 3)
@@ -231,20 +252,21 @@ public class EnemyAI : MonoBehaviour
                     if (UnityEngine.Random.Range(0.0f, 1.0f) <= dashChance)
                     {
                         isDashing = true;
+                        dashTimer = 0f;
+                        dashChance /= 2f;
 
                         Dash();
 
-                        dashTimer = 0f;
-
-                        dashChance /= 2f;
+                        animator.SetBool("IsDash", true);
                     }
                     else
                     {
                         teleportPhase = 0;
-
                         dashChance = 1f;
 
                         UpdateBossAttackPattern();
+
+                        animator.SetBool("IsDash", false);
                     }
                 }
 
@@ -321,6 +343,8 @@ public class EnemyAI : MonoBehaviour
 
                         Shoot();
 
+                        animator.SetTrigger("Fire");
+
                         shotPhase = 2;
                     }
 
@@ -342,10 +366,23 @@ public class EnemyAI : MonoBehaviour
                     UpdateBossAttackPattern();
                 }
 
-
                 break;
         }
 
+    }
+
+    private void CheckPhase(float currentHealth, float maxHealth)
+    {
+        PlaySound(hurtSound);
+
+        if (phases == 0 && currentHealth < maxHealth * 0.5f)
+        {
+            phases = 1;
+        }
+        if (phases == 1 && currentHealth < maxHealth * 0.2f)
+        {
+            phases = 2;
+        }
     }
 
     void TelegraphTeleport(bool toPlayer)
@@ -442,6 +479,8 @@ public class EnemyAI : MonoBehaviour
     {
         var bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
         bullet.Initialize(gunDamage);
+
+        PlaySound(shootSound);
     }
 
     private void UpdateBossAttackPattern()
@@ -470,11 +509,11 @@ public class EnemyAI : MonoBehaviour
 
         FlipSprite();
 
+        PlaySound(dashSound);
     }
 
     private void Dash()
     {
-
         transform.position = Vector2.MoveTowards(transform.position, new Vector2(positionToDashTo.x, positionToDashTo.y), curSpeed * enemyData.speedMultiplier * Time.deltaTime * dashSpeed);
 
         animator.Play("Dash");
@@ -483,6 +522,8 @@ public class EnemyAI : MonoBehaviour
         {
             isDashing = false;
         }
+
+        PlaySound(dashSound);
     }
 
     private void HandleGroundedAI()
@@ -554,7 +595,6 @@ public class EnemyAI : MonoBehaviour
 
         if (isChasing)
         {
-
             transform.position = Vector2.MoveTowards(transform.position, new Vector2(player.transform.position.x, player.transform.position.y + flightLowerBound), curSpeed * Time.deltaTime);
             animator.SetBool("IsAttacking", true);
             AdjustSpeed(enemyData.speed * enemyData.speedMultiplier);
@@ -649,14 +689,6 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-
-    private IEnumerator ShootFireballAtIntervals()
-    {
-        ShootFireball();
-        yield return new WaitForSeconds(enemyData.attackInterval);
-        isAttacking = false;
-    }
-
     private void ShootFireball()
     {
         Vector3 playerPosition = player.transform.position;
@@ -685,6 +717,20 @@ public class EnemyAI : MonoBehaviour
         // Apply force to the fireball to shoot it towards the player
         Rigidbody2D rb = fireball.GetComponent<Rigidbody2D>();
         rb.AddForce(direction * fireballSpeed, ForceMode2D.Impulse);
+
+        PlaySound(fireballSound);
+    }
+
+    private void CastFireWave()
+    {
+        float directionX = (player.transform.position.x - transform.position.x) > 0 ? 1 : -1;
+        Vector3 firePosition = transform.position + new Vector3(directionX, 0, 0);
+
+        GameObject fireWave = Instantiate(fireWavePrefab, firePosition, Quaternion.identity, transform);
+        fireWave.GetComponent<SpriteRenderer>().flipX = directionX == 1;
+        fireWave.GetComponent<Rigidbody2D>().AddForce(directionX * fireWaveSpeed * Vector3.right, ForceMode2D.Impulse);
+
+        PlaySound(fireWallSound);
     }
 
     private void Patrol()
@@ -851,5 +897,13 @@ public class EnemyAI : MonoBehaviour
             Gizmos.DrawRay(transform.position, leftArc);
             Gizmos.DrawRay(transform.position, rightArc);
         }
+    }
+
+    private void PlaySound(AudioSource audio)
+    {
+        if (audio == null) return;
+
+        audio.pitch = SFXHelper.GetRandomPitch();
+        audio.Play();
     }
 }
