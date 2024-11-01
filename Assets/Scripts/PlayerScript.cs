@@ -237,6 +237,7 @@ public class PlayerScript : MonoBehaviour
         StartCoroutine(FakeAddForceMotion(other, enemyData, -facingDirection));
     }
 
+
     public void PlayerObstacleHit(GameObject other, EnemyData enemyData)
     {
         m_Animator.Play("Action-Hurt");
@@ -460,14 +461,14 @@ public class PlayerScript : MonoBehaviour
         PlayerStatsHandler.SavePlayerBuff(currentBuff);
     }
     #endregion
-    
+
 
     private void PlaySound(AudioSource audio)
     {
         if (audio == null) return;
 
         audio.pitch = SFXHelper.GetRandomPitch();
-        
+
         audio.Play();
     }
 
