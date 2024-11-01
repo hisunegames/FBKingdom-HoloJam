@@ -9,12 +9,16 @@ public class SlashStateMachine : StateMachineBehaviour
         if (stateInfo.IsName("Action-Slash-Ground-Start"))
         {
             PlayerScript.instance.isSlashing = true;
+            
+            
             animator.SetInteger("ComboState", 1);
+            
         }
 
         else if (stateInfo.IsName("Action-Slash-Ground-1"))
         {
             PlayerScript.instance.transform.GetChild(0).gameObject.SetActive(true);
+            
             if (animator.GetInteger("ComboState") == 3)
             {
                 // Define the step size to move the player by one step
@@ -22,6 +26,7 @@ public class SlashStateMachine : StateMachineBehaviour
 
                 // Apply the translation to the Transform
                 animator.transform.Translate(moveStep);
+                
 
                 // Start a coroutine to stop the movement after 0.5 seconds
                 // PlayerScript.instance.StartCoroutine(StopMovementAfterDelay(animator.transform, moveStep, 0.5f));
@@ -31,10 +36,12 @@ public class SlashStateMachine : StateMachineBehaviour
         else if (stateInfo.IsName("Action-Slash-Ground-2"))
         {
             PlayerScript.instance.transform.GetChild(1).gameObject.SetActive(true);
+           
         }
         else if (stateInfo.IsName("Action-Slash-Aerial"))
         {
             PlayerScript.instance.transform.GetChild(2).gameObject.SetActive(true);
+            
             animator.ResetTrigger("Slash");
 
         }
@@ -50,8 +57,10 @@ public class SlashStateMachine : StateMachineBehaviour
 
         else if (stateInfo.IsName("Action-Slash-Ground-1"))
         {
+            
             if (animator.GetInteger("ComboState") == 1)
             {
+                
                 if (PlayerScript.instance.isSlashing)
                     animator.SetInteger("ComboState", 2);
                 else if (!PlayerScript.instance.isSlashing)
@@ -103,16 +112,19 @@ public class SlashStateMachine : StateMachineBehaviour
         else if (stateInfo.IsName("Action-Slash-Ground-1"))
         {
             PlayerScript.instance.transform.GetChild(0).gameObject.SetActive(false);
+            
         }
 
         else if (stateInfo.IsName("Action-Slash-Ground-2"))
         {
             PlayerScript.instance.transform.GetChild(1).gameObject.SetActive(false);
+            
 
         }
         else if (stateInfo.IsName("Action-Slash-Aerial"))
         {
             PlayerScript.instance.transform.GetChild(2).gameObject.SetActive(false);
+            
             // PlayerScript.instance.isSlashing = false;
             animator.ResetTrigger("Slash");
         }

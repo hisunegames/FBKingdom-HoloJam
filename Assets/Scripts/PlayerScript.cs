@@ -107,7 +107,7 @@ public class PlayerScript : MonoBehaviour
                 isSlashing = true;
                 m_Animator.SetBool("isSlashing", isSlashing);
 
-                PlaySound(slashSound);
+                //PlaySound(slashSound);
             }
             else if (currentWeapon == 2 && Time.time >= nextFireTime)
             {
@@ -460,12 +460,14 @@ public class PlayerScript : MonoBehaviour
         PlayerStatsHandler.SavePlayerBuff(currentBuff);
     }
     #endregion
+    
 
     private void PlaySound(AudioSource audio)
     {
         if (audio == null) return;
 
         audio.pitch = SFXHelper.GetRandomPitch();
+        
         audio.Play();
     }
 
@@ -474,5 +476,11 @@ public class PlayerScript : MonoBehaviour
         if (audio == null) return;
 
         audio.Stop();
+    }
+
+    public void PlaySoundSlash()
+    {
+        PlaySound(slashSound);
+
     }
 }
