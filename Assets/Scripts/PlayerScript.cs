@@ -60,6 +60,7 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] private AudioSource jumpSound;
     [SerializeField] private AudioSource hurtSound;
     [SerializeField] private AudioSource dashSound;
+    [SerializeField] private AudioSource deadSound;
 
     void Awake()
     {
@@ -438,6 +439,7 @@ public class PlayerScript : MonoBehaviour
     #region subscribe events   
     private void OnGameOver()
     {
+        PlaySound(deadSound);
         EventGameOver?.Invoke();
     }
 
