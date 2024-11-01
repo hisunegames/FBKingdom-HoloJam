@@ -113,8 +113,6 @@ public class PlayerScript : MonoBehaviour
                 Shoot();
                 m_Animator.SetTrigger("Fire");
                 nextFireTime = Time.time + fireCooldown;
-
-                PlaySound(shootSound);
             }
         }
         else
@@ -385,6 +383,8 @@ public class PlayerScript : MonoBehaviour
     {
         var bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
         bullet.Initialize(gunDamage);
+
+        PlaySound(shootSound);
     }
 
     public int GetRandomBuff()

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public static class SFXHelper
 {
-    private static readonly int[] pentatonicSemitones = { 0, 2, 4, 7, 9 };
+    private static readonly int[] pentatonicSemitones = { 0, 2, 4 };
 
     public static float GetRandomPitch()
     {
