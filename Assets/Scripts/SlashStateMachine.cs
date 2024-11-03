@@ -23,9 +23,17 @@ public class SlashStateMachine : StateMachineBehaviour
                 // Define the step size to move the player by one step
                 Vector3 moveStep = new Vector3(.05f * PlayerScript.instance.m_Controller.FacingDirection, 0, 0); // Adjust the x value as needed for the step size
 
-                // Apply the translation to the Transform
-                animator.transform.Translate(moveStep);
-
+                // Apply the movement using Rigidbody2D.Cast to check for collisions
+                Rigidbody2D rb = animator.GetComponent<Rigidbody2D>();
+                if (rb != null)
+                {
+                    RaycastHit2D[] hits = new RaycastHit2D[1];
+                    int hitCount = rb.Cast(moveStep, hits, moveStep.magnitude);
+                    if (hitCount == 0)
+                    {
+                        rb.MovePosition(rb.position + new Vector2(moveStep.x, moveStep.y));
+                    }
+                }
 
                 // Start a coroutine to stop the movement after 0.5 seconds
                 // PlayerScript.instance.StartCoroutine(StopMovementAfterDelay(animator.transform, moveStep, 0.5f));

@@ -26,6 +26,7 @@ public class PlayerScript : MonoBehaviour
     int originalLayer;
     float aerialMultiplier = .8f;
     float comboMultiplier = 1.5f;
+    public float invincibilityTime = 1.0f; // Duration of invincibility frames
 
     private PlayerBuff currentBuff;
     private bool isFlashing;
@@ -255,21 +256,27 @@ public class PlayerScript : MonoBehaviour
 
     public void PlayerHit(GameObject other, EnemyData enemyData, float facingDirection)
     {
-        m_Animator.Play("Action-Hurt");
-        StartCoroutine(FlashOnDamage());
-        // StartCoroutine(InvincibiltyFrames());
-        other.GetComponent<PlayerScript>().Damage(enemyData.attackPower);
-        StartCoroutine(FakeAddForceMotion(other, enemyData, -facingDirection));
+        if (!isInvincible)
+        {
+            m_Animator.Play("Action-Hurt");
+            StartCoroutine(FlashOnDamage());
+            StartCoroutine(InvincibilityFrames());
+            other.GetComponent<PlayerScript>().Damage(enemyData.attackPower);
+            StartCoroutine(FakeAddForceMotion(other, enemyData, -facingDirection));
+        }
     }
 
 
     public void PlayerObstacleHit(GameObject other, EnemyData enemyData)
     {
-        m_Animator.Play("Action-Hurt");
-        // StartCoroutine(InvincibiltyFrames());
-        StartCoroutine(FlashOnDamage());
-        other.GetComponent<PlayerScript>().Damage(enemyData.attackPower);
-        StartCoroutine(FakeAddForceMotion(other, enemyData, -m_Controller.FacingDirection));
+        if (!isInvincible)
+        {
+            m_Animator.Play("Action-Hurt");
+            StartCoroutine(FlashOnDamage());
+            StartCoroutine(InvincibilityFrames());
+            other.GetComponent<PlayerScript>().Damage(enemyData.attackPower);
+            StartCoroutine(FakeAddForceMotion(other, enemyData, -m_Controller.FacingDirection));
+        }
     }
 
     private IEnumerator FlashOnDamage()
@@ -291,6 +298,7 @@ public class PlayerScript : MonoBehaviour
         Rigidbody2D rb = target.GetComponent<Rigidbody2D>();
         Vector2 raycastDirection = new Vector2(-facingDirection, 0); // Raycast direction opposite to the facing direction
         float raycastDistance = .7f; // Adjust the distance as needed
+        float topRaycastDistance = .2f; // Separate distance for the top raycast
         int worldLayerMask = LayerMask.GetMask("World"); // Create a layer mask for the "world" layer
 
         int numberOfRaycasts = 20; // Number of raycast lines
@@ -320,6 +328,21 @@ public class PlayerScript : MonoBehaviour
                     obstacleDetected = true;
                     break;
                 }
+            }
+
+            // Add a raycast on top of the collider
+            Vector2 topRaycastOrigin = new Vector2(target.transform.position.x, collider.bounds.max.y - padding);
+            RaycastHit2D topHit = Physics2D.Raycast(topRaycastOrigin, raycastDirection, topRaycastDistance, worldLayerMask);
+
+            // Draw the top raycast line
+            Debug.DrawLine(topRaycastOrigin, topRaycastOrigin + raycastDirection * topRaycastDistance, Color.blue);
+
+            if (topHit.collider != null)
+            {
+                // Obstacle detected, stop the player's velocity
+                Debug.Log("Obstacle detected on top");
+                rb.linearVelocity = Vector2.zero;
+                obstacleDetected = true;
             }
 
             if (obstacleDetected)
@@ -359,6 +382,13 @@ public class PlayerScript : MonoBehaviour
             yield break;
         target.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
         yield return null;
+    }
+
+    private IEnumerator InvincibilityFrames()
+    {
+        isInvincible = true;
+        yield return new WaitForSeconds(invincibilityTime);
+        isInvincible = false;
     }
 
     // public IEnumerator InvincibiltyFrames()
