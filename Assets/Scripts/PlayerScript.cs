@@ -86,13 +86,13 @@ public class PlayerScript : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        if (Input.GetKeyUp(KeyCode.Alpha1))
         {
             currentWeapon = 1;
             m_Animator.SetBool("ShootReady", false);
             m_Animator.SetInteger("ActionState", 0);
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        else if (Input.GetKeyUp(KeyCode.Alpha2))
         {
             currentWeapon = 2;
             m_Animator.SetBool("ShootReady", true);
