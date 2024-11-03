@@ -430,6 +430,14 @@ PrefabInstance:
       propertyPath: m_PreviousShadowShape2DSource
       value: 
       objectReference: {fileID: 1128894515149652216}
+    - target: {fileID: 3626916397498700004, guid: 91349267652f7214b9ee0ad7a7bbc1f4, type: 3}
+      propertyPath: m_SortingLayer
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3626916397498700004, guid: 91349267652f7214b9ee0ad7a7bbc1f4, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 1427344807
+      objectReference: {fileID: 0}
     - target: {fileID: 7878350319992209165, guid: 91349267652f7214b9ee0ad7a7bbc1f4, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

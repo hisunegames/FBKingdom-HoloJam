@@ -110,4 +110,6 @@ public class FubukiAnimationController : MonoBehaviour
     {
         // Handle the action based on the actionCode
     }
+
+
 }

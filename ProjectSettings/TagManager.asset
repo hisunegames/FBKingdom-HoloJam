@@ -51,6 +51,9 @@ TagManager:
   - name: Building
     uniqueID: 1749697577
     locked: 0
+  - name: Enemies
+    uniqueID: 1427344807
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0

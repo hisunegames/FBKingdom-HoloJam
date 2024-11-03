@@ -452,6 +452,7 @@ public class PlayerScript : MonoBehaviour
     private void OnGameOver()
     {
         PlaySound(deadSound);
+        OnDeath();
         EventGameOver?.Invoke();
     }
 
@@ -483,5 +484,65 @@ public class PlayerScript : MonoBehaviour
     {
         PlaySound(slashSound);
 
+    }
+
+    private void OnDeath()
+    {
+        m_Animator.Play("Defeat");
+        CreateBlackoutEffect();
+    }
+
+    private void CreateBlackoutEffect()
+    {
+        GameObject blackout = new GameObject("Blackout");
+        SpriteRenderer sr = blackout.AddComponent<SpriteRenderer>();
+        sr.sprite = CreateBlackSprite();
+        sr.color = new Color(0, 0, 0, 0); // Start with transparent black
+
+        // Set the size to 2x the screen size
+        float screenHeight = Camera.main.orthographicSize * 2;
+        float screenWidth = screenHeight * Camera.main.aspect;
+        blackout.transform.localScale = new Vector3(screenWidth * 200, screenHeight * 200, 1);
+
+        // Set the sorting layer to default
+        sr.sortingLayerName = "Default";
+        sr.sortingOrder = 10;
+
+        // Set the blackout sprite behind the game object of this script
+        blackout.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + 1);
+
+        // Set the blackout as a child of the "Gameplay" GameObject
+        GameObject gameplay = GameObject.Find("Gameplay");
+        if (gameplay != null)
+        {
+            blackout.transform.SetParent(gameplay.transform);
+        }
+
+        // Start the fade-in effect
+        StartCoroutine(FadeToBlack(sr));
+    }
+
+    private Sprite CreateBlackSprite()
+    {
+        Texture2D texture = new Texture2D(1, 1);
+        texture.SetPixel(0, 0, Color.black);
+        texture.Apply();
+        return Sprite.Create(texture, new Rect(0, 0, 1, 1), new Vector2(0.5f, 0.5f));
+    }
+
+    private IEnumerator FadeToBlack(SpriteRenderer sr)
+    {
+        float duration = 2f; // Duration of the fade
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float alpha = Mathf.Clamp01(elapsed / duration);
+            sr.color = new Color(0, 0, 0, alpha);
+            yield return null;
+        }
+
+        sr.color = Color.black; // Ensure it's fully black at the end
     }
 }

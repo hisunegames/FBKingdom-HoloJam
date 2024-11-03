@@ -20,6 +20,14 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: d9d15fe852e477c4ea832f3a7985a9bf, type: 2}
+    - target: {fileID: 3626916397498700004, guid: 7912ffea52ba9f343b4e1509b447ffe6, type: 3}
+      propertyPath: m_SortingLayer
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3626916397498700004, guid: 7912ffea52ba9f343b4e1509b447ffe6, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 1427344807
+      objectReference: {fileID: 0}
     - target: {fileID: 7878350319992209165, guid: 7912ffea52ba9f343b4e1509b447ffe6, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
