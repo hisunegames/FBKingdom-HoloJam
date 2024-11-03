@@ -150,7 +150,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 612930748240870024, guid: 37973ecb7e0010e4b800c3b4de1aa907, type: 3}
       propertyPath: distanceBetween
-      value: 4
+      value: 3.7
       objectReference: {fileID: 0}
     - target: {fileID: 612930748240870024, guid: 37973ecb7e0010e4b800c3b4de1aa907, type: 3}
       propertyPath: flightLowerBound

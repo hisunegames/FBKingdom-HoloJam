@@ -11,6 +11,8 @@ public class PlayerScript : MonoBehaviour
 
     public static PlayerScript instance;
     public CustomMovementController2D m_Controller;
+    bool isSwitchingWeapons = false;
+
 
     [Header("PlayerData")]
     public PlayerStatsSO Stats;
@@ -31,6 +33,7 @@ public class PlayerScript : MonoBehaviour
     [Header("Player Animation")]
     public Animator m_Animator;
     public bool isSlashing = false;
+    public bool isFiring = false;
 
     [Header("Equipment")]
     public int currentWeapon = 1;
@@ -86,17 +89,31 @@ public class PlayerScript : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyUp(KeyCode.Alpha1))
+
+        if (Input.GetKeyDown(KeyCode.Alpha1) && !isSwitchingWeapons)
         {
+            if (isFiring) return;
+            isSwitchingWeapons = true;
             currentWeapon = 1;
             m_Animator.SetBool("ShootReady", false);
             m_Animator.SetInteger("ActionState", 0);
         }
-        else if (Input.GetKeyUp(KeyCode.Alpha2))
+        else if (Input.GetKeyDown(KeyCode.Alpha2) && !isSwitchingWeapons)
         {
+            if (isSlashing) return;
+            isSwitchingWeapons = true;
             currentWeapon = 2;
             m_Animator.SetBool("ShootReady", true);
             m_Animator.SetInteger("ActionState", 1);
+        }
+
+        if (Input.GetKeyUp(KeyCode.Alpha1))
+        {
+            isSwitchingWeapons = false;
+        }
+        else if (Input.GetKeyUp(KeyCode.Alpha2))
+        {
+            isSwitchingWeapons = false;
         }
 
         if (Input.GetButton("Fire1"))
@@ -112,14 +129,22 @@ public class PlayerScript : MonoBehaviour
             else if (currentWeapon == 2 && Time.time >= nextFireTime)
             {
                 Shoot();
+                isFiring = true;
                 m_Animator.SetTrigger("Fire");
                 nextFireTime = Time.time + fireCooldown;
             }
         }
         else
         {
-            isSlashing = false;
-            m_Animator.SetBool("isSlashing", isSlashing);
+            if (currentWeapon == 1)
+            {
+                isSlashing = false;
+                m_Animator.SetBool("isSlashing", isSlashing);
+            }
+            else if (currentWeapon == 2)
+            {
+                isFiring = false;
+            }
 
             //StopSound(slashSound);
         }
